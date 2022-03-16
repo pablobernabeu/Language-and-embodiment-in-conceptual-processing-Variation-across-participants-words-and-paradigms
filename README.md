@@ -1,3 +1,3 @@
-# Hybrid conceptual processing in semantic priming and semantic decision
+# Language and vision in conceptual processing: Multilevel variation and statistical power
 
-Project: https://osf.io/ueryq/
+## Project: https://osf.io/ueryq/
