@@ -1,0 +1,52 @@
+
+
+# Appendix D: Further plots of interactions {#appendix-D-interaction-plots}
+
+
+```{r}
+
+# This appendix inherits the libraries, the working directory and the
+# data sets loaded in manuscript.Rmd, when the latter is knitted.
+
+```
+
+
+This appendix presents plots of interactions that did not fit in the main text. 
+
+
+## Study 1: Semantic priming
+
+
+```{r semanticpriming-interactions-with-gender, fig.cap = 'Interactions with gender in the semantic priming study.', out.height = '70%'}
+
+# Run plot through source() rather than directly in this R Markdown document 
+# to preserve the italicised text.
+
+source('semanticpriming/frequentist_analysis/semanticpriming-interactions-with-gender.R', 
+       local = TRUE)
+
+include_graphics(
+  paste0(
+    getwd(),  # Circumvent illegal characters in file path
+    '/semanticpriming/frequentist_analysis/plots/semanticpriming-interactions-with-gender.pdf'
+  ))
+
+```
+
+... TBC
+
+
+
+## Study 2: Semantic decision
+
+...
+
+
+
+
+## Study 3: Lexical decision
+
+...
+
+
+

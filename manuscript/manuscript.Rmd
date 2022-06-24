@@ -1,0 +1,2433 @@
+---
+title: 'Language and vision in conceptual processing: Multilevel analysis and statistical power'
+
+shorttitle: LANGUAGE AND VISION IN CONCEPTUAL PROCESSING
+
+authornote: |
+  \addORCIDlink{Pablo Bernabeu}{0000-0003-1083-2460}
+  
+  \addORCIDlink{Dermot Lynott}{0000-0001-7338-0567}
+  
+  \addORCIDlink{Louise Connell}{0000-0002-5291-5267}
+  
+  This manuscript is a draft and includes some appendices. Correspondence can be addressed to Pablo Bernabeu on pcbernabeu@gmail.com. All materials are available at [http://doi.org/10.17605/OSF.IO/UERYQ](http://doi.org/10.17605/OSF.IO/UERYQ).
+
+abstract: |
+   Research over the past two decades has suggested that conceptual processing depends on both language-based and vision-based information. We tested this interplay at three levels of the data: individual differences, words and tasks. To this aim, we drew on three existing data sets that were composed of large samples, and implemented the paradigms of semantic priming, semantic decision and lexical decision. After extending these data sets with language-based and vision-based measures, we performed the analysis using mixed-effects models that included a comprehensive array of fixed effects---including covariates---and random effects. Overall, language-based information was found to be more important than vision-based information. Furthermore, in the semantic priming study---whose task required distinguishing between words and nonwords---, both language-based and vision-based information were more influential when words were presented faster. In addition, higher-vocabulary participants presented a greater effect of language-based similarity than lower-vocabulary participants. Conversely, lower-vocabulary participants presented a greater effect of vision-based information, which was less relevant to the task. This 'relevance advantage' for higher-vocabulary participants also appeared in the semantic decision study, whose task required distinguishing between concrete and abstract words. Specifically, higher-vocabulary participants were more strongly influenced by word concreteness than lower-vocabulary participants. Furthermore, we compared the effects of different measures of visual information. Lastly, we estimated the sample size required to reliably examine each effect of interest. We found that 300 participants would suffice to examine language-based information contained in words, whereas more than 1,000 participants would be necessary to examine vision-based information as well as the interactions between both the former variables and vocabulary size, gender and presentation speed.
+  
+keywords: semantic, conceptual processing, vocabulary size, statistical power
+
+bibliography: ['references.bib', 'package-references.bib']
+
+# APPENDICES are inserted through code chunks at the end of this document.
+# The source code for each appendix is in the 'manuscript' folder.
+
+floatsintext:       yes
+figurelist:         no
+tablelist:          no
+footnotelist:       no
+linenumbers:        no
+mask:               no
+
+csl:                "`r system.file('rmd', 'apa7.csl', package = 'papaja')`"
+documentclass:      apa7
+classoption:        man
+
+fontsize:           12pt
+linestretch:        1.5
+
+output:
+  papaja::apa6_pdf:
+    extra_dependencies: ["flafter"]   # Place figures and tables below where they are first mentioned in the text.
+    
+# Latex preamble specifying layout
+header-includes: 
+# Background on the first four lines: https://stackoverflow.com/a/70658799/7050882
+  - \renewcommand\author[1]{}
+  - \renewcommand\affiliation[1]{}
+  - \authorsnames[1, 2, 2]{Pablo Bernabeu, Dermot Lynott, Louise Connell}
+  - \authorsaffiliations{{Department of Psychology, Lancaster University, UK}, {Department of Psychology, Maynooth University, Ireland}}
+  - \renewcommand{\topfraction}{.75}        # Reduce page margins
+  - \renewcommand{\bottomfraction}{.4}      # Reduce page margins
+  - \renewcommand{\textfraction}{.15}       # Reduce page margins
+  - \renewcommand{\floatpagefraction}{.6}   # Reduce page margins
+  - \setlength{\@fptop}{0pt}                # Vertically-align tables & figures to the top
+  - \setcounter{topnumber}{3}               # Reduce page margins
+  - \setcounter{bottomnumber}{2}            # Reduce page margins
+  - \setcounter{totalnumber}{4}             # Reduce page margins
+  - \usepackage{amsmath}                    # Maths formatting
+  - \usepackage{upgreek}                    # Disable the italicisation of Greek letters
+  - \usepackage{booktabs}                   # Dependency for R package 'kableExtra' (table formatting)
+  - \usepackage{longtable}                  # Dependency for R package 'kableExtra' (table formatting)
+  - \usepackage{array}                      # Dependency for R package 'kableExtra' (table formatting)
+  - \usepackage{multirow}                   # Dependency for R package 'kableExtra' (table formatting)
+  - \usepackage{wrapfig}                    # Dependency for R package 'kableExtra' (table formatting)
+  - \usepackage{float}                      # Dependency for R package 'kableExtra' (table formatting)
+  - \usepackage{colortbl}                   # Dependency for R package 'kableExtra' (table formatting)
+  - \usepackage{pdflscape}                  # Dependency for R package 'kableExtra' (table formatting)
+  - \usepackage{tabu}                       # Dependency for R package 'kableExtra' (table formatting)
+  - \usepackage{threeparttable}             # Dependency for R package 'kableExtra' (table formatting)
+  - \usepackage{threeparttablex}            # Dependency for R package 'kableExtra' (table formatting)
+  - \usepackage[normalem]{ulem}             # Dependency for R package 'kableExtra' (table formatting)
+  - \usepackage{makecell}                   # Dependency for R package 'kableExtra' (table formatting)
+  - \usepackage{xcolor}                     # Dependency for R package 'kableExtra' (table formatting)
+  - \renewcommand\appendix{}                # Remove redundant label
+---
+
+
+```{r setup, include = FALSE}
+
+# General knitr options
+knitr::opts_chunk$set(cache = FALSE, message = FALSE, warning = FALSE, 
+                      error = FALSE, echo = FALSE, 
+                      knitr.duplicate.label = 'allow', 
+                      fig.align = 'center', dev = 'CairoPDF', 
+                      knitr.graphics.auto_pdf = TRUE, dpi = 72, 
+                      out.width = '100%')
+
+library(papaja)       # APA-formatted manuscript
+library(knitr)        # Document rendering
+options(kableExtra.latex.load_packages = FALSE)  # instead, LaTeX packages loaded in header/preamble above
+library(kableExtra)   # Tables
+library(dplyr)        # Data wrangling
+library(formattable)  # Format numbers
+library(kableExtra)   # Table formatting (e.g., `pack_rows()`)
+library(stringr)      # Text processing
+library(ggplot2)      # Plots
+library(GGally)       # Correlation plots
+library(sjPlot)       # Model plots
+library(RColorBrewer) # Colours in plots
+library(patchwork)    # Combination of plots
+library(Cairo)        # Allows use of special characters such as dashes in plots
+library(magick)       # Image rendering
+library(tikzDevice)   # Image rendering
+
+# Move working directory to the project root
+knitr::opts_knit$set(root.dir = '../')
+
+```
+
+
+```{r load-functions-data-models, include = FALSE}
+
+# Read in all custom functions
+setwd('R_functions')
+sapply(list.files(), source, echo = FALSE)
+setwd('../')
+
+# Load main data sets and models. These objects are loaded directly, rather than 
+# being run on the go, to keep the knitting of the manuscript reasonably fast. 
+# Crucially, however, all the objects can be reproduced from the appropriate R 
+# scripts in the current project. For further details, see 'README.pdf' in 
+# 'manuscript' directory. 
+
+# Study 1: Semantic priming
+
+# Code for data set below in 'semanticpriming/data' folder
+semanticpriming = read.csv('semanticpriming/data/final_dataset/semanticpriming.csv')
+
+# Code for models below in 'semanticpriming/frequentist_analysis' folder
+semanticpriming_lmerTest =   # Primary model object
+  readRDS('semanticpriming/frequentist_analysis/results/semanticpriming_lmerTest.rds')
+KR_summary_semanticpriming_lmerTest =   # Model with Kenward-Roger p values
+  readRDS('semanticpriming/frequentist_analysis/results/KR_summary_semanticpriming_lmerTest.rds')
+confint_semanticpriming_lmerTest =   # Confidence intervals
+  readRDS('semanticpriming/frequentist_analysis/results/confint_semanticpriming_lmerTest.rds')
+
+
+# Subset of the semantic priming study that included visual similarity.
+# Code for data set below in 'semanticpriming/data' folder
+semanticpriming_with_visualsimilarity = 
+  read.csv('semanticpriming/data/subset_with_visualsimilarity/semanticpriming_with_visualsimilarity.csv')
+
+# Code for models below in 'semanticpriming/semanticpriming_with_visualsimilarity' folder
+semanticpriming_with_visualsimilarity_lmerTest =   # Primary model object
+  readRDS('semanticpriming/analysis_with_visualsimilarity/results/semanticpriming_with_visualsimilarity_lmerTest.rds')
+KR_summary_semanticpriming_with_visualsimilarity_lmerTest =   # Model with Kenward-Roger p values
+  readRDS('semanticpriming/analysis_with_visualsimilarity/results/KR_summary_semanticpriming_with_visualsimilarity_lmerTest.rds')
+confint_semanticpriming_with_visualsimilarity_lmerTest =   # Confidence intervals
+  readRDS('semanticpriming/analysis_with_visualsimilarity/results/confint_semanticpriming_with_visualsimilarity_lmerTest.rds')
+
+# Code for models below in 'semanticpriming/bayesian_analysis' folder
+semanticpriming_summary_informativepriors_exgaussian =   # Primary model object
+  readRDS('semanticpriming/bayesian_analysis/results/semanticpriming_summary_informativepriors_exgaussian.rds')
+# semanticpriming_summary_weaklyinformativepriors_exgaussian =   # Primary model object
+#   readRDS('semanticpriming/bayesian_analysis/results/semanticpriming_summary_weaklyinformativepriors_exgaussian.rds')
+semanticpriming_summary_diffusepriors_exgaussian =   # Primary model object
+  readRDS('semanticpriming/bayesian_analysis/results/semanticpriming_summary_diffusepriors_exgaussian.rds')
+
+
+# Study 2: Semantic decision
+# Code for data set below in 'semanticdecision/data' folder
+semanticdecision = read.csv('semanticdecision/data/final_dataset/semanticdecision.csv')
+
+# Code for models below in 'semanticdecision/frequentist_analysis' folder
+semanticdecision_lmerTest =   # Primary model object
+  readRDS('semanticdecision/frequentist_analysis/results/semanticdecision_lmerTest.rds')
+KR_summary_semanticdecision_lmerTest =   # Model with Kenward-Roger p values
+  readRDS('semanticdecision/frequentist_analysis/results/KR_summary_semanticdecision_lmerTest.rds')
+confint_semanticdecision_lmerTest =   # Confidence intervals
+  readRDS('semanticdecision/frequentist_analysis/results/confint_semanticdecision_lmerTest.rds')
+
+# Code for models below in 'semanticdecision/bayesian_analysis' folder
+semanticdecision_summary_informativepriors_exgaussian =   # Primary model object
+  readRDS('semanticdecision/bayesian_analysis/results/semanticdecision_summary_informativepriors_exgaussian.rds')
+semanticdecision_summary_weaklyinformativepriors_exgaussian =   # Primary model object
+  readRDS('semanticdecision/bayesian_analysis/results/semanticdecision_summary_weaklyinformativepriors_exgaussian.rds')
+semanticdecision_summary_diffusepriors_exgaussian =   # Primary model object
+  readRDS('semanticdecision/bayesian_analysis/results/semanticdecision_summary_diffusepriors_exgaussian.rds')
+
+
+# Study 3: Lexical decision
+# Code for data set below in 'lexicaldecision/data' folder
+lexicaldecision = read.csv('lexicaldecision/data/final_dataset/lexicaldecision.csv')
+
+# Code for models below in 'lexicaldecision/frequentist_analysis' folder
+lexicaldecision_lmerTest =   # Primary model object
+  readRDS('lexicaldecision/frequentist_analysis/results/lexicaldecision_lmerTest.rds')
+KR_summary_lexicaldecision_lmerTest =   # Model with Kenward-Roger p values
+  readRDS('lexicaldecision/frequentist_analysis/results/KR_summary_lexicaldecision_lmerTest.rds')
+confint_lexicaldecision_lmerTest =   # Confidence intervals
+  readRDS('lexicaldecision/frequentist_analysis/results/confint_lexicaldecision_lmerTest.rds')
+
+# Code for models below in 'lexicaldecision/bayesian_analysis' folder
+lexicaldecision_summary_informativepriors_exgaussian =   # Primary model object
+  readRDS('lexicaldecision/bayesian_analysis/results/lexicaldecision_summary_informativepriors_exgaussian.rds')
+lexicaldecision_summary_weaklyinformativepriors_exgaussian =   # Primary model object
+  readRDS('lexicaldecision/bayesian_analysis/results/lexicaldecision_summary_weaklyinformativepriors_exgaussian.rds')
+lexicaldecision_summary_diffusepriors_exgaussian =   # Primary model object
+  readRDS('lexicaldecision/bayesian_analysis/results/lexicaldecision_summary_diffusepriors_exgaussian.rds')
+
+```
+
+
+# 
+
+Research over the past two decades has suggested that conceptual processing involves both 'linguistic' and 'embodied' systems of the brain. The language system is characterised by associations across networks of words [@landauerIntroductionLatentSemantic1998; @pylyshynWhatMindEye1973], whereas the embodiment system is characterised by associations within perceptual, motor, affective and social domains [@barsalouPerceptualSymbolSystems1999; @diveicaQuantifyingSocialSemantics2022]. Both systems have strengths and limitations [@connell2019a; @dove2020a; @kumar2021a; @louwerse2015a; @mahon2016a]. As a result, conceptual processing flexibly draws on these systems following the demands of the context [@satoTaskRelatedModulation2008; @shebaniFlexibilityLanguageAction2018; @willemsFlexibilityEmbodiedLanguage2011].
+
+The language system is involved in the representation of both abstract and concrete concepts [@ponari2018a; @regginDevelopmentAbstractWord2021]. For instance, measures of distributional semantic distance---solely based on texts---have been shown to capture aspects of the real world with considerable accuracy [@contreraskallensQuantifyingInterdisciplinarityCognitive2022; @dedeyneBetterExplanationsLexical2013; @kumarDistantConnectivityMultiplestep2020; @louwerseLanguageEncodesGeographical2009]. Although the language system is likely more important for the processing of abstract---rather than concrete---concepts [@barca2020a; @dunabeitiaQualitativeDifferencesRepresentation2009; @hultenNeuralRepresentationAbstract2021], although the degree of this difference could be small [@dedeyneBetterExplanationsLexical2013]. Language-based regularities may even allow distinguishing between concrete and abstract words, as word concreteness is consistently related to linguistic characteristics such as part of speech, morphological structure, countability and etymology [@lieversLinguisticDimensionsConcrete2021]. 
+
+Regarding the time course, the language system is activated more quickly in semantically-deep tasks [@connell2013a; @louwerseTasteWordsLinguistic2011], whereas both systems are similarly fast in semantically-shallow tasks [@petilli2021a]. As a result of these characteristics, the language system is equipped to support a major part of conceptual processing [@connell2019a; @connellSeeHearWhat2014]. However, the language system is hindered by the symbol grounding problem, which refers to the impossibility of obtaining meaning---or 'grounding' lexical content in reality---on the sole basis of word-to-word associations [@guntherLimitsAutomaticSensorimotor2021; @guntherSymbolGroundingDirect2018; @louwerseSymbolInterdependencySymbolic2011; @harnadSymbolGroundingProblem1990]. Another limitation is caused by the finite vocabularies of languages, which sometimes fall short of the richness of sensorimotor experience [@guntherLimitsAutomaticSensorimotor2021; @dedeyneVisualAffectiveMultimodal2021; @majidOdorsAreExpressible2014; @majidSensesLanguageCulture2011; @majidCanNomenclatureBody2015]. In conclusion, word-to-word associations appear to be necessary but not sufficient for conceptual processing.
+
+The embodiment system is best suited for the representation of concrete concepts, such as those involving perceptual features [@pecherDoesPizzaPrime1998; @yeeColorlessGreenIdeas2012; @ostarekTaskdependentCausalRole2017] and actions [@riccardiDissociatingActionAbstract2019]. Some research has suggested that embodied simulation plays an integral role in conceptual processing [@pulvermullerHowNeuronsMake2013], at least in the context of relatively-semantic tasks and stimuli [@leboisAreAutomaticConceptual2015; @pecherDoesPizzaPrime1998; @yeeColorlessGreenIdeas2012; @ostarekTaskdependentCausalRole2017; @connellWeKnowWhat2016; @garciaTimeFaceLanguage2020; @shebaniWhatImpairedSpatial2021; @vitaleNeuralInhibitionNetwork2021; @vukovicPrimaryMotorCortex2017; @wangSocialEmotionDimensional2021]. For instance, @riccardiDissociatingActionAbstract2019 investigated the comprehension of action verbs and abstract verbs in left-hemisphere stroke patients, and found that the processing of action concepts relied more heavily on sensory-motor areas. Furthermore, studies have suggested that even abstract concepts may be partially grounded in modality-specific domains such as emotion, sociality and interoception [@concaSearchDifferentCategories2021; @connellInteroceptionForgottenModality2018; @diveicaQuantifyingSocialSemantics2022; @kousta2011a; @vigliocco2014a; @wangSocialEmotionDimensional2021]. 
+
+However, other research has curtailed the importance of this system [@mahonCriticalLookEmbodied2008; @bottiniConcretenessAdvantageLexical2021; @garceaPreservedToolKnowledge2013; @guntherSymbolGroundingDirect2018; @guntherLimitsAutomaticSensorimotor2021; @montero-melisNoEvidenceEmbodiment2022; @vannuscorpsPersistentSparingAction2016]. For instance, studies have found that lesions to motor brain areas did not systematically impair the processing of action concepts in language [@papeoActionPerformanceActionword2010; @negriWhatRoleMotor2007].
+
+
+## Interplay between language and embodiment systems
+
+The above characteristics make the language and the embodiment systems complementary to each other [@andrewsIntegratingExperientialDistributional2009; @dedeyneVisualAffectiveMultimodal2021; @wangNeuralRepresentationAbstract2010]. A comprehensive approach to both these systems requires a direct comparison of them. Studies tackling such a comparison have found that the systems are selectively engaged, following contextual demands [@connell2013a; @louwerseTasteWordsLinguistic2011; @ostarekTaskdependentCausalRole2017; @petilli2021a]. For instance, the role of perceptual simulation appears to be augmented in slower responses [@louwerseTasteWordsLinguistic2011], when words are presented more slowly [@lam2015a], and in tasks prompting deeper semantic processing [@connell2013a; @louwerseTasteWordsLinguistic2011; @ostarekTaskdependentCausalRole2017; @petilli2021a].
+
+
+# The present study
+
+There is considerable evidence supporting the 'hybrid' theory positing that conceptual processing depends on both language and embodiment systems [@barsalouLanguageSimulationConceptual2008; @louwerseSymbolInterdependencySymbolic2011; @connell2013a]. Nonetheless, there are also reasons to continue testing this theory. Firstly, the coexistence of several systems in a scientific theory must be thoroughly justified, due to the value of simplicity, as epitomised by Occam's razor [@galleseBrainConceptsRole2005; @tillmanHowSharpOccam2015]. This point is particularly pressing because the language system has consistently produced larger effect sizes than the embodiment system [@lam2015a; @pecherDoesPizzaPrime1998; @petilli2021a; @banksLinguisticDistributionalKnowledge2021; @kiela2014a; @louwerse2015a]. Secondly, mixed evidence has appeared regarding some aspects of the interplay. For instance, whereas some studies have suggested that the language system becomes relevant before the embodiment system [@lam2015a; @louwerseTasteWordsLinguistic2011], a recent study found the opposite pattern [@petilli2021a]. Similarly, whereas some evidence has suggested that female participants might draw on the language system more prominently than males [@hutchinson2013a], other research has suggested that this difference could be negligible [@wallentinChapterGenderDifferences2020]. Thirdly, the role of individual differences has not been examined in most of the studies addressing the language--embodiment interplay. Fourthly and last, the scarcity of statistical power that has ailed some studies in cognitive psychology and neuroscience [@vasishthHowEmbraceVariation2021; @marekReproducibleBrainwideAssociation2022] is likely to have affected some studies in the present topic area, too [see @lynottReplicationExperiencingPhysical2014; @montero-melisNoEvidenceEmbodiment2022].
+
+The above open questions were addressed in the present study. These questions were overarched by the main research question, which examined whether the interplay between linguistic and visual processing held in the expected direction and at multiple levels of the experimental structure. To study this question, we drew on the data sets from three previous studies whose samples of participants were larger than average. These studies implemented the paradigms of semantic priming [@hutchison2013a], semantic decision [@pexman2017a] and lexical decision [@balota2007a]. Importantly, we extended these data sets with 
+
+
+# Levels of analysis
+
+Experimental data in psycholinguistics often consists of various levels, such as participants, words and tasks. A simultaneous examination of these levels should improve our understanding of the evidence collected [@ostarekStrongInferenceResearch2021]. For instance, this cross-examination can help increase our certainty on the attribution of explanatory power to each level, as well as allowing a comparison of the explanatory power across levels. This multilevel approach is complementary to another approach in the field which seeks to test the causal contribution of different sources of information to conceptual processing---e.g., language [@ponari2018a], perception [@stasenkoWhenConceptsLose2014] and action [@speedImpairedComprehensionSpeed2017].
+
+The three levels examined in this study are described below.
+
+
+## Participant level
+
+*** to be edited *** Individual differences in domains such as language, perception, mental imagery and physical experience [e.g., @davies2017a; @dils2010a; @fettermanFeelingWarmBeing2018; @holt2006a; @mak2019a; @miceliDifferencesRelatedAging2022; @pexman2018a; @vukovic2015a; @yap2012a; @yap2017a].^[According to @lamiellStatisticalThinkingPsychology2019, 'individual differences' is a misnomer in that the methods used to analyse individual differences (e.g, regression) are not participant-specific. We think that this observation is mitigated in the context of mixed-effects models (as used in our current study), which incorporate by-participant random intercepts and random slopes.] Furthermore, in some topic areas in which individual differences have not featured as prominently, the data have revealed a non-trivial role of individual differences [@montero-melisConsistencyMotionEvent2021; @kosIndividualVariationLate2012].
+
+### Vocabulary size
+
+Vocabulary size refers to the number of words a person can recognise out of a discrete set. Higher-vocabulary participants are expected to respond faster overall [@pexman2018a]. Some previous studies have found that the effect of vocabulary size was moderated by variables related to general intelligence, such as processing speed [@ratcliff2010a; @yap2012a]. Owing to those findings, and the recommendations from other studies [@james2018a; @pexman2018a; @sassenhagenCommonMisapplicationStatistical2016], the present studies included covariates of vocabulary size, where available.These covariates were measures of intelligence that were not vocabulary-based, namely, attentional control in Study 1 and information uptake in Study 2 (such a variable was not available for Study 3).
+
+
+## Word level
+
+*** to be edited *** Semantic or lexical information in words [e.g., @dedeyneVisualAffectiveMultimodal2021; @lam2015a; @lund1995a; @lund1996a; @lynott2020a; @mandera2017a; @pexman2017a; @santosPropertyGenerationReflects2011; @wingfieldUnderstandingRoleLinguistic2022]
+
+- *Variables in this study:* degree of association between words, degree of vision-based information in single words
+
+- Covariates: lexical variables and word concreteness. 
+
+  - Lexical variables: The lexical covariates were selected in each study out of the same 5 variables, which have been identified as important in previous research (Wingfield & Connell, 2022; see [\underline{General statistical analysis}](#general-statistical-analyses) for details).
+
+  - Word concreteness: Adjusting for word concreteness was deemed important due to the pervasive effect of this variable across lexical-semantic tasks [@brysbaert2014a; @connellStrengthPerceptualExperience2012; @pexman2018a]. Furthermore, it has been recently suggested that the effect of word concreteness does not stem from perceptual simulation, but instead from modality-independent properties of words [@bottiniConcretenessAdvantageLexical2021].
+
+Studies have operationalised the *language system* using measures that capture the relationships among words without explicitly drawing on any sensory or affective modalities. Two main types of linguistic measures exist: those based on text corpora---dubbed *word co-occurrence* measures [@bullinariaExtractingSemanticRepresentations2007; @petilli2021a; @wingfieldUnderstandingRoleLinguistic2022]---and those based on associations collected from human participants---dubbed *word association* measures [@de2016a; @de2019a]. Word co-occurrence is more purely linguistic, as word association captures more of the sensory and affective meaning of words [@dedeyneVisualAffectiveMultimodal2021]. In Studies 1 and 2 below, word co-occurrence measures are used to represent the language system at the word level. In Study 3, however, such a measure could not be implemented. The measurement of priming across consecutive trials was not possible due to the high prevalence of nonword trials throughout the experiment.
+
+The embodiment system has been represented by measures that explicitly draw on perceptual, motor or affective modalities [@fernandinoDecodingInformationStructure2022]. The perceptual modalities used in studies have often matched the 5 prototypical senses---vision, hearing, touch, taste, smell [@bernabeu2017a; @bernabeu2021a; @louwerseTasteWordsLinguistic2011]---and, less often, interoception [@connellInteroceptionForgottenModality2018]. Yet, out of these senses, vision has been most frequently used in research [e.g., @bottiniConcretenessAdvantageLexical2021; @dedeyneVisualAffectiveMultimodal2021; @pearsonHeterogeneityMentalRepresentation2015; @petilli2021a; @yeeColorlessGreenIdeas2012]. The prevalence of vision in research could be due to the prevalence of this sense in the brain [@reillyEnglishLexiconMirrors2020] and in language [@lynott2020a; @winterVisionDominatesPerceptual2018]. Furthermore, for the purpose of examining individual differences along with word-level variables, vision is easier to tap into than other senses. For instance, the perception of visual motion can be measured using a standard computer screen [@rajanandaRandomdotKinematogramWebbased2018]. Owing to these reasons, the three studies reported below implement the visual modality to represent the embodiment system at the word level.
+
+
+## Task level
+
+*** to be edited *** 
+
+- *Variable in this study:* stimulus-onset asynchrony (SOA), present in Study 1 only.^[The names of all variables were slightly adjusted for this text to facilitate their understanding---for instance, by replacing underscores with spaces (see code scripts at [https://osf.io/ueryq](https://osf.io/ueryq)). One specific case deserves further comment. We use the formula of the 'stimulus-onset asynchrony' (SOA) in this paper, instead of the 'interstimulus interval' (ISI), as the SOA has been more commonly used in previous papers [e.g., @hutchison2013a; @pecherDoesPizzaPrime1998; @petilli2021a; @yap2017a]. The difference between these formulas is that the ISI does not count the presentation of the prime word [example equivalences between ISI and SOA are available in @lam2015a, and in Figure 1A of @dilolloDecouplingStimulusDuration2004]. In the current study, the presentation of the prime word lasts 150 ms. Thus, the 200-ms SOA is equivalent to an ISI of 50 ms, and the 1,200-ms SOA corresponds to an ISI of 1,050 ms [@hutchison2013a]. The use of either formula in the analysis would not change our results, as we recoded the levels of the factor as -0.5 and +0.5, and then $z$-scored those, following the advice of @brauer2018a. In our analyses ([https://osf.io/ueryq](https://osf.io/ueryq)), we used the ISI formula as it was the one present in the data set of @hutchison2013a (retrieved from [https://www.montana.edu/attmemlab/documents/all%20ldt%20subs_all%20trials3.xlsx](https://www.montana.edu/attmemlab/documents/all%20ldt%20subs_all%20trials3.xlsx)]).
+
+In addition, the different paradigms applied across the three studies can be compared, albeit cautiously as the studies differ in other influential ways, such as the number of participants and stimulus words. The three tasks examined in the present studies are likely to reflect different degrees of semantic depth, in the following order [for background, see @connell2013a; @lam2015a; @ostarekTaskdependentCausalRole2017; @versaceImpactEmbodiedSimulation2021; @wingfieldUnderstandingRoleLinguistic2022].
+
+1. **Semantic decision** (Study 2) likely elicits the deepest semantic processing, as the instructions of this task ask for a concreteness judgement. In this task, participants are asked to classify words as abstract or concrete. 
+
+2. **Semantic priming** (Study 1). The task in the semantic priming paradigm is often lexical decision, as in Study 1 herein. The fundamental characteristic of this paradigm is that, in each trial, a prime word is presented for a very short period before the target word. The prime word is not relevant to the task. Nonetheless, participants process both the prime word and the target word, and this combination allows researchers to analyse responses based on the relationship between those words. Therefore, this paradigm is more deeply semantic than the lexical decision paradigm. Indeed, slower responses in semantic priming studies---reflecting difficult lexical decisions---have been linked to larger priming effects [@balotaMeanResponseLatency2008; @hoedemakerItTakesTime2014; @yapAdditiveInteractiveEffects2013], suggesting a degree of semantic association that does not appear in the standard lexical decision paradigm.
+
+3. **Lexical decision** (Study 3) is likely the semantically-shallowest task [see @balotaDepthAutomaticSpreading1986; @beckerLongtermSemanticPriming1997; @connell2013a; @dewitMaskedSemanticPriming2015; @joordensLongShortSemantic1997; @ostarekTaskdependentCausalRole2017].
+
+
+## Interactions across levels
+
+The three levels are strongly intertwined, and studies have probed into more than one level at once: for instance, word level and individual level [@aujlaLanguageExperiencePredicts2021; @lim2020a; @pexman2018a; @yapIndividualDifferencesJoint2009], or word level and task level [@al-azaryCanYouTouch2022; @connell2013a; @ostarekSixChallengesEmbodiment2019; @petilli2021a]. Thus, hypotheses are available regarding interactions across levels, as addressed below.
+
+### Vocabulary size and linguistic features
+
+Three hypotheses exist regarding the interaction between vocabulary size and lexical-semantic features. First, higher-vocabulary participants---compared to lower-vocabulary ones---might be more sensitive to linguistic features, thanks to a larger number of semantic associations [@connell2019a; @landauerIntroductionLatentSemantic1998; @louwerse2015a; @paivioMentalRepresentationsDual1990; @pylyshynWhatMindEye1973]. For instance, @yap2017a observed a larger semantic priming effect in higher-vocabulary participants from [@hutchinson2013a]. The second hypothesis, in contrast, states that higher-vocabulary participants would be *less* sensitive to linguistic features, thanks to a more automatic process. For instance, @yapIndividualDifferencesJoint2009 observed a smaller semantic priming effect in higher-vocabulary participants. Similarly, @yap2012a found that higher-vocabulary participants in a lexical decision task [@balota2007a] were less sensitive to a cluster of lexical and semantic features (i.e., word frequency, semantic neighborhood density and number of senses). Last, the third hypothesis proposes that higher-vocabulary participants might present a selective sensitivity, tailored to the task. For instance, @pexman2018a analysed the semantic decision task of @pexman2017a, in which participants assessed the concreteness of words. Pexman and Yap found that higher-vocabulary participants---compared to lower-vocabulary ones---were more sensitive to word concreteness and less sensitive to word frequency and age of acquisition, which were less relevant to the task [also see @lim2020a]. The three hypotheses herein were tested in the present study by revisiting some of the aforementioned studies [@hutchinson2013a; @pexman2017a; @balota2007a].
+
+### Vocabulary size and visual strength
+
+Research demonstrating the interplay between linguistic and embodied information [@connell2019a; @louwerse2015a; @paivioMentalRepresentationsDual1990] affords the hypothesis that lower-vocabulary participants---compared to higher-vocabulary ones---might profit more from sensory, motor, affective and social associations of the words.
+
+### Gender and linguistic features
+
+In addition, the language system is expected to be more important in female than male participants [@burman2008a; @hutchinson2013a; @jung2019a; @ullman2008a], provided that this interaction effect is not too small to be detected [@wallentinChapterGenderDifferences2020].
+
+In another study, @schmidtke2018a collected human ratings on the association between words that make up compounds. Some compounds were found to be relatively transparent---e.g., *doorbell*---, and others relatively opaque---e.g., *deadline*. Furthermore, @schmidtke2018a found an interaction between semantic transparency and participants' reading experience (the latter measure encompassing vocabulary size and exposure to printed materials): namely, more experienced readers processed transparent compounds more quickly than opaque ones, whereas less experienced readers processed opaque compounds more quickly than transparent ones. This interaction suggests __________________________. Thus, ________________________.
+
+
+## Power analysis
+
+Statistical power depends on the following factors: (1) sample size---comprising the number of participants, items, trials, etc.---, (2) effect size, (3) measurement variability and (4) number of comparisons being performed [@kumleEstimatingPowerGeneralized2021]. Out of these, sample size is the factor that can best be controlled by researchers [@kumleEstimatingPowerGeneralized2021]. The three studies we present below, containing larger-than-average sample sizes, offer an opportunity to conduct an a-priori power analysis to help determine the sample size of future studies [@albersWhenPowerAnalyses2018]. 
+
+### Motivations
+
+Insufficient statistical power lowers the reliability of effect sizes, and increases the likelihood of false positive results---i.e., Type I error---and of false negative results---i.e., Type II error [@gelmanPowerCalculationsAssessing2014; @lokenMeasurementErrorReplication2017; @tverskyBeliefLawSmall1971; @vondermalsburgFalsePositivesOther2017]. For instance, @vasishthHowEmbraceVariation2021 illustrate how, in low-powered studies, effect sizes associated with significant results tend to be overestimated [also see @vasishthStatisticalSignificanceFilter2018]. 
+
+Over the past decade, replication studies and power analyses have uncovered insufficient sample sizes in psychology [@brysbaertHowManyParticipants2019; @lynottReplicationExperiencingPhysical2014; @montero-melisSatelliteVsVerbframing2017; @montero-melisNoEvidenceEmbodiment2022; @rodriguez-ferreiroSemanticPrimingSchizotypal2020; @vasishthStatisticalSignificanceFilter2018]. In the neighbouring field of neuroscience, @marekReproducibleBrainwideAssociation2022 recently estimated the sample size that is required to reliably study the mapping between individual differences, such as fluid intelligence, and brain structures. Marek et al. found that the current median of 25 participants contributing to one of these studies contrasted with the thousands of participants---around 10,000---that would be needed for a well-powered study [also see @buttonPowerFailureWhy2013]. 
+
+More topic-specific power analyses are necessary due to three reasons. Firstly, power analyses provide greater certainty on the reasons behind non-replications [e.g., @opensciencecollaborationEstimatingReproducibilityPsychological2015], and behind non-significant results. Indeed, insufficient power is one of the possible reasons, alongside procedural errors or subtler methodological differences, and publication bias [@andersonResponseCommentEstimating2016; @barsalouEstablishingGeneralizableMechanisms2019; @corkerHighQualityDirect2014; @gilbertCommentEstimatingReproducibility2016; @williamsImprovingPsychologicalScience2014]. Currently, if we consider---for instance---research on individual differences, we will find several non-significant results, both in behavioural studies [e.g., @hedge2018a; @rodriguez-ferreiroSemanticPrimingSchizotypal2020; for a Bayes factor analysis, see @rouderPsychometricsIndividualDifferences2019] and in neuroscientific studies [e.g., @diazNeuralSensitivityPhonological2021]. A greater availability of power analyses in specific topics will at least shed light on the role of power in the results. Secondly, power analyses facilitate the identification of sensible sample sizes for future studies. Thirdly, power analyses help maximise the use of research funding in the long term by fostering studies that are more replicable [see @vasishthHowEmbraceVariation2021].
+
+
+# Methods
+
+The analytical method was largely similar across the three studies. Below, we present the commonalities in the statistical analyses and in the power analyses.
+
+## General method for statistical analyses {#general-statistical-analyses}
+
+The statistical analysis was designed to examine the unique contribution of each effect of interest. In all three studies, the dependent variable---response time (RT)---was $z$-scored around each participant's mean to curb the influence of each participant's baseline speed [@balota2007a; @lim2020a; @kumarDistantConnectivityMultiplestep2020; @pexman2017a; @pexman2018a; @yap2012a; @yap2017a]. This was important because the size of experimental effects is known to increase with longer RTs [@faust1999a]. Next, binary predictors were recoded into continuous variables [@brauer2018a]. Specifically, participants' gender was recoded as follows: male = -0.5; female = 0.5; NA = 0. The SOAs in Study 1 were recoded as follows: 150 ms = -0.5; 1,200 ms = 0.5. Finally, following @brauer2018a, all predictors were $z$-scored (i.e., $M \approx$ 0, $SD \approx$ 1). 
+
+Several covariates---or nuisance variables---were included, as detailed in each study, to allow a rigorous analysis of the effects of interest [@sassenhagenCommonMisapplicationStatistical2016]. Unlike the effects of interest, these covariates were not critical to the research question. They comprised lexical variables (e.g., word frequency) and participant-specific variables (e.g., attentional control). The lexical covariates were selected in every study out of the same 5 variables, which had been used as covariates in @wingfieldUnderstandingRoleLinguistic2022, and are widely used [e.g., @petilli2021a]. They comprised: number of letters (i.e., orthographic length), word frequency, number of syllables [both the latter from @balota2007a], orthographic Levenshtein distance [@yarkoniMovingColtheartNew2008] and phonological Levenshtein distance [@suarezObservingNeighborhoodEffects2011]. The selection among these candidates was performed because some of them were highly intercorrelated---i.e., $r$ > .70 [@dormannCollinearityReviewMethods2013; @harrison2018a]. The correlations and the selection models are available in [\underline{Appendix A}](#appendix-A-lexical-covariates).
+
+### Random effects
+
+The participants and the stimulus items were crossed in the three studies. That is, each participant was presented with a subset of the stimulus words. Conversely, each word was presented to a subset of participants. Therefore, linear mixed-effects models were implemented. These models included a maximal random-effects structure, with by-participant and by-word random intercepts, and the appropriate random slopes for all effects of interest [@barrRandomEffectsStructure2013]. In the case of interactions, random slopes were included only when the variables interacting varied within the same unit [@brauer2018a]---e.g., an interaction of two variables varying within participants (only present in Study 1). Owing to convergence warnings, random slopes for controlled covariates were removed, inspired by Remedy 11 from @brauer2018a. Exceptionally, in the Bayesian models for the lexical decision study, the random slopes for the covariates did not have to be removed.
+
+To avoid inflating the Type I error rate (false positives), the random slopes for the effects of interest were never removed [see Table 17 in @brauer2018a; for an example of this approach, see @diazNeuralSensitivityPhonological2021]. This approach provides a better protection against false positives [@barrRandomEffectsStructure2013; @brauer2018a; @singmann2019a] than the practice of removing random slopes when they do not significantly improve the fit [e.g., @bernabeu2017a; @pexman2018a; see @batesFittingLinearMixedeffects2015]. 
+
+### Frequentist analysis
+
+*P* values were calculated with the Kenward-Roger approximation for degrees of freedom [@luke2017a], using the 'lmerTest' package, Version 3.1-3 [@R-lmerTest]. The latter package in turn used 'lme4', Version 1.1-26 [@batesPackageLme42021; @batesFittingLinearMixedeffects2015]. Diagnostics regarding convergence and normality are provided in [\underline{Appendix B}](#appendix-B-frequentist-analysis-diagnostics).
+
+### Bayesian analysis
+
+In addition to the frequentist analysis, a Bayesian analysis was performed for two purposes: firstly, to enhance the interpretation of the smaller effects (which were identified as low-powered), and secondly, to complement the estimates obtained in the frequentist analysis. The latter purpose was pertinent because the frequentist models presented convergence warnings---even though it must be noted that a previous study found that frequentist and Bayesian estimates were similar despite convergence warnings appearing in the frequentist analysis [@rodriguez-ferreiroSemanticPrimingSchizotypal2020]. Furthermore, the complementary analysis was pertinent because the frequentist models presented residual errors that deviated from normality---even though mixed-effects models are fairly robust to such a deviation [@kniefViolatingNormalityAssumption2021; @schielzethRobustnessLinearMixed2020]. Owing to these precedents, we expected to find broadly similar estimates in the two approaches. 
+
+Each frequentist model in the three studies has a Bayesian counterpart, with the exception of a sub-analysis performed in the first study (semantic priming), which included 'visual similarity' as a predictor. Due to time constraints, this analysis did not include a Bayesian model. Furthermore, it must be noted that the Bayesian models in the semantic decision study did not produce valid results. Therefore, the estimates produced by these models are not shown in the main text, but they are instead in [\underline{Appendix E}](#appendix-E-Bayesian-analysis-results).
+
+Just as the frequentist estimates include 95% confidence intervals (CI), the Bayesian estimates include 95% credible intervals (CrI). These two types differ at a theoretical level, in that frequentist statistics are designed for the long run of testing, whereas Bayesian statistics are specific to each study [@schootBayesianStatisticsModelling2021; @vasishthStatisticalSignificanceFilter2018].
+
+The random effects included in these models were largely the same as those included in the frequentist models. The only exception regarded the lexical decision models. In the frequentist models for lexical decision, the covariates did not carry random slopes due to the presence of convergence warnings [see Remedy 11 in @brauer2018a], whereas in the Bayesian analysis, covariates did carry random slopes because the models converged.
+
+This Bayesian analysis was not aimed at hypothesis testing. Instead, it was designed to complement and verify the estimates that had been obtained in the frequentist analysis. Accordingly, we estimated the posterior distribution of every effect, without calculating Bayes factors [for other examples of this approach, see @milekEavesdroppingHappinessRevisited2018; @preglaVariabilitySentenceComprehension2021; @rodriguez-ferreiroSemanticPrimingSchizotypal2020; for comparisons between estimation and hypothesis testing, see @cummingNewStatisticsWhy2014; @kruschkeBayesianNewStatistics2018; @schmalzWhatBayesFactor2021; @tendeiroReviewIssuesNull2019; @tendeiroOnTheWhite2022; @rouderBayesianInferencePsychology2018; @vanravenzwaaijAdvantagesMasqueradingIssues2021]. In the estimation approach, the estimates are interpreted by considering the position of their credible intervals in relation to the predicted value of RT ($z$). That is, the closer an interval is to a value of 0 on the predicted RT ($z$), the smaller the effect of that predictor. For instance, an interval that is symmetrically centred on 0 indicates a very small effect, whereas---in comparison---an interval that does not include 0 at all indicates a far larger effect.
+
+The R package 'brms', Version 2.17.0, was used for this analysis [@burknerPackageBrms2022; @burknerAdvancedBayesianMultilevel2018].
+
+#### Priors
+
+The priors were established by inspecting the effect sizes obtained in previous studies as well as the effect sizes obtained in our frequentist analyses of Studies 1, 2 and 3. 
+
+The previous studies that were considered for determining the priors were selected because they had used experimental paradigms and analytical procedures similar to those used in the current studies. Specifically, the paradigms were (I) semantic priming with a lexical decision task---as in Study 1---, (II) semantic decision---as in Study 2---,and (III) lexical decision---as in Study 3. The analytical procedures consisted of the z-scoring of the dependent and the independent variables. We found two studies that matched these characteristics: @lim2020a (see Table 5 therein) and @pexman2018a (see Tables 6 and 7 therein). These studies and the frequentist analyses reported below yielded effect sizes smaller than ±0.30. The bounds of this range were determined by the results from @pexman2018a, who found a word-concreteness effect of $\upbeta$ = 0.41 in the concrete-words analysis, and an effect of $\upbeta$ = 0.20 in the abstract-words analysis. Since we did not separate abstract from concrete words, we averaged the former values, and set -0.30 as the lower bound, and 0.30 as the upper bound. This provided the basis for informative priors. Specifically, in these informative priors, 95% of values would fall within the range [-0.30, 0.30].
+
+Next, we considered the direction of effects. In the results of @lim2020a and @pexman2018a, and in our frequentist results, some effects consistently presented a negative direction---i.e., an inhibitory effect on RT---, whereas some other effects were consistently positive. We only incorporated the direction of effects into the priors in cases of large effects that had presented consistent directions in previous studies and in our frequentist analyses. These criteria were matched by the following variables: word frequency---with a negative direction, as higher word frequency leads to shorter RTs [@brysbaertImpactWordPrevalence2016; @brysbaertWordFrequencyEffect2018a; @lim2020a; @mendesPervasiveEffectWord2021; @pexman2018a]---, number of letters and number of syllables---both with positive directions [@bartonWordlengthEffectReading2014; @beyersmannEvidenceEmbeddedWord2020; @pexman2018a]---, and orthographic Levenshtein distance---with a positive direction [@cerniMotorExpertiseTyping2016; @dijkstraMultilinkComputationalModel2019; @kimEffectsLexicalFeatures2018; @yarkoniMovingColtheartNew2008]. We did not incorporate information about the direction of the word concreteness effect as this effect can follow different directions in abstract and concrete words [@pexman2018a], and we analysed both sets of words together. Last, it is noteworthy that some previous studies have integrated effect direction in some priors [e.g., @stoneInteractionGrammaticallyDistinct2021], but most have not [e.g., @preglaVariabilitySentenceComprehension2021; @rodriguez-ferreiroSemanticPrimingSchizotypal2020; @stoneEffectDecayLexical2020]. In conclusion, the four predictors that had directional priors were covariates (also known as nuisance variables). All the other predictors had priors centred on 0.
+
+These priors were used on the fixed effects and on the corresponding standard deviation parameters. The correlation among the random effects had a weakly-informative prior, LKJ(2) [@lewandowskiGeneratingRandomCorrelation2009], which assumes that high correlations among the random effects are rare [also used in @rodriguez-ferreiroSemanticPrimingSchizotypal2020; @stoneEffectDecayLexical2020; @stoneInteractionGrammaticallyDistinct2021; @vasishthBayesianDataAnalysis2018].
+
+##### Prior distributions and prior predictive checks
+
+We aimed to perform prior sensitivity analyses of our results. Prior sensitivity analyses are checks that assess the influence of different priors on the results [@leeBayesianCognitiveModeling2014; @schootBayesianStatisticsModelling2021; @stoneEffectDecayLexical2020]. The range of priors established for this purpose varied in their standard deviations. Their means were the same, most being centred on 0, as explained above.
+
+The priors we settled upon---shown in Figure \@ref(fig:bayesian-priors)---comprised an 'informative' prior ($SD$ = 0.1), a 'weakly-informative' one ($SD$ = 0.2) and a 'diffuse' one ($SD$ = 0.3). These priors resembled others from previous psycholinguistic studies [@preglaVariabilitySentenceComprehension2021; @stoneEffectDecayLexical2020; @stoneInteractionGrammaticallyDistinct2021]. For instance, @stoneEffectDecayLexical2020 used the following priors: $Normal$(0, 0.1), $Normal$(0, 0.3) and $Normal$(0, 1). The range of standard deviations we used---i.e., 0.1, 0.2 and 0.3---was narrower than those of previous studies because our dependent variable and our predictors were $z$-scored, resulting in small estimates and small $SD$s [see @lim2020a; @pexman2018a]. 
+
+```{r bayesian-priors, fig.cap = 'Priors used in the three studies. The green vertical rectangle shows the range of plausible effect sizes based on previous studies and on our frequentist analyses.'}
+
+source('bayesian_priors/bayesian_priors.R', local = TRUE)
+
+include_graphics(
+  paste0(
+    getwd(),  # Circumvent illegal characters in file path
+    '/bayesian_priors/plots/bayesian_priors.pdf'
+  ))
+
+```
+
+
+The adequacy of each of these priors was assessed with prior predictive checks, in which we compared the observed data to data predicted by the priors [@schootBayesianStatisticsModelling2021]. In these checks, we also tested the adequacy of two model-wide distributions: the traditional Gaussian distribution (default in most analyses) and an exponentially modified Gaussian---dubbed 'ex-Gaussian'---distribution [@matzkePsychologicalInterpretationExGaussian2009]. The ex-Gaussian distribution was considered because the residual errors of the frequentist models were not normally distributed [@loTransformNotTransform2015], and because this distribution was found to be more appropriate than the Gaussian one in a related, previous study [see supplementary materials of @rodriguez-ferreiroSemanticPrimingSchizotypal2020]. The ex-Gaussian distribution had an identity link function, which preserves the interpretability of the coefficients, as opposed to a transformation applied directly to the dependent variable [@loTransformNotTransform2015].
+
+Prior predictive checks revealed that the priors were adequate, and that the ex-Gaussian distribution was more appropriate than the Gaussian one, converging with @rodriguez-ferreiroSemanticPrimingSchizotypal2020 (see the corresponding plots in [\underline{Appendix D}](#appendix-D-interaction-plots)). Therefore, the ex-Gaussian distribution was used in the final models. 
+
+##### Prior sensitivity analysis
+
+In the main analyses, the informative, weakly-informative and diffuse priors were used in separate models. In other words, in each model, all priors had the same degree of informativeness [as done in @preglaVariabilitySentenceComprehension2021; @rodriguez-ferreiroSemanticPrimingSchizotypal2020; @stoneEffectDecayLexical2020; @stoneInteractionGrammaticallyDistinct2021]. In this way, a prior sensitivity analysis was performed to acknowledge the likely influence of the priors on the posterior distributions---that is, on the results [@leeBayesianCognitiveModeling2014; @schootBayesianStatisticsModelling2021; @stoneEffectDecayLexical2020].
+
+#### Posterior distributions
+
+As a last diagnostic, posterior predictive checks were performed to assess the fit between the observed data and new data predicted by the posterior [@schootBayesianStatisticsModelling2021]. These checks are available in [\underline{Appendix C}](#appendix-C-Bayesian-analysis-diagnostics). 
+
+
+## General method for statistical power analyses
+
+Power curves based on Monte Carlo simulations were performed for most of the effects of interest, using the R package 'simr', Version 1.0.5 [@greenSIMRPackagePower2016]. Obtaining power curves for a range of effects in each study allows for a comprehensive assessment of the plausibility of the power estimated for each effect.
+
+Monte Carlo simulations are performed by running the statistical model a large number of times, under slight, random variations of the dependent variable [@greenSIMRPackagePower2016; for a comparable approach, see @lokenMeasurementErrorReplication2017]. The power to detect each effect of interest is calculated by dividing the number of times that the effect is significant by the total number of simulations run. For instance, if an effect is significant on 85 simulations out of 100, the power for that effect is 85% [@kumleEstimatingPowerGeneralized2021]. The sample sizes tested in the semantic priming study ranged from 50 to 800 participants, whereas those tested in the semantic decision and lexical decision studies ranged from 50 to 2,000 participants. These sample sizes were unequally spaced to limit the computational requirements. They comprised the following: 50, 100, 200, 300, 400, 500, 600, 700, 800, 1,200, 1,600 and 2,000 participants.^[For the semantic priming study, the remaining sample sizes up to 2,000 participants have not finished running yet. Upon finishing, they will be reported in this manuscript.] The variance of the results decreases as more simulations are run. In each of our three studies, 200 simulations [as in @brysbaertPowerAnalysisEffect2018] were run for each effect of interest and for each sample size under consideration. Thus, for a power curve examining the power for an effect across 12 sample sizes, 2,400 simulations were run. In each study, the item-level sample size---i.e., the number of words---was not modified. Thus, each of the power curves we present assume the same number of words that existed in each of our studies (these numbers are detailed in each study below). *P* values were calculated using the Satterthwaite approximation for degrees of freedom, which is faster than Kenward-Roger but similarly accurate [@luke2017a].
+
+It is difficult to determine an effect size for each effect examined in a power analysis, as the amount and the scope of relevant research are usually finite and biased [@albersWhenPowerAnalyses2018; @gelmanPowerCalculationsAssessing2014; @kumleEstimatingPowerGeneralized2021]. Power analyses sometimes use the original effect sizes from previous studies [e.g., @paciniExocentricCodingMapping2021; @villalongaPerceptualTimingPrecision2021]. In contrast, some authors have opted to reduce the previous effect sizes to account for factors that can influence the effect size of the planned study. First, publication bias and low-powered studies cause published effect sizes to be inflated [@brysbaertHowManyParticipants2019; @lokenMeasurementErrorReplication2017; @vasishthStatisticalSignificanceFilter2018; @vasishthHowEmbraceVariation2021; @opensciencecollaborationEstimatingReproducibilityPsychological2015]. Second, there might be differences between the studies used in the power analysis and the study to be conducted. Some of these differences could be foreseeable---for instance, if they are due to a limitation in the literature available for the power analysis---, whereas other differences might arise from unexpected circumstances arising during the project or from random variation [@barsalouEstablishingGeneralizableMechanisms2019]. Reducing the effect size in the power analysis leads to an increase of the sample size of the planned study [@brysbaertPowerAnalysisEffect2018; @greenSIMRPackagePower2016; @hoenigAbusePower2001]. The reduced effect size---sometimes dubbed the smallest effect size of interest---is often set with a certain arbitrariness. For instance, @fleurDefinitelySawIt2020 applied a reduction of 1/8 (i.e., 12.5%), whereas @kumleEstimatingPowerGeneralized2021 applied a 15% reduction. In the present study, a reduction of 20% was applied to every effect examined in the power analysis. By comparison with the power analyses reviewed in this paragraph, the present reduction will lead to a relatively-conservative estimate of required sample sizes. Yet, it is intrinsically difficult to determine how conservative a power analysis is, once we consider the insufficient power of most studies in psychology, and the resulting overestimation of effect sizes.
+
+Both the primary analysis and the power analysis were performed in R [@R-base]. Version 4.0.2 was used for the frequentist analysis, Version 4.1.0 was used for the Bayesian analysis, and Version 4.1.2 was used for fast operations such as plotting. All the statistical and the power analyses were run on the High-End Computing facility at Lancaster University.^[Information about this facility is available at [https://answers.lancaster.ac.uk/display/ISS/High+End+Computing+%28HEC%29+help](https://answers.lancaster.ac.uk/display/ISS/High+End+Computing+%28HEC%29+help)]
+
+
+# Study 1: Semantic priming
+
+The core data set in this study was that of the Semantic Priming Project [@hutchison2013a; also see @yap2017a]. Out of the tasks delivered in the experiment, we used the lexical decision one because it was most relevant to our forthcoming research. In the lexical decision task, participants judged whether strings of letters constituted real words (e.g., 'building') or nonwords (e.g., 'gop'). Crucially, in the experimental manipulation that characterises semantic priming, a prime word was presented before the target word in each trial. Since prime words facilitate the comprehension of target words, the participants' responses to the targets can be analysed as a function of the semantic relationship between primes and targets [@hoedemakerItTakesTime2014].
+
+In some studies, the association between prime and target words has been examined in terms of related versus unrelated pairs [@pecherDoesPizzaPrime1998; @trumppMaskedPrimingConceptual2013], and in terms of first- and second-order relationships [@hutchison2013a]. In contrast to these categorical associations, other studies have measured the association between the prime and the target words using language-based similarity estimates [@guntherLatentSemanticAnalysis2016; @guenther2016a; @hutchisonPredictingSemanticPriming2008; @jones2006a; @lam2015a; @lund1995a; @lund1996a; @mandera2017a; @mcdonald2002a; @pad2007a; @petilli2021a; @wingfieldUnderstandingRoleLinguistic2022]. In one of these studies, @mandera2017a found that the latter computational measures outperformed human-based associations at explaining the priming effect.
+
+Priming associations beyond the linguistic realm have also been examined, with early studies finding perceptual priming effects [@floresdarcaisSemanticActivationRecognition1985; @schreuderEffectsPerceptualConceptual1984]. Yet, the earliest findings were soon reframed by @pecherDoesPizzaPrime1998, who conducted a follow-up with an improved design, and observed the perceptual priming effect only when the word processing task was preceded by a visually-intensive task [@pecherDoesPizzaPrime1998]. This moderating condition, replicated by @yeeColorlessGreenIdeas2012, is consistent with other conceptual-processing studies using a non-priming paradigm [@ostarekTaskdependentCausalRole2017]. However, a considerable number of studies have observed perceptual priming even in the absence of a preparatory perceptual task. A set of these studies used the Conceptual Modality Switch paradigm, in which the primes and the targets are presented in separate, consecutive trials [@pecherVerifyingDifferentmodalityProperties2003; @lynottModalityExclusivityNorms2009; @louwerseTasteWordsLinguistic2011; @collinsModalitySwitchingProperty2011; @hald2011a; @hald2013a; @trumppMaskedPrimingConceptual2013; @bernabeu2017a]. The other set of studies, using the more standard priming intervals, are described below.
+
+@lam2015a conducted a semantic priming experiment containing a lexical decision task. Participants were instructed to respond whether the prime word and the target word in each trial were both real words or pseudowords. The semantic-priming manipulation consisted of the following types of associations between the prime and the target words: (1) semantic association (e.g., bolt → screwdriver), (2) action association (e.g., housekey → screwdriver), (3) visual association (e.g., soldering iron → screwdriver), and (4) no association (e.g., charger → screwdriver). In addition, four conditions were present that consisted of SOAs of 500, 650, 800 and 1,400 ms. In the results, Lam et al. firstly observed priming effects of the semantic-association type with all SOAs. Secondly, the authors observed motor-association priming effects with the SOAs of 500, 650 and 1,400 ms. Lastly, they observed visual-association priming effects only with the SOA of 1,400 ms. Overall, semantic-association priming---corresponding to language-based association---was more consistent than the priming based on visual and action associations. This greater influence of the language system converges with other studies on semantic priming [@lam2015a; @pecherDoesPizzaPrime1998; @petilli2021a] and with studies using other paradigms [@banksLinguisticDistributionalKnowledge2021; @kiela2014a; @louwerse2015a]. 
+
+Similarly, the results of @lam2015a regarding the time course of language-based and vision-based priming were consistent with a wealth of literature observing that perceptual systems, such as vision, are activated later than the language system [@barsalouLanguageSimulationConceptual2008; @connell2013a; @louwerseTasteWordsLinguistic2011; @santosPropertyGenerationReflects2011]. For instance, studies using electroencephalography have found that perceptual priming effects emerged in the first 300 ms. Following the 300-ms stage, the perceptual priming increased in some studies [@bernabeu2017a; @amselEmpiricallyGroundingGrounded2014], whereas other studies it stabilised [@kieferDifferentialTemporospatialPattern2022], and in a third set of studies, the effect fluctuated [@amselTrackingRealtimeNeural2011]. Taken together, the most prevalent pattern is of a gradual accumulation of information throughout word processing [also see @haukOnlyTimeWill2016], which is consistent with the accummulation of information required for the integration of context in sentences [@haldEEGThetaGamma2006]. This progression invites two hypotheses regarding SOA in the current study: (1) that language-based information will be more prevalent than vision-based information in both the short and the long SOA, and (2) that vision-based information will be more prevalent in the long SOA than in the short one. Consistent with the first hypothesis, @petilli2021a observed that language-based information was more influential in both the short and the long SOA, within the data set of @hutchison2013a. The second hypothesis, in contrast, is challenged by other findings. First, @hutchisonSemanticPrimingDue2003 concluded that the vision-based priming effect was negligible. Second, other studies have observed the effect only when the word processing task was preceded by a visually-intensive task [@pecherDoesPizzaPrime1998; @yeeColorlessGreenIdeas2012]. Third, Petilli et al. observed vision-based priming with the short SOA (150 ms) but not with the long one (1,200 ms).
+
+The findings of @petilli2021a were based on a novel analysis of the data set of @hutchison2013a. The strengths of Petilli et al.'s study centred on the simultaneous analysis of language- and vision-based similarity using predictors that were continuous [see @cohenCostDichotomization1983; @guntherLatentSemanticAnalysis2016; @mandera2017a] and not based on human ratings [cf. @hutchisonPredictingSemanticPriming2008; @hutchison2013a; @lam2015a; @pecherDoesPizzaPrime1998]. The authors used such measures to pursue a comprehensive analysis that was not affected by the problem of circularity between the independent and the dependent variables. The circularity problem obtains even though the participants who contributed to the ratings---or 'norms'---are always different from those who participate in the main experiment. 
+
+Petilli et al. operationalised language-based similarity based on text-based co-occurrence, producing a continuous measure in contrast to the categorical factors used earlier. Next, Petilli et al. created a visual-similarity measure by retrieving ImageNet images for each word, and training vector representations on those images using neural networks. Importantly, the authors compared the resulting visual-similarity measure to previous scores based on human ratings [@pecherDoesPizzaPrime1998], and found a comparable pattern. Using these materials, Petilli et al. examined language-based and vision-based priming in two tasks---lexical decision and naming---and with both a short and a long SOA. In lexical decision, the largest effect observed by the authors was that of language-based priming with the short SOA (150 ms). The second largest effect was that of language-based priming with the long SOA (1,200 ms). Next, the weakest effect that was significant was that of vision-based priming with the short SOA. Last, there was no effect of vision-based priming with the long SOA. @petilli2021a explained the absence of vision-based priming with the long SOA in lexical decision by contending that visual activation had likely decayed before participants processed the target words [also see @yeeFunctionFollowsForm2011], owing to the limited semantic processing required for lexical decision [also see @balotaDepthAutomaticSpreading1986; @beckerLongtermSemanticPriming1997; @connell2013a; @dewitMaskedSemanticPriming2015; @joordensLongShortSemantic1997; @ostarekTaskdependentCausalRole2017]. Therefore, the authors suggested that perceptual simulation does *not* outlast language-based processing in lexical decision, in contrast to the longer latency found in other tasks [@barsalouLanguageSimulationConceptual2008; @louwerseTasteWordsLinguistic2011].
+
+In the naming task of @petilli2021a, the largest effect was that of language-based priming with the long SOA. The second largest effect was that of language-based priming with the short SOA. Last, there was no effect of vision-based priming with either SOA. This finding contrasted with @connellSeeHearWhat2014, who found facilitatory effects of visual strength in both lexical decision and naming. Petilli et al. explained the lack of vision-based priming in the naming task by alluding to the lower semantic depth of this task---compared to lexical decision---, and the mixture of visual and auditory processing in the naming task [@connellSeeHearWhat2014].
+
+In the present study, we revisited the interplay between linguistic and perceptual simulation by conceptually replicating @petilli2021a. Specifically, we used the same primary data set [@hutchison2013a], and a language-based similarity measure that was very similar to that used by @petilli2021a [both our measure and theirs originated from @mandera2017a]. In contrast, in the domain of vision, the operationalisation of visual-strength difference in our study---based one variable from [@lynott2020a]---was simpler than that of Petilli et al.'s visual similarity---which involved convolutional neural networks. As a counterpoint, Petilli et al.'s measure was superior in that it was independent from human ratings, thus precluding the problem of circularity between the independent and the dependent variables. At [\underline{the end of the Results section}](#comparing-two-measures-of-vision-based-information), we compare the performance of these two measures.
+
+
+## Methods
+
+### Effects of interest
+
+- $Z$-scored vocabulary size [`z_vocabulary_size`; calculated from average of `vocaba`, `vocabb` and `vocabc` in @hutchison2013a]. The test used by @hutchison2013a comprised a synonym test, an antonym test, and an analogy test, all three extracted from the Woodcock–Johnson III diagnostic reading battery [@woodcockWoodcockJohnsonIII2001]. We operationalised the vocabulary measure as the mean score across the three tasks per participant.
+
+- $Z$-scored, recoded participant's gender [`z_recoded_participant_gender`; calculated from `gender` in @hutchison2013a]
+
+- $Z$-scored language-based similarity between prime and target words [`z_cosine_similarity`]. This measure was calculated using a semantic space from @mandera2017a, which the authors found to be the second-best predictor ($R$^2^ = .465) of the semantic priming effect in the lexical decision task of @hutchison2013a (we could not use the best semantic space, $R$^2^ = .471, owing to computational limitations). The second-best semantic space [see first row in Table 5 of @mandera2017a] was based on lemmas from a subtitle corpus, processed in a Continuous Bag Of Words model, and the space had 300 dimensions and a window size of 6.
+
+- $Z$-scored vision-based information in words [`z_visual_rating`; calculated from `Visual.mean` in @lynott2020a]
+
+- $Z$-scored, recoded SOA [`z_recoded_interstimulus_interval`; calculated from `isi` in @hutchison2013a]
+
+
+```{r}
+
+# Calculate numbers to be reported in the paragraph below
+
+# Save number of participants and prime-target pairs
+semanticpriming_number_participants = 
+  length(unique(semanticpriming$Participant))
+
+semanticpriming_number_primetarget_pairs = 
+  length(unique(semanticpriming$primeword_targetword))
+
+# Number of prime-target pairs per participant.
+# Save mean as integer and SD rounded while keeping trailing zeros
+semanticpriming_mean_primetarget_pairs_per_participant = 
+  semanticpriming %>% group_by(Participant) %>% 
+  summarise(length(unique(primeword_targetword))) %>% 
+  select(2) %>% unlist %>% mean %>% round(0)
+
+semanticpriming_SD_primetarget_pairs_per_participant = 
+  semanticpriming %>% group_by(Participant) %>% 
+  summarise(length(unique(primeword_targetword))) %>% 
+  select(2) %>% unlist %>% sd %>% sprintf('%.2f', .)
+
+# Number of participants per prime-target pair.
+# Save mean as integer and SD rounded while keeping trailing zeros
+semanticpriming_mean_participants_per_primetarget_pair = 
+  semanticpriming %>% group_by(primeword_targetword) %>% 
+  summarise(length(unique(Participant))) %>% 
+  select(2) %>% unlist %>% mean %>% round(0)
+
+semanticpriming_SD_participants_per_primetarget_pair = 
+  semanticpriming %>% group_by(primeword_targetword) %>% 
+  summarise(length(unique(Participant))) %>% 
+  select(2) %>% unlist %>% sd %>% sprintf('%.2f', .)
+
+```
+
+
+The final data set contained `r semanticpriming_number_participants` participants, `r semanticpriming_number_primetarget_pairs %>% formattable::comma(digits = 0)` prime-target pairs, and a total of `r length(semanticpriming$z_target.RT) %>% formattable::comma(digits = 0)` RTs. On average, there were `r semanticpriming_mean_primetarget_pairs_per_participant` prime-target pairs per participant ($SD$ = `r semanticpriming_SD_primetarget_pairs_per_participant`), and conversely, `r semanticpriming_mean_participants_per_primetarget_pair` participants per prime-target pair ($SD$ = `r semanticpriming_SD_participants_per_primetarget_pair`).
+
+Figure \@ref(fig:semanticpriming-correlations) shows the zero-order correlations among the predictors and the dependent variable.
+
+```{r semanticpriming-correlations, fig.cap = 'Zero-order correlations in the semantic priming study.', fig.width = 7.5, fig.height = 4.5, out.width = '65%'}
+
+# Using the following variables...
+semanticpriming[, c('z_target.RT', 'z_vocabulary_size', 
+                    'z_attentional_control',  'z_cosine_similarity', 
+                    'z_visual_rating_diff', 'z_word_concreteness_diff', 
+                    'z_target_word_frequency', 
+                    'z_target_number_syllables')] %>%
+  
+  # renamed for the sake of clarity
+  rename('RT' = z_target.RT, 
+         'Vocabulary size' = z_vocabulary_size,
+         'Attentional control' = z_attentional_control,
+         'Language-based similarity' = z_cosine_similarity,
+         'Visual-strength difference' = z_visual_rating_diff,
+         'Word-concreteness difference' = z_word_concreteness_diff,
+         'Word frequency' = z_target_word_frequency,
+         'Number of syllables' = z_target_number_syllables) %>%
+  
+  # make correlation matrix (custom function from the 'R_functions' folder)
+  correlation_matrix() + 
+  theme(plot.margin = unit(c(0, 0, 0.1, -3.1), 'in'))
+
+```
+
+
+### Covariates
+
+The following covariates were included in the model to allow a rigorous analysis of the effects of interest.
+
+- Lexical (see [\underline{Appendix A}](#appendix-A-lexical-covariates)): $z$-scored word frequency and orthographic Levenshtein distance [@balota2007a]
+
+- Semantic: $z$-scored word concreteness [@brysbaert2014a], used as a covariate of visual rating.
+
+- Individual differences: $z$-scored attentional control [@hutchison2013a]. This covariate is related to vocabulary size [@ratcliff2010a], and previous studies have pointed out the desirability of including these kinds of covariates in analyses [@james2018a; @pexman2018a]. Attentional control was operationalised as the average score across three attention-demanding tasks: namely, operation span, Stroop, antisaccade.
+
+
+### Diagnostics for the frequentist model
+
+The model presented convergence warnings. To avoid removing important random slopes, which could increase the Type I error [@brauer2018a; @singmann2019a], we examined the model after refitting it using seven optimization algorithms through the 'allFit' function of the 'lme4' package [@batesPackageLme42021]. The results showed that all optimizers produced virtually identical means for all effects, suggesting that the convergence warnings were not consequential (Bates et al., 2021; see [\underline{Appendix B}](#appendix-B-frequentist-analysis-diagnostics)).
+
+The residual errors were not normally distributed, and attempts to mitigate this deviation proved unsuccessful (see [\underline{Appendix B}](#appendix-B-frequentist-analysis-diagnostics)). However, this is not likely to have posed a major problem, as mixed-effects models are fairly robust to deviations from normality [@kniefViolatingNormalityAssumption2021; @schielzethRobustnessLinearMixed2020].
+
+```{r}
+
+# Calculate VIF for every predictor and return only the maximum VIF rounded up
+maxVIF_semanticpriming = car::vif(semanticpriming_lmerTest) %>% max %>% ceiling
+
+```
+
+The model did not present multicollinearity problems, all variance inflation factors (VIF) being smaller than `r maxVIF_semanticpriming` [@dormannCollinearityReviewMethods2013; @harrison2018a].
+
+
+### Diagnostics for the Bayesian model
+
+```{r}
+
+# Calculate number of post-warmup draws (as in 'brms' version 2.17.0).
+# Informative prior model used but same numbers in all three models.
+semanticpriming_post_warmup_draws = 
+  (semanticpriming_summary_informativepriors_exgaussian$iter -
+     semanticpriming_summary_informativepriors_exgaussian$warmup) *
+  semanticpriming_summary_informativepriors_exgaussian$chains
+
+# As a convergence diagnostic, find maximum R-hat value for the 
+# fixed effects across the three models.
+semanticpriming_fixedeffects_max_Rhat = 
+  max(semanticpriming_summary_informativepriors_exgaussian$fixed$Rhat,
+      # semanticpriming_summary_weaklyinformativepriors_exgaussian$fixed$Rhat,
+      semanticpriming_summary_diffusepriors_exgaussian$fixed$Rhat) %>% 
+  # Round
+  sprintf('%.2f', .)
+
+# Next, find find maximum R-hat value for the random effects 
+# across the three models. 
+semanticpriming_randomeffects_max_Rhat = 
+  max(semanticpriming_summary_informativepriors_exgaussian$random[['Participant']]$Rhat,
+      # semanticpriming_summary_weaklyinformativepriors_exgaussian$random[['Participant']]$Rhat,
+      semanticpriming_summary_diffusepriors_exgaussian$random[['Participant']]$Rhat,
+      semanticpriming_summary_informativepriors_exgaussian$random[['primeword_targetword']]$Rhat,
+      # semanticpriming_summary_weaklyinformativepriors_exgaussian$random[['primeword_targetword']]$Rhat,
+      semanticpriming_summary_diffusepriors_exgaussian$random[['primeword_targetword']]$Rhat) %>% 
+  # Round
+  sprintf('%.2f', .)
+
+```
+
+
+Three Bayesian models were run that were respectively characterised by informative, weakly-informative and diffuse priors. In each model, `r semanticpriming_summary_informativepriors_exgaussian$chains` chains were used. In each chain, `r semanticpriming_summary_informativepriors_exgaussian$warmup %>% formattable::comma(digits = 0)` warmup iterations were run, followed by `r (semanticpriming_summary_informativepriors_exgaussian$iter - semanticpriming_summary_informativepriors_exgaussian$warmup) %>% formattable::comma(digits = 0)` post-warmup iterations. Thus, a total of `r semanticpriming_post_warmup_draws %>% formattable::comma(digits = 0)` post-warmup draws were produced over all the chains. 
+
+The maximum $\widehat R$ value for the fixed effects across the three models was `r semanticpriming_fixedeffects_max_Rhat`, suggesting that these parameters had converged [@schootBayesianStatisticsModelling2021; @vehtariRanknormalizationFoldingLocalization2021]. In contrast, the maximum $\widehat R$ value for the random effects was `r semanticpriming_randomeffects_max_Rhat`, exceeding the 1.01 threshold [@vehtariRanknormalizationFoldingLocalization2021]. Therefore, models with more iterations will be run, and once completed, they will be reported in this manuscript.
+
+The posterior predictive checks were sound (see [\underline{Appendix C}](#appendix-C-Bayesian-analysis-diagnostics)). Furthermore, in the prior sensitivity analysis, the results were virtually identical with the three priors that were considered (to recall the priors, see Figure \@ref(fig:bayesian-priors) above; to view the results in detail, see [\underline{Appendix E}](#appendix-E-Bayesian-analysis-results)).
+
+
+## Results {#semanticpriming-results}
+
+Table \@ref(tab:semanticpriming-frequentist-model) presents the results of the mixed-effects model.
+
+```{r semanticpriming-frequentist-model, results = 'asis'}
+
+# Rename effects in plain language and specify the random slopes
+# (if any) for each effect, in the footnote. For this purpose, 
+# superscripts are added to the names of the appropriate effects.
+# 
+# In the interactions below, word-level variables are presented 
+# first for the sake of consistency (the order does not affect 
+# the results in any way). Also in the interactions, double 
+# colons are used to inform the 'frequentist_model_table' 
+# function that the two terms in the interaction must be split 
+# into two lines.
+
+rownames(KR_summary_semanticpriming_lmerTest$coefficients)[
+  rownames(KR_summary_semanticpriming_lmerTest$coefficients) == 
+    'z_attentional_control'] = 'Attentional control'
+
+rownames(KR_summary_semanticpriming_lmerTest$coefficients)[
+  rownames(KR_summary_semanticpriming_lmerTest$coefficients) == 
+    'z_vocabulary_size'] = 'Vocabulary size $^{\\text{a}}$'
+
+rownames(KR_summary_semanticpriming_lmerTest$coefficients)[
+  rownames(KR_summary_semanticpriming_lmerTest$coefficients) == 
+    'z_recoded_participant_gender'] = 'Gender $^{\\text{a}}$'
+
+rownames(KR_summary_semanticpriming_lmerTest$coefficients)[
+  rownames(KR_summary_semanticpriming_lmerTest$coefficients) == 
+    'z_target_word_frequency'] = 'Word frequency'
+
+rownames(KR_summary_semanticpriming_lmerTest$coefficients)[
+  rownames(KR_summary_semanticpriming_lmerTest$coefficients) == 
+    'z_target_number_syllables'] = 'Number of syllables'
+
+rownames(KR_summary_semanticpriming_lmerTest$coefficients)[
+  rownames(KR_summary_semanticpriming_lmerTest$coefficients) == 
+    'z_word_concreteness_diff'] = 'Word-concreteness difference'
+
+rownames(KR_summary_semanticpriming_lmerTest$coefficients)[
+  rownames(KR_summary_semanticpriming_lmerTest$coefficients) == 
+    'z_cosine_similarity'] = 'Language-based similarity $^{\\text{b}}$'
+
+rownames(KR_summary_semanticpriming_lmerTest$coefficients)[
+  rownames(KR_summary_semanticpriming_lmerTest$coefficients) == 
+    'z_visual_rating_diff'] = 'Visual-strength difference $^{\\text{b}}$'
+
+rownames(KR_summary_semanticpriming_lmerTest$coefficients)[
+  rownames(KR_summary_semanticpriming_lmerTest$coefficients) == 
+    'z_recoded_interstimulus_interval'] = 'Stimulus-onset asynchrony (SOA) $^{\\text{b}}$'
+
+rownames(KR_summary_semanticpriming_lmerTest$coefficients)[
+  rownames(KR_summary_semanticpriming_lmerTest$coefficients) == 
+    'z_word_concreteness_diff:z_vocabulary_size'] = 
+  'Word-concreteness difference :: Vocabulary size'
+
+rownames(KR_summary_semanticpriming_lmerTest$coefficients)[
+  rownames(KR_summary_semanticpriming_lmerTest$coefficients) == 
+    'z_word_concreteness_diff:z_recoded_interstimulus_interval'] = 
+  'Word-concreteness difference : SOA'
+
+rownames(KR_summary_semanticpriming_lmerTest$coefficients)[
+  rownames(KR_summary_semanticpriming_lmerTest$coefficients) == 
+    'z_word_concreteness_diff:z_recoded_participant_gender'] = 
+  'Word-concreteness difference : Gender'
+
+rownames(KR_summary_semanticpriming_lmerTest$coefficients)[
+  rownames(KR_summary_semanticpriming_lmerTest$coefficients) == 
+    'z_attentional_control:z_cosine_similarity'] = 
+  'Language-based similarity :: Attentional control'
+
+rownames(KR_summary_semanticpriming_lmerTest$coefficients)[
+  rownames(KR_summary_semanticpriming_lmerTest$coefficients) == 
+    'z_attentional_control:z_visual_rating_diff'] = 
+  'Visual-strength difference :: Attentional control'
+
+rownames(KR_summary_semanticpriming_lmerTest$coefficients)[
+  rownames(KR_summary_semanticpriming_lmerTest$coefficients) == 
+    'z_vocabulary_size:z_cosine_similarity'] = 
+  'Language-based similarity :: Vocabulary size'
+
+rownames(KR_summary_semanticpriming_lmerTest$coefficients)[
+  rownames(KR_summary_semanticpriming_lmerTest$coefficients) == 
+    'z_vocabulary_size:z_visual_rating_diff'] = 
+  'Visual-strength difference :: Vocabulary size'
+
+rownames(KR_summary_semanticpriming_lmerTest$coefficients)[
+  rownames(KR_summary_semanticpriming_lmerTest$coefficients) == 
+    'z_recoded_participant_gender:z_cosine_similarity'] = 
+  'Language-based similarity : Gender'
+
+rownames(KR_summary_semanticpriming_lmerTest$coefficients)[
+  rownames(KR_summary_semanticpriming_lmerTest$coefficients) == 
+    'z_recoded_participant_gender:z_visual_rating_diff'] = 
+  'Visual-strength difference : Gender'
+
+rownames(KR_summary_semanticpriming_lmerTest$coefficients)[
+  rownames(KR_summary_semanticpriming_lmerTest$coefficients) == 
+    'z_recoded_interstimulus_interval:z_cosine_similarity'] = 
+  'Language-based similarity : SOA $^{\\text{b}}$'
+
+rownames(KR_summary_semanticpriming_lmerTest$coefficients)[
+  rownames(KR_summary_semanticpriming_lmerTest$coefficients) == 
+    'z_recoded_interstimulus_interval:z_visual_rating_diff'] = 
+  'Visual-strength difference : SOA $^{\\text{b}}$'
+
+
+# Next, change the names in the confidence intervals object
+
+rownames(confint_semanticpriming_lmerTest)[
+  rownames(confint_semanticpriming_lmerTest) == 
+    'z_attentional_control'] = 'Attentional control'
+
+rownames(confint_semanticpriming_lmerTest)[
+  rownames(confint_semanticpriming_lmerTest) == 
+    'z_vocabulary_size'] = 'Vocabulary size $^{\\text{a}}$'
+
+rownames(confint_semanticpriming_lmerTest)[
+  rownames(confint_semanticpriming_lmerTest) == 
+    'z_recoded_participant_gender'] = 'Gender $^{\\text{a}}$'
+
+rownames(confint_semanticpriming_lmerTest)[
+  rownames(confint_semanticpriming_lmerTest) == 
+    'z_target_word_frequency'] = 'Word frequency'
+
+rownames(confint_semanticpriming_lmerTest)[
+  rownames(confint_semanticpriming_lmerTest) == 
+    'z_target_number_syllables'] = 'Number of syllables'
+
+rownames(confint_semanticpriming_lmerTest)[
+  rownames(confint_semanticpriming_lmerTest) == 
+    'z_word_concreteness_diff'] = 'Word-concreteness difference'
+
+rownames(confint_semanticpriming_lmerTest)[
+  rownames(confint_semanticpriming_lmerTest) == 
+    'z_cosine_similarity'] = 'Language-based similarity $^{\\text{b}}$'
+
+rownames(confint_semanticpriming_lmerTest)[
+  rownames(confint_semanticpriming_lmerTest) == 
+    'z_visual_rating_diff'] = 'Visual-strength difference $^{\\text{b}}$'
+
+rownames(confint_semanticpriming_lmerTest)[
+  rownames(confint_semanticpriming_lmerTest) == 
+    'z_recoded_interstimulus_interval'] = 'Stimulus-onset asynchrony (SOA) $^{\\text{b}}$'
+
+rownames(confint_semanticpriming_lmerTest)[
+  rownames(confint_semanticpriming_lmerTest) == 
+    'z_word_concreteness_diff:z_vocabulary_size'] = 
+  'Word-concreteness difference :: Vocabulary size'
+
+rownames(confint_semanticpriming_lmerTest)[
+  rownames(confint_semanticpriming_lmerTest) == 
+    'z_word_concreteness_diff:z_recoded_interstimulus_interval'] = 
+  'Word-concreteness difference : SOA'
+
+rownames(confint_semanticpriming_lmerTest)[
+  rownames(confint_semanticpriming_lmerTest) == 
+    'z_word_concreteness_diff:z_recoded_participant_gender'] = 
+  'Word-concreteness difference : Gender'
+
+rownames(confint_semanticpriming_lmerTest)[
+  rownames(confint_semanticpriming_lmerTest) == 
+    'z_attentional_control:z_cosine_similarity'] = 
+  'Language-based similarity :: Attentional control'
+
+rownames(confint_semanticpriming_lmerTest)[
+  rownames(confint_semanticpriming_lmerTest) == 
+    'z_attentional_control:z_visual_rating_diff'] = 
+  'Visual-strength difference :: Attentional control'
+
+rownames(confint_semanticpriming_lmerTest)[
+  rownames(confint_semanticpriming_lmerTest) == 
+    'z_vocabulary_size:z_cosine_similarity'] = 
+  'Language-based similarity :: Vocabulary size'
+
+rownames(confint_semanticpriming_lmerTest)[
+  rownames(confint_semanticpriming_lmerTest) == 
+    'z_vocabulary_size:z_visual_rating_diff'] = 
+  'Visual-strength difference :: Vocabulary size'
+
+rownames(confint_semanticpriming_lmerTest)[
+  rownames(confint_semanticpriming_lmerTest) == 
+    'z_recoded_participant_gender:z_cosine_similarity'] = 
+  'Language-based similarity : Gender'
+
+rownames(confint_semanticpriming_lmerTest)[
+  rownames(confint_semanticpriming_lmerTest) == 
+    'z_recoded_participant_gender:z_visual_rating_diff'] = 
+  'Visual-strength difference : Gender'
+
+rownames(confint_semanticpriming_lmerTest)[
+  rownames(confint_semanticpriming_lmerTest) == 
+    'z_recoded_interstimulus_interval:z_cosine_similarity'] = 
+  'Language-based similarity : SOA $^{\\text{b}}$'
+
+rownames(confint_semanticpriming_lmerTest)[
+  rownames(confint_semanticpriming_lmerTest) == 
+    'z_recoded_interstimulus_interval:z_visual_rating_diff'] = 
+  'Visual-strength difference : SOA $^{\\text{b}}$'
+
+
+# Create table (using custom function from the 'R_functions' folder)
+frequentist_model_table(
+  KR_summary_semanticpriming_lmerTest, 
+  confint_semanticpriming_lmerTest,
+  order_effects = c('(Intercept)',
+                    'Attentional control',
+                    'Vocabulary size $^{\\text{a}}$',
+                    'Gender $^{\\text{a}}$',
+                    'Word frequency',
+                    'Number of syllables',
+                    'Word-concreteness difference',
+                    'Language-based similarity $^{\\text{b}}$',
+                    'Visual-strength difference $^{\\text{b}}$',
+                    'Stimulus-onset asynchrony (SOA) $^{\\text{b}}$',
+                    'Word-concreteness difference :: Vocabulary size',
+                    'Word-concreteness difference : SOA',
+                    'Word-concreteness difference : Gender',
+                    'Language-based similarity :: Attentional control',
+                    'Visual-strength difference :: Attentional control',
+                    'Language-based similarity :: Vocabulary size',
+                    'Visual-strength difference :: Vocabulary size',
+                    'Language-based similarity : Gender',
+                    'Visual-strength difference : Gender',
+                    'Language-based similarity : SOA $^{\\text{b}}$',
+                    'Visual-strength difference : SOA $^{\\text{b}}$'),
+  interaction_symbol_x = TRUE,
+  caption = 'Frequentist model for the semantic priming study.') %>%
+  # kable_styling(latex_options = 'scale_down') %>%
+  
+  # Group predictors under headings
+  pack_rows('Individual differences', 2, 4) %>% 
+  pack_rows('Target-word lexical covariates', 5, 6) %>% 
+  pack_rows('Prime-target semantic relationship', 7, 9) %>% 
+  pack_rows('Task condition', 10, 10) %>% 
+  pack_rows('Interactions', 11, 21) %>% 
+  
+  # Place table close to designated position and highlight covariates
+  kable_styling(latex_options = c('hold_position', 'striped'), 
+                stripe_index = c(2, 5:7, 11:15)) %>%
+  
+  # Footnote describing abbreviations, random slopes, etc. 
+  # LaTeX code used to format the text.
+  footnote(escape = FALSE, threeparttable = TRUE, general_title = '\\\\linebreak', 
+           general = paste('\\\\textit{Note}. $\\\\upbeta$ = Estimate based on $z$-scored variables; \\\\textit{SE} = standard error;',
+                           'CI = confidence interval. Shaded rows contain covariates. Some interactions are',
+                           'split over two lines, with the second line indented. \\\\linebreak', 
+                           '$^{\\\\text{a}}$ By-word random slopes were included for this effect.',
+                           '$^{\\\\text{b}}$ By-participant random slopes were included for this effect.', 
+                           # Begin lines after first one with a dot-sized indent
+                           sep = ' \\\\linebreak \\\\phantom{.}'))
+
+
+# Calculate R^2. This coefficient must be interpreted with caution 
+# (Nakagawa et al., 2017; https://doi.org/10.1098/rsif.2017.0213). 
+# Also, transform coefficient to rounded percentage.
+
+Nakagawa2017_fixedeffects_R2_semanticpriming_lmerTest = 
+  paste0(
+    (MuMIn::r.squaredGLMM(semanticpriming_lmerTest)[1, 'R2m'][[1]] * 100) %>% 
+      sprintf('%.2f', .), '%'
+  )
+
+Nakagawa2017_randomeffects_R2_semanticpriming_lmerTest = 
+  paste0(
+    (MuMIn::r.squaredGLMM(semanticpriming_lmerTest)[1, 'R2c'][[1]] * 100) %>% 
+      sprintf('%.2f', .), '%'
+  )
+
+```
+
+
+The fixed effects of this model explained `r Nakagawa2017_fixedeffects_R2_semanticpriming_lmerTest` of the variance, and the random effects explained `r Nakagawa2017_randomeffects_R2_semanticpriming_lmerTest` [@nakagawaCoefficientDeterminationR22017]. It is to be expected that random effects explain more variance, as they involve a far larger number of coefficients for each effect. For instance, the by-word random slopes for a single individual-level variable (e.g., vocabulary size) involve as many coefficients as the number of words. Similarly, the by-participant random slopes for a single word-level variable (e.g., language-based similarity) involve as many coefficients as the number of participants. In contrast, a fixed effect involves 1 coefficient only.
+
+Figure \@ref(fig:semanticpriming-interactions-with-vocabulary-size)-a shows the interaction between vocabulary size and language-based similarity, whereby higher-vocabulary participants presented a greater benefit from the language-based similarity between prime and target words. That is, the greater the similarity between prime and target words, the greater the advantage for participants with higher vocabularies. This interaction replicates the results of @yap2017a, who analysed the same data set but using a categorical measure of similarity instead. Indeed, this replication is noteworthy as it holds in spite of some methodological differences between the studies. First, @yap2017a operationalised the priming effect as a categorical difference between related and unrelated prime-target pairs. In contrast, the present study applied a continuous measure of relatedness---i.e., cosine similarity---, which is more precise and may thus afford more statistical power [@mandera2017a; @petilli2021a]. Second, the analysis conducted by @yap2017a was correlational, whereas the present analysis used mixed-effects models that included several covariates to measure the effects of interest as rigorously as possible.
+
+Figure \@ref(fig:semanticpriming-interactions-with-vocabulary-size)-b presents the interaction between vocabulary size and vision-based similarity. Albeit a non-significant interaction, it is noteworthy that the effect of vision-based information is larger in lower-vocabulary participants.
+
+(ref:semanticpriming-interactions-with-vocabulary-size) Interactions of vocabulary size with language- and vision-based similarity. Vocabulary size is constrained to deciles, whereas in the statistical analysis it contained more values within the current range. *n* = number of participants contained between decile values.
+
+```{r semanticpriming-interactions-with-vocabulary-size, fig.cap = '(ref:semanticpriming-interactions-with-vocabulary-size)', out.width = '85%'}
+
+# Run plot through source() rather than directly in this R Markdown document 
+# to preserve the italicised text.
+
+source('semanticpriming/frequentist_analysis/semanticpriming-interactions-with-vocabulary-size.R', 
+       local = TRUE)
+
+include_graphics(
+  paste0(
+    getwd(),  # Circumvent illegal characters in file path
+    '/semanticpriming/frequentist_analysis/plots/semanticpriming-interactions-with-vocabulary-size.pdf'
+  ))
+
+```
+
+
+Methodologically, the interaction between vocabulary size and language-based similarity underscores the consistency that exists between human ratings and computational approximations to meaning [e.g., @charbonnierPredictingWordConcreteness2019; @charbonnierPredictingConcretenessGerman2020; @guenther2016a; @louwerse2015a; @mandera2017a; @petilli2021a; @solovyevConcretenessAbstractnessConcept2021; @wingfieldUnderstandingRoleLinguistic2022]. In contrast to this consistency, some studies have found human ratings to have more explanatory power than computational measures [@de2016a; @de2019a; @gagneProcessingEnglishCompounds2016; @schmidtke2018a], and other research has suggested that some computational measures are not intrinsically contentful, but arise from a missing-data problem [@snefjella2020a]. In sum, this evidence suggests that computational measures are artificial, and yet valid for the study of cognition.
+
+Figure \@ref(fig:semanticpriming-interactions-with-SOA) shows that the effects of language-based similarity and visual strength were both larger with the short SOA. Yet there is a notable difference: whereas the effect of language-based similarity is present with both SOAs (i.e., 150 ms and 1,200 ms), the effect of visual strength is almost reserved to the the long SOA. This finding replicates @petilli2021a, and stands in contrast to previous findings regarding the slower pace of the visual system in semantic priming [@lam2015a] and in other paradigms [@connell2013a; @louwerseTasteWordsLinguistic2011]. __conclude_______________
+
+```{r semanticpriming-interactions-with-SOA, fig.cap = 'Interactions of SOA with language-based similarity and visual strength. SOA was analysed using $z$-scores, but for clarity, the variable is shown in its simpler form here.', out.width = '80%'}
+
+# Run plot through source() rather than directly in this R Markdown document 
+# to preserve the italicised text.
+
+source('semanticpriming/frequentist_analysis/semanticpriming-interactions-with-SOA.R', 
+       local = TRUE)
+
+include_graphics(
+  paste0(
+    getwd(),  # Circumvent illegal characters in file path
+    '/semanticpriming/frequentist_analysis/plots/semanticpriming-interactions-with-SOA.pdf'
+  ))
+
+```
+
+
+#### The importance of outliers
+
+The interaction in Figure \@ref(fig:semanticpriming-interactions-with-vocabulary-size) is patent in all deciles of vocabulary size but most notably in the participants who lie more than 1 standard deviation away from the mean. Outliers in individual differences have played important roles in other areas of cognition as well, such as in the domains of aphantasia and hyperphantasia---traits characterised, respectively, by a diminished and an extraordinary ability to mentally visualise objects [@milton2021a; @zeman2020a]. Furthermore, if we consider the difficulty of detecting effects involving individual differences [@diazNeuralSensitivityPhonological2021; @hedge2018a; @rodriguez-ferreiroSemanticPrimingSchizotypal2020], and the limited representativeness of most samples of participants [@henrich2010a], it may be fruitful to study more varied samples, where possible.
+
+
+### Visualising the estimates
+
+Figure \@ref(fig:semanticpriming-frequentist-bayesian-plot-informativepriors-exgaussian) presents the posterior distribution of each effect, based on the informative prior model. The models with the other priors produced virtually identical results (see [\underline{Appendix E}](#appendix-E-Bayesian-analysis-results)). The figure also shows the frequentist estimates from Table \@ref(tab:semanticpriming-frequentist-model), to facilitate the comparison.
+
+```{r semanticpriming-frequentist-bayesian-plot-informativepriors-exgaussian, fig.cap = 'Estimates from the frequentist analysis (in red) and from the Bayesian analysis (in blue) for the semantic priming study. The frequentist means (represented by points) are flanked by 95\\% confidence intervals. The Bayesian means (represented by vertical lines) are flanked by 95\\% credible intervals, in light blue (in some cases, the interval is covered up by the bar of the mean).'}
+
+# Run plot through source() rather than directly in this R Markdown document
+# to preserve the format.
+
+source('semanticpriming/frequentist_bayesian_plots/semanticpriming_frequentist_bayesian_plots.R', 
+       local = TRUE)
+
+include_graphics(
+  paste0(
+    getwd(),  # Circumvent illegal characters in file path
+    '/semanticpriming/frequentist_bayesian_plots/plots/semanticpriming_frequentist_bayesian_plot_informativepriors_exgaussian.pdf'
+  ))
+
+```
+
+
+### Comparing two measures of vision-based information {#comparing-two-measures-of-vision-based-information}
+
+Next, we reflected on the adequacy of visual-strength difference as a measurement instrument, as it had never been used before to operationalise the semantic priming effect. On the one hand, its effect on RT was negative, as we would expect. However, we were concerned about the low correlation between this variable and language-based similarity ($r$ = `r cor(semanticpriming$z_cosine_similarity, semanticpriming$z_visual_rating_diff) %>% sprintf('%.2f', .)`). This concern was especially motivated by the correlation that @petilli2021a had found between their 'vision-based similarity' measure and language-based similarity, which reached $r$ = .50. Based on this information, we set out to run a model with the aim of comparing the performance of our measures of vision-based information. 
+
+```{r}
+
+# Calculate numbers to be reported in the paragraph below
+
+# Save number of participants and prime-target pairs
+semanticpriming_with_visualsimilarity_number_participants = 
+  length(unique(semanticpriming_with_visualsimilarity$Participant))
+
+semanticpriming_with_visualsimilarity_number_primetarget_pairs =
+  length(unique(semanticpriming_with_visualsimilarity$primeword_targetword))
+
+# Number of prime-target pairs per participant.
+# Save mean as integer and SD rounded while keeping trailing zeros
+semanticpriming_with_visualsimilarity_mean_primetarget_pairs_per_participant = 
+  semanticpriming_with_visualsimilarity %>% group_by(Participant) %>% 
+  summarise(length(unique(primeword_targetword))) %>% 
+  select(2) %>% unlist %>% mean %>% round(0)
+
+semanticpriming_with_visualsimilarity_SD_primetarget_pairs_per_participant = 
+  semanticpriming_with_visualsimilarity %>% group_by(Participant) %>% 
+  summarise(length(unique(primeword_targetword))) %>% 
+  select(2) %>% unlist %>% sd %>% sprintf('%.2f', .)
+
+# Number of participants per prime-target pair.
+# Save mean as integer and SD rounded while keeping trailing zeros
+semanticpriming_with_visualsimilarity_mean_participants_per_primetarget_pair = 
+  semanticpriming_with_visualsimilarity %>% group_by(primeword_targetword) %>% 
+  summarise(length(unique(Participant))) %>% 
+  select(2) %>% unlist %>% mean %>% round(0)
+
+semanticpriming_with_visualsimilarity_SD_participants_per_primetarget_pair = 
+  semanticpriming_with_visualsimilarity %>% group_by(primeword_targetword) %>% 
+  summarise(length(unique(Participant))) %>% 
+  select(2) %>% unlist %>% sd %>% sprintf('%.2f', .)
+
+```
+
+
+We created a subset of our data set in which we ensured that all the trials contained data from all the relevant variables---i.e., from all the existing variables and from the newly-added visual similarity from Petilli et al. This subsetting resulted in the loss of 83% of trials, owing to the strict selection criteria applied by Petilli et al. in the creation of the visual-similarity measure (e.g., both the target and the prime word had to be associated to at least 100 pictures in ImageNet). As a result, our data set in this analysis contained `r semanticpriming_with_visualsimilarity_number_participants` participants, `r semanticpriming_with_visualsimilarity_number_primetarget_pairs %>% formattable::comma(digits = 0)` prime-target pairs, and a total of `r length(semanticpriming_with_visualsimilarity$z_target.RT) %>% formattable::comma(digits = 0)` RTs. On average, there were `r semanticpriming_with_visualsimilarity_mean_primetarget_pairs_per_participant` prime-target pairs per participant ($SD$ = `r semanticpriming_with_visualsimilarity_SD_primetarget_pairs_per_participant`), and conversely, `r semanticpriming_with_visualsimilarity_mean_participants_per_primetarget_pair` participants per prime-target pair ($SD$ = `r semanticpriming_with_visualsimilarity_SD_participants_per_primetarget_pair`).
+
+Figure \@ref(fig:semanticpriming-with-visualsimilarity-correlations) shows the zero-order correlations among the predictors and the dependent variable.
+
+```{r semanticpriming-with-visualsimilarity-correlations, fig.cap = 'Zero-order correlations in the semantic priming data set that included visual similarity.', fig.width = 8.3, fig.height = 5, out.width = '73%'}
+
+# Using the following variables...
+semanticpriming_with_visualsimilarity %>%
+  
+  select(z_target.RT, z_vocabulary_size, z_attentional_control, 
+         z_cosine_similarity, z_visual_similarity, 
+         z_visual_rating_diff, z_word_concreteness_diff, 
+         z_target_word_frequency, z_target_number_syllables) %>%
+  
+  # Use plain names
+  rename('RT' = z_target.RT, 
+         'Vocabulary size' = z_vocabulary_size,
+         'Attentional control' = z_attentional_control,
+         'Language-based similarity' = z_cosine_similarity,
+         'Visual-strength difference' = z_visual_rating_diff,
+         'Vision-based similarity' = z_visual_similarity,
+         'Word-concreteness difference' = z_word_concreteness_diff,
+         'Target-word frequency' = z_target_word_frequency,
+         'Number of target-word syllables' = z_target_number_syllables) %>%
+  
+  # make correlation matrix (custom function from the 'R_functions' folder)
+  correlation_matrix() + 
+  theme(plot.margin = unit(c(0, 0, 0.1, -3.1), 'in'))
+
+```
+
+
+### Diagnostics for the frequentist model
+
+The model presented convergence warnings. To avoid removing important random slopes, which could increase the Type I error [@brauer2018a; @singmann2019a], we examined the model after refitting it using seven optimization algorithms through the 'allFit' function of the 'lme4' package [@batesPackageLme42021]. The results showed that all optimizers produced virtually identical means for all effects, suggesting that the convergence warnings were not consequential (Bates et al., 2021; see [\underline{Appendix B}](#appendix-B-frequentist-analysis-diagnostics)).
+
+The residual errors were not normally distributed, and attempts to mitigate this deviation proved unsuccessful (see [\underline{Appendix B}](#appendix-B-frequentist-analysis-diagnostics)). However, this is not likely to have posed a major problem, as mixed-effects models are fairly robust to deviations from normality [@kniefViolatingNormalityAssumption2021; @schielzethRobustnessLinearMixed2020].
+
+```{r}
+
+# Calculate VIF for every predictor and return only the maximum VIF rounded up
+maxVIF_semanticpriming_with_visualsimilarity = 
+  car::vif(semanticpriming_with_visualsimilarity_lmerTest) %>% max %>% ceiling
+
+```
+
+The model did not present multicollinearity problems, all VIFs being smaller than `r maxVIF_semanticpriming_with_visualsimilarity` [@dormannCollinearityReviewMethods2013; @harrison2018a].
+
+Due to time constraints, this analysis did not include a Bayesian model.
+
+
+#### Results
+
+Table \@ref(tab:semanticpriming-with-visualsimilarity-frequentist-model) presents the results of the mixed-effects model. Due to space, the covariates are shown in Table \@ref(tab:semanticpriming-with-visualsimilarity-frequentist-model-covariates).
+
+```{r semanticpriming-with-visualsimilarity-frequentist-model, results = 'asis'}
+
+# Rename effects in plain language and specify the random slopes
+# (if any) for each effect, in the footnote. For this purpose, 
+# superscripts are added to the names of the appropriate effects.
+# 
+# In the interactions below, word-level variables are presented 
+# first for the sake of consistency (the order does not affect 
+# the results in any way). Also in the interactions, double 
+# colons are used to inform the 'frequentist_model_table' 
+# function that the two terms in the interaction must be split 
+# into two lines.
+
+rownames(KR_summary_semanticpriming_with_visualsimilarity_lmerTest$coefficients)[
+  rownames(KR_summary_semanticpriming_with_visualsimilarity_lmerTest$coefficients) ==
+    'z_attentional_control'] = 'Attentional control'
+
+rownames(KR_summary_semanticpriming_with_visualsimilarity_lmerTest$coefficients)[
+  rownames(KR_summary_semanticpriming_with_visualsimilarity_lmerTest$coefficients) == 
+    'z_vocabulary_size'] = 'Vocabulary size $^{\\text{a}}$'
+
+rownames(KR_summary_semanticpriming_with_visualsimilarity_lmerTest$coefficients)[
+  rownames(KR_summary_semanticpriming_with_visualsimilarity_lmerTest$coefficients) == 
+    'z_recoded_participant_gender'] = 'Gender $^{\\text{a}}$'
+
+rownames(KR_summary_semanticpriming_with_visualsimilarity_lmerTest$coefficients)[
+  rownames(KR_summary_semanticpriming_with_visualsimilarity_lmerTest$coefficients) ==
+    'z_target_word_frequency'] = 'Word frequency'
+
+rownames(KR_summary_semanticpriming_with_visualsimilarity_lmerTest$coefficients)[
+  rownames(KR_summary_semanticpriming_with_visualsimilarity_lmerTest$coefficients) ==
+    'z_target_number_syllables'] = 'Number of syllables'
+
+rownames(KR_summary_semanticpriming_with_visualsimilarity_lmerTest$coefficients)[
+  rownames(KR_summary_semanticpriming_with_visualsimilarity_lmerTest$coefficients) ==
+    'z_word_concreteness_diff'] = 'Word-concreteness difference'
+
+rownames(KR_summary_semanticpriming_with_visualsimilarity_lmerTest$coefficients)[
+  rownames(KR_summary_semanticpriming_with_visualsimilarity_lmerTest$coefficients) == 
+    'z_cosine_similarity'] = 'Language-based similarity $^{\\text{b}}$'
+
+rownames(KR_summary_semanticpriming_with_visualsimilarity_lmerTest$coefficients)[
+  rownames(KR_summary_semanticpriming_with_visualsimilarity_lmerTest$coefficients) == 
+    'z_visual_rating_diff'] = 'Visual-strength difference $^{\\text{b}}$'
+
+rownames(KR_summary_semanticpriming_with_visualsimilarity_lmerTest$coefficients)[
+  rownames(KR_summary_semanticpriming_with_visualsimilarity_lmerTest$coefficients) == 
+    'z_visual_similarity'] = 'Vision-based similarity $^{\\text{b}}$'
+
+rownames(KR_summary_semanticpriming_with_visualsimilarity_lmerTest$coefficients)[
+  rownames(KR_summary_semanticpriming_with_visualsimilarity_lmerTest$coefficients) == 
+    'z_recoded_interstimulus_interval'] = 'Stimulus-onset asynchrony (SOA) $^{\\text{b}}$'
+
+rownames(KR_summary_semanticpriming_with_visualsimilarity_lmerTest$coefficients)[
+  rownames(KR_summary_semanticpriming_with_visualsimilarity_lmerTest$coefficients) ==
+    'z_word_concreteness_diff:z_vocabulary_size'] =
+  'Word-concreteness difference :: Vocabulary size'
+
+rownames(KR_summary_semanticpriming_with_visualsimilarity_lmerTest$coefficients)[
+  rownames(KR_summary_semanticpriming_with_visualsimilarity_lmerTest$coefficients) ==
+    'z_word_concreteness_diff:z_recoded_interstimulus_interval'] =
+  'Word-concreteness difference : SOA'
+
+rownames(KR_summary_semanticpriming_with_visualsimilarity_lmerTest$coefficients)[
+  rownames(KR_summary_semanticpriming_with_visualsimilarity_lmerTest$coefficients) ==
+    'z_word_concreteness_diff:z_recoded_participant_gender'] =
+  'Word-concreteness difference : Gender'
+
+rownames(KR_summary_semanticpriming_with_visualsimilarity_lmerTest$coefficients)[
+  rownames(KR_summary_semanticpriming_with_visualsimilarity_lmerTest$coefficients) ==
+    'z_attentional_control:z_cosine_similarity'] =
+  'Language-based similarity :: Attentional control'
+
+rownames(KR_summary_semanticpriming_with_visualsimilarity_lmerTest$coefficients)[
+  rownames(KR_summary_semanticpriming_with_visualsimilarity_lmerTest$coefficients) ==
+    'z_attentional_control:z_visual_rating_diff'] =
+  'Visual-strength difference :: Attentional control'
+
+rownames(KR_summary_semanticpriming_with_visualsimilarity_lmerTest$coefficients)[
+  rownames(KR_summary_semanticpriming_with_visualsimilarity_lmerTest$coefficients) ==
+    'z_attentional_control:z_visual_similarity'] =
+  'Vision-based similarity :: Attentional control'
+
+rownames(KR_summary_semanticpriming_with_visualsimilarity_lmerTest$coefficients)[
+  rownames(KR_summary_semanticpriming_with_visualsimilarity_lmerTest$coefficients) == 
+    'z_vocabulary_size:z_cosine_similarity'] = 
+  'Language-based similarity :: Vocabulary size'
+
+rownames(KR_summary_semanticpriming_with_visualsimilarity_lmerTest$coefficients)[
+  rownames(KR_summary_semanticpriming_with_visualsimilarity_lmerTest$coefficients) == 
+    'z_vocabulary_size:z_visual_rating_diff'] = 
+  'Visual-strength difference :: Vocabulary size'
+
+rownames(KR_summary_semanticpriming_with_visualsimilarity_lmerTest$coefficients)[
+  rownames(KR_summary_semanticpriming_with_visualsimilarity_lmerTest$coefficients) == 
+    'z_vocabulary_size:z_visual_similarity'] = 
+  'Vision-based similarity :: Vocabulary size'
+
+rownames(KR_summary_semanticpriming_with_visualsimilarity_lmerTest$coefficients)[
+  rownames(KR_summary_semanticpriming_with_visualsimilarity_lmerTest$coefficients) == 
+    'z_recoded_participant_gender:z_cosine_similarity'] = 
+  'Language-based similarity : Gender'
+
+rownames(KR_summary_semanticpriming_with_visualsimilarity_lmerTest$coefficients)[
+  rownames(KR_summary_semanticpriming_with_visualsimilarity_lmerTest$coefficients) == 
+    'z_recoded_participant_gender:z_visual_rating_diff'] = 
+  'Visual-strength difference : Gender'
+
+rownames(KR_summary_semanticpriming_with_visualsimilarity_lmerTest$coefficients)[
+  rownames(KR_summary_semanticpriming_with_visualsimilarity_lmerTest$coefficients) == 
+    'z_recoded_participant_gender:z_visual_similarity'] = 
+  'Vision-based similarity : Gender'
+
+rownames(KR_summary_semanticpriming_with_visualsimilarity_lmerTest$coefficients)[
+  rownames(KR_summary_semanticpriming_with_visualsimilarity_lmerTest$coefficients) == 
+    'z_recoded_interstimulus_interval:z_cosine_similarity'] = 
+  'Language-based similarity : SOA $^{\\text{b}}$'
+
+rownames(KR_summary_semanticpriming_with_visualsimilarity_lmerTest$coefficients)[
+  rownames(KR_summary_semanticpriming_with_visualsimilarity_lmerTest$coefficients) == 
+    'z_recoded_interstimulus_interval:z_visual_rating_diff'] = 
+  'Visual-strength difference : SOA $^{\\text{b}}$'
+
+rownames(KR_summary_semanticpriming_with_visualsimilarity_lmerTest$coefficients)[
+  rownames(KR_summary_semanticpriming_with_visualsimilarity_lmerTest$coefficients) == 
+    'z_recoded_interstimulus_interval:z_visual_similarity'] = 
+  'Vision-based similarity : SOA $^{\\text{b}}$'
+
+
+# Next, change the names in the confidence intervals object
+
+rownames(confint_semanticpriming_with_visualsimilarity_lmerTest)[
+  rownames(confint_semanticpriming_with_visualsimilarity_lmerTest) ==
+    'z_attentional_control'] = 'Attentional control'
+
+rownames(confint_semanticpriming_with_visualsimilarity_lmerTest)[
+  rownames(confint_semanticpriming_with_visualsimilarity_lmerTest) == 
+    'z_vocabulary_size'] = 'Vocabulary size $^{\\text{a}}$'
+
+rownames(confint_semanticpriming_with_visualsimilarity_lmerTest)[
+  rownames(confint_semanticpriming_with_visualsimilarity_lmerTest) == 
+    'z_recoded_participant_gender'] = 'Gender $^{\\text{a}}$'
+
+rownames(confint_semanticpriming_with_visualsimilarity_lmerTest)[
+  rownames(confint_semanticpriming_with_visualsimilarity_lmerTest) ==
+    'z_target_word_frequency'] = 'Word frequency'
+
+rownames(confint_semanticpriming_with_visualsimilarity_lmerTest)[
+  rownames(confint_semanticpriming_with_visualsimilarity_lmerTest) ==
+    'z_target_number_syllables'] = 'Number of syllables'
+
+rownames(confint_semanticpriming_with_visualsimilarity_lmerTest)[
+  rownames(confint_semanticpriming_with_visualsimilarity_lmerTest) ==
+    'z_word_concreteness_diff'] = 'Word-concreteness difference'
+
+rownames(confint_semanticpriming_with_visualsimilarity_lmerTest)[
+  rownames(confint_semanticpriming_with_visualsimilarity_lmerTest) == 
+    'z_cosine_similarity'] = 'Language-based similarity $^{\\text{b}}$'
+
+rownames(confint_semanticpriming_with_visualsimilarity_lmerTest)[
+  rownames(confint_semanticpriming_with_visualsimilarity_lmerTest) == 
+    'z_visual_rating_diff'] = 'Visual-strength difference $^{\\text{b}}$'
+
+rownames(confint_semanticpriming_with_visualsimilarity_lmerTest)[
+  rownames(confint_semanticpriming_with_visualsimilarity_lmerTest) == 
+    'z_visual_similarity'] = 'Vision-based similarity $^{\\text{b}}$'
+
+rownames(confint_semanticpriming_with_visualsimilarity_lmerTest)[
+  rownames(confint_semanticpriming_with_visualsimilarity_lmerTest) == 
+    'z_recoded_interstimulus_interval'] = 'Stimulus-onset asynchrony (SOA) $^{\\text{b}}$'
+
+rownames(confint_semanticpriming_with_visualsimilarity_lmerTest)[
+  rownames(confint_semanticpriming_with_visualsimilarity_lmerTest) ==
+    'z_word_concreteness_diff:z_vocabulary_size'] =
+  'Word-concreteness difference :: Vocabulary size'
+
+rownames(confint_semanticpriming_with_visualsimilarity_lmerTest)[
+  rownames(confint_semanticpriming_with_visualsimilarity_lmerTest) ==
+    'z_word_concreteness_diff:z_recoded_interstimulus_interval'] =
+  'Word-concreteness difference : SOA'
+
+rownames(confint_semanticpriming_with_visualsimilarity_lmerTest)[
+  rownames(confint_semanticpriming_with_visualsimilarity_lmerTest) ==
+    'z_word_concreteness_diff:z_recoded_participant_gender'] =
+  'Word-concreteness difference : Gender'
+
+rownames(confint_semanticpriming_with_visualsimilarity_lmerTest)[
+  rownames(confint_semanticpriming_with_visualsimilarity_lmerTest) ==
+    'z_attentional_control:z_cosine_similarity'] =
+  'Language-based similarity :: Attentional control'
+
+rownames(confint_semanticpriming_with_visualsimilarity_lmerTest)[
+  rownames(confint_semanticpriming_with_visualsimilarity_lmerTest) ==
+    'z_attentional_control:z_visual_rating_diff'] =
+  'Visual-strength difference :: Attentional control'
+
+rownames(confint_semanticpriming_with_visualsimilarity_lmerTest)[
+  rownames(confint_semanticpriming_with_visualsimilarity_lmerTest) ==
+    'z_attentional_control:z_visual_similarity'] =
+  'Vision-based similarity :: Attentional control'
+
+rownames(confint_semanticpriming_with_visualsimilarity_lmerTest)[
+  rownames(confint_semanticpriming_with_visualsimilarity_lmerTest) == 
+    'z_vocabulary_size:z_cosine_similarity'] = 
+  'Language-based similarity :: Vocabulary size'
+
+rownames(confint_semanticpriming_with_visualsimilarity_lmerTest)[
+  rownames(confint_semanticpriming_with_visualsimilarity_lmerTest) == 
+    'z_vocabulary_size:z_visual_rating_diff'] = 
+  'Visual-strength difference :: Vocabulary size'
+
+rownames(confint_semanticpriming_with_visualsimilarity_lmerTest)[
+  rownames(confint_semanticpriming_with_visualsimilarity_lmerTest) == 
+    'z_vocabulary_size:z_visual_similarity'] = 
+  'Vision-based similarity :: Vocabulary size'
+
+rownames(confint_semanticpriming_with_visualsimilarity_lmerTest)[
+  rownames(confint_semanticpriming_with_visualsimilarity_lmerTest) == 
+    'z_recoded_participant_gender:z_cosine_similarity'] = 
+  'Language-based similarity : Gender'
+
+rownames(confint_semanticpriming_with_visualsimilarity_lmerTest)[
+  rownames(confint_semanticpriming_with_visualsimilarity_lmerTest) == 
+    'z_recoded_participant_gender:z_visual_rating_diff'] = 
+  'Visual-strength difference : Gender'
+
+rownames(confint_semanticpriming_with_visualsimilarity_lmerTest)[
+  rownames(confint_semanticpriming_with_visualsimilarity_lmerTest) == 
+    'z_recoded_participant_gender:z_visual_similarity'] = 
+  'Vision-based similarity : Gender'
+
+rownames(confint_semanticpriming_with_visualsimilarity_lmerTest)[
+  rownames(confint_semanticpriming_with_visualsimilarity_lmerTest) == 
+    'z_recoded_interstimulus_interval:z_cosine_similarity'] = 
+  'Language-based similarity : SOA $^{\\text{b}}$'
+
+rownames(confint_semanticpriming_with_visualsimilarity_lmerTest)[
+  rownames(confint_semanticpriming_with_visualsimilarity_lmerTest) == 
+    'z_recoded_interstimulus_interval:z_visual_rating_diff'] = 
+  'Visual-strength difference : SOA $^{\\text{b}}$'
+
+rownames(confint_semanticpriming_with_visualsimilarity_lmerTest)[
+  rownames(confint_semanticpriming_with_visualsimilarity_lmerTest) == 
+    'z_recoded_interstimulus_interval:z_visual_similarity'] = 
+  'Vision-based similarity : SOA $^{\\text{b}}$'
+
+
+# Create table (using custom function from the 'R_functions' folder)
+
+# Covariates are commented out as they do not fit in the table. 
+# They are instead shown in the subsequent table.
+
+frequentist_model_table(
+  KR_summary_semanticpriming_with_visualsimilarity_lmerTest, 
+  confint_semanticpriming_with_visualsimilarity_lmerTest,
+  select_effects = c('(Intercept)',
+                     # 'Attentional control',
+                     'Vocabulary size $^{\\text{a}}$',
+                     'Gender $^{\\text{a}}$',
+                     # 'Word frequency',
+                     # 'Number of syllables',
+                     # 'Word-concreteness difference',
+                     'Language-based similarity $^{\\text{b}}$',
+                     'Visual-strength difference $^{\\text{b}}$',
+                     'Vision-based similarity $^{\\text{b}}$',
+                     'Stimulus-onset asynchrony (SOA) $^{\\text{b}}$',
+                     # 'Word-concreteness difference :: Vocabulary size',
+                     # 'Word-concreteness difference : SOA',
+                     # 'Word-concreteness difference : Gender',
+                     # 'Language-based similarity :: Attentional control',
+                     # 'Visual-strength difference :: Attentional control',
+                     # 'Vision-based similarity :: Attentional control',
+                     'Language-based similarity :: Vocabulary size',
+                     'Visual-strength difference :: Vocabulary size',
+                     'Vision-based similarity :: Vocabulary size',
+                     'Language-based similarity : Gender',
+                     'Visual-strength difference : Gender',
+                     'Vision-based similarity : Gender',
+                     'Language-based similarity : SOA $^{\\text{b}}$',
+                     'Visual-strength difference : SOA $^{\\text{b}}$',
+                     'Vision-based similarity : SOA $^{\\text{b}}$'),
+  interaction_symbol_x = TRUE,
+  caption = 'Effects of interest in the semantic priming model that included visual similarity.') %>%
+  # kable_styling(latex_options = 'scale_down') %>%
+  
+  # Group predictors under headings
+  pack_rows('Individual differences', 2, 3) %>% 
+  pack_rows('Prime-target semantic relationship', 4, 6) %>% 
+  pack_rows('Task condition', 7, 7) %>% 
+  pack_rows('Interactions', 8, 16) %>% 
+  
+  # Place table close to designated position
+  kable_styling(latex_options = c('hold_position')) %>%
+  
+  # Footnote describing abbreviations, random slopes, etc. 
+  # LaTeX code used to format the text.
+  footnote(escape = FALSE, threeparttable = TRUE, general_title = '\\\\linebreak', 
+           general = paste('\\\\textit{Note}. $\\\\upbeta$ = Estimate based on $z$-scored variables; \\\\textit{SE} = standard error;',
+                           'CI = confidence interval. Covariates shown in next table due to space. Some ',
+                           'interactions are split over two lines, with the second line indented. \\\\linebreak', 
+                           '$^{\\\\text{a}}$ By-word random slopes were included for this effect.',
+                           '$^{\\\\text{b}}$ By-participant random slopes were included for this effect.', 
+                           # Begin lines after first one with a dot-sized indent
+                           sep = ' \\\\linebreak \\\\phantom{.}'))
+
+```
+
+
+```{r semanticpriming-with-visualsimilarity-frequentist-model-covariates, results = 'asis'}
+
+# Create table (using custom function from the 'R_functions' folder)
+
+# Only the covariates are shown, and the effects of interest are
+# commented out as they were shown in the table above.
+
+frequentist_model_table(
+  KR_summary_semanticpriming_with_visualsimilarity_lmerTest, 
+  confint_semanticpriming_with_visualsimilarity_lmerTest,
+  select_effects = c('Attentional control',
+                     # 'Vocabulary size $^{\\text{a}}$',
+                     # 'Gender $^{\\text{a}}$',
+                     'Word frequency',
+                     'Number of syllables',
+                     'Word-concreteness difference',
+                     # 'Language-based similarity $^{\\text{b}}$',
+                     # 'Visual-strength difference $^{\\text{b}}$',
+                     # 'Vision-based similarity $^{\\text{b}}$',
+                     # 'Stimulus-onset asynchrony (SOA) $^{\\text{b}}$',
+                     'Word-concreteness difference :: Vocabulary size',
+                     'Word-concreteness difference : SOA',
+                     'Word-concreteness difference : Gender',
+                     'Language-based similarity :: Attentional control',
+                     'Visual-strength difference :: Attentional control',
+                     'Vision-based similarity :: Attentional control'  # comma deleted
+                     # 'Language-based similarity :: Vocabulary size',
+                     # 'Visual-strength difference :: Vocabulary size',
+                     # 'Vision-based similarity :: Vocabulary size',
+                     # 'Language-based similarity : Gender',
+                     # 'Visual-strength difference : Gender',
+                     # 'Language-based similarity : SOA $^{\\text{b}}$',
+                     # 'Visual-strength difference : SOA $^{\\text{b}}$',
+                     # 'Vision-based similarity : SOA $^{\\text{b}}$'
+  ),
+  interaction_symbol_x = TRUE,
+  caption = 'Covariates in the semantic priming model that included visual similarity.') %>%
+  # kable_styling(latex_options = 'scale_down') %>%
+  
+  # Group predictors under headings
+  pack_rows('Individual-differences covariate', 1, 1) %>% 
+  pack_rows('Target-word lexical covariates', 2, 3) %>% 
+  pack_rows('Prime-target semantic covariate', 4, 4) %>% 
+  pack_rows('Covariate interactions', 5, 10) %>%
+  
+  # Place table close to designated position
+  kable_styling(latex_options = c('hold_position')) %>%
+  
+  # Footnote describing abbreviations, random slopes, etc. 
+  # LaTeX code used to format the text.
+  footnote(escape = FALSE, threeparttable = TRUE, general_title = '\\\\linebreak', 
+           general = paste('\\\\textit{Note}. $\\\\upbeta$ = Estimate based on $z$-scored variables; \\\\textit{SE} = standard error;',
+                           'CI = confidence interval. Some interactions are split over two lines, with the',
+                           'second line indented. \\\\linebreak', 
+                           # '$^{\\\\text{a}}$ By-word random slopes were included for this effect.',
+                           # '$^{\\\\text{b}}$ By-participant random slopes were included for this effect.', 
+                           # Begin lines after first one with a dot-sized indent
+                           sep = ' \\\\linebreak \\\\phantom{.}'))
+
+
+# Calculate R^2. This coefficient must be interpreted with caution 
+# (Nakagawa et al., 2017; https://doi.org/10.1098/rsif.2017.0213). 
+# Also, transform coefficient to rounded percentage.
+
+Nakagawa2017_fixedeffects_R2_semanticpriming_with_visualsimilarity_lmerTest = 
+  paste0(
+    (MuMIn::r.squaredGLMM(semanticpriming_with_visualsimilarity_lmerTest)[1, 'R2m'][[1]] * 100) %>% 
+      sprintf('%.2f', .), '%'
+  )
+
+Nakagawa2017_randomeffects_R2_semanticpriming_with_visualsimilarity_lmerTest = 
+  paste0(
+    (MuMIn::r.squaredGLMM(semanticpriming_with_visualsimilarity_lmerTest)[1, 'R2c'][[1]] * 100) %>% 
+      sprintf('%.2f', .), '%'
+  )
+
+```
+
+
+The fixed effects of this model explained `r Nakagawa2017_fixedeffects_R2_semanticpriming_with_visualsimilarity_lmerTest` of the variance, and the random effects explained `r Nakagawa2017_randomeffects_R2_semanticpriming_with_visualsimilarity_lmerTest` (Nakagawa et al., 2017; for background on why random effects explain more variance, see [Results in Study 1](#semanticpriming-results)).
+
+Figure \@ref(fig:semanticpriming-with-visualsimilarity-confidence-intervals-plot) presents the means and 95% confidence intervals for the effects of interest. 
+
+```{r semanticpriming-with-visualsimilarity-confidence-intervals-plot, fig.cap = 'Means and 95\\% confidence intervals for the effects of interest in the semantic priming model that included visual similarity.', out.width = '89%'}
+
+# Run plot through source() rather than directly in this R Markdown document
+# to preserve the format.
+
+source('semanticpriming/analysis_with_visualsimilarity/semanticpriming_with_visualsimilarity_confidence_intervals_plot.R', 
+       local = TRUE)
+
+include_graphics(
+  paste0(
+    getwd(),  # Circumvent illegal characters in file path
+    '/semanticpriming/analysis_with_visualsimilarity/plots/semanticpriming_with_visualsimilarity_confidence_intervals_plot.pdf'
+  ))
+
+```
+
+
+The results revealed that visual-strength difference had a significantly larger effect. This difference was not due to an excessive collinearity between these measures ($r$ = `r cor(semanticpriming_with_visualsimilarity$z_visual_rating_diff, semanticpriming_with_visualsimilarity$z_visual_similarity) %>% sprintf('%.2f', .)`). Also importantly, both measures appeared to be valid based on their correlations with language-based similarity and with word concreteness. 
+
+
+### Statistical power analysis
+
+Power curves were performed for most effects of interest in the main model (no power analysis was performed for the model that included visual similarity). Figures \@ref(fig:semanticpriming-powercurve-plots-1-2-3) and \@ref(fig:semanticpriming-powercurve-plots-4-5-6-7-8-9) show the estimated power for the main effects and the interactions, respectively.
+
+```{r semanticpriming-powercurve-plots-1-2-3, fig.cap = 'Power curves for some main effects in the semantic priming study.'}
+
+# Run plot through source() rather than directly in this R Markdown document 
+# to preserve the italicised text.
+source('semanticpriming/power_analysis/semanticpriming_all_powercurves.R', 
+       local = TRUE)
+
+include_graphics(
+  paste0(
+    getwd(),  # Circumvent illegal characters in file path
+    '/semanticpriming/power_analysis/plots/semanticpriming_powercurve_plots_1_2_3.pdf'
+  ))
+
+```
+
+```{r semanticpriming-powercurve-plots-4-5-6-7-8-9, fig.cap = 'Power curves for some interactions in the semantic priming study.', out.width = '92%'}
+
+include_graphics(
+  paste0(
+    getwd(),  # Circumvent illegal characters in file path
+    '/semanticpriming/power_analysis/plots/semanticpriming_powercurve_plots_4_5_6_7_8_9.pdf'
+  ))
+
+```
+
+
+_______ interpret ____________
+
+
+## Discussion
+
+___________________
+
+
+\clearpage
+
+
+
+# Study 2: Semantic decision
+
+The semantic decision task probes into the role of concreteness in conceptual processing. Specifically, this task requires participants to classify words as abstract or concrete. Researchers then analyse whether the responses can be explained by the sensory experientiality of the referents---that is, the degree to which they can be experienced through our senses---and by other variables, such as word frequency. The core data set in this study was that of the Calgary Semantic Decision Project [@pexman2017a; @pexman2018a]. The experimental task is semantic decision, in which participants judge whether words are relatively concrete (e.g., 'building') or abstract (e.g., 'thought'). 
+
+Research has found that the processing of relatively concrete words relies considerably on sensorimotor information [@hultenNeuralRepresentationAbstract2021; @kousta2011a; @vigliocco2014a]. In contrast, the processing of relatively abstract words seems to draw more heavily on information from language [@barca2020a; @dunabeitiaQualitativeDifferencesRepresentation2009; @snefjella2020a], emotion [@kousta2011a; @ponari2018a; @ponari2018b; @ponariRoleEmotionalValence2020; @vigliocco2014a] and sociality [@borghiWordsSocialTools2019; @diveicaQuantifyingSocialSemantics2022].
+
+
+## Word co-occurrence
+
+@wingfieldUnderstandingRoleLinguistic2022 reanalysed the data from @pexman2017a using language-based variables that are more related to the language system than to the visual system. The authors found that the variables that best explained RTs were word co-occurrence measures. Specifically, the measures corresponded to the distance from each stimulus word to two labels that were central to the task, namely, the words ‘abstract’ and ‘concrete’. Wingfield and Connell studied these distance measures in various forms, and found that cosine and correlation distance yielded the best results. We used the correlation distance following the advice of [@kiela2014a]. Furthermore, we sought to avoid the collinearity between these variables ($r$ = .99) and to facilitate the analysis of interactions with other variables. For this purpose, we created a difference score by subtracting distance to 'abstract' from the distance to 'concrete'. The resulting variable was practically equivalent to the distance to 'abstract', as attested by its large correlation with word concreteness ($r$ = `r cor(semanticdecision$word_cooccurrence, semanticdecision$information_uptake) %>% sprintf('%.2f', .)`). Last, it should be noted that this difference score may not be affected by the reduced sensitivity of other ones [see @rodriguez-ferreiroSemanticPrimingSchizotypal2020], as this difference score did not entail an aggregation of data points over any third variables.
+
+## Methods
+
+### Effects of interest
+
+- $Z$-scored vocabulary size [`z_vocabulary_size`; calculated from `NAART` in @pexman2017a]. In the test used by @pexman2018a, participants were presented with 35 rare words, whose pronunciations are not regular (e.g., *gaoled*, *ennui*), and they were asked to read the words aloud. When they pronounced a word correctly, it was inferred that they knew the word. This test was based on NAART35, a short version of the North American Adult Reading Test [@uttlNorthAmericanAdult2002].
+
+- $Z$-scored, recoded participant's gender [`z_recoded_participant_gender`; calculated from `Gender` in @pexman2018a]
+
+- $Z$-scored distance to word 'abstract': a distributional semantic distance measure obtained from @wingfieldUnderstandingRoleLinguistic2022 that reflects the correlation distance between each stimulus word and the word 'abstract'.^[Specifically, this measure is a difference score that merges both the distance to the word 'abstract' and the distance to the word 'concrete'. We drew on both variables because @wingfieldUnderstandingRoleLinguistic2022 found them to be similarly important. Yet, we had to create a difference score because these variables were highly correlated ($r$ = .99), we created a difference score by subtracting the distance to 'abstract' from the distance to 'concrete'. The resulting difference score was practically equivalent to the distance to the word 'abstract', as attested by its correlation with word concreteness (see Figure \@ref(fig:semanticdecision-correlations)). Our difference score in practice  The variable `Conditional_probability_BNC_r5_correlation_abstract_distance` was subtracted from `Conditional_probability_BNC_r5_correlation_concrete_distance`.]
+
+- $Z$-scored vision-based information in words [`z_visual_rating`; calculated from `Visual.mean` in @lynott2020a]
+
+
+```{r}
+
+# Calculate numbers to be reported in the paragraph below
+
+# Save number of participants and words
+semanticdecision_number_participants = 
+  length(unique(semanticdecision$Participant))
+
+semanticdecision_number_words = length(unique(semanticdecision$Word))
+
+# Number of words per participant.
+# Save mean as integer and SD rounded while keeping trailing zeros
+semanticdecision_mean_words_per_participant = 
+  semanticdecision %>% group_by(Participant) %>% 
+  summarise(length(unique(Word))) %>% 
+  select(2) %>% unlist %>% mean %>% round(0)
+
+semanticdecision_SD_words_per_participant = 
+  semanticdecision %>% group_by(Participant) %>% 
+  summarise(length(unique(Word))) %>% 
+  select(2) %>% unlist %>% sd %>% sprintf('%.2f', .)
+
+# Number of participants per word.
+# Save mean as integer and SD rounded while keeping trailing zeros
+semanticdecision_mean_participants_per_word = 
+  semanticdecision %>% group_by(Word) %>% 
+  summarise(length(unique(Participant))) %>% 
+  select(2) %>% unlist %>% mean %>% round(0)
+
+semanticdecision_SD_participants_per_word = 
+  semanticdecision %>% group_by(Word) %>% 
+  summarise(length(unique(Participant))) %>% 
+  select(2) %>% unlist %>% sd %>% sprintf('%.2f', .)
+
+```
+
+
+The final data set contained `r semanticdecision_number_participants` participants, `r semanticdecision_number_words %>% formattable::comma(digits = 0)` words, and a total of `r length(semanticdecision$z_RTclean) %>% formattable::comma(digits = 0)` RTs. On average, there were `r semanticdecision_mean_words_per_participant` words per participant ($SD$ = `r semanticdecision_SD_words_per_participant`), and conversely, `r semanticdecision_mean_participants_per_word` participants per word ($SD$ = `r semanticdecision_SD_participants_per_word`).
+
+Figure \@ref(fig:semanticdecision-correlations) shows the zero-order correlations among the predictors among the predictors and the dependent variable.
+
+```{r semanticdecision-correlations, fig.cap = 'Zero-order correlations in the semantic decision study.', fig.width = 7, fig.height = 4.5, out.width = '57%'}
+
+# Using the following variables...
+semanticdecision[, c('z_RTclean', 'z_vocabulary_size', 
+                     'z_information_uptake', 'z_word_cooccurrence', 
+                     'z_visual_rating', 'z_word_concreteness', 
+                     'z_word_frequency', 
+                     'z_orthographic_Levenshtein_distance')] %>%
+  
+  # renamed for the sake of clarity
+  rename('RT' = z_RTclean, 
+         'Vocabulary size' = z_vocabulary_size,
+         'Information uptake' = z_information_uptake,
+         "Distance to word 'abstract'" = z_word_cooccurrence,
+         'Visual strength' = z_visual_rating,
+         'Word concreteness' = z_word_concreteness,
+         'Word frequency' = z_word_frequency,
+         'Orthographic Levenshtein distance' = z_orthographic_Levenshtein_distance) %>%
+  
+  # make correlation matrix (custom function from the 'R_functions' folder)
+  correlation_matrix() + 
+  theme(plot.margin = unit(c(0, 0, 0.1, -3.1), 'in'))
+
+```
+
+
+### Covariates
+
+The following covariates were included in the model to allow a rigorous analysis of the effects of interest.
+
+- Lexical (see [\underline{Appendix A}](#appendix-A-lexical-covariates)): $z$-scored word frequency and orthographic Levenshtein distance [@balota2007a]
+
+- Semantic: $z$-scored word concreteness [@brysbaert2014a]. This variable is used as a covariate of visual strength, and it is especially fundamental in the semantic decision task, in which participants judge whether words are concrete or abstract [for a more general consideration of concreteness, see @bottiniConcretenessAdvantageLexical2021]. Indeed, owing to the instructions of the task, word concreteness is likely to be more relevant to the participants' task than our effects of interest.
+
+- Individual differences: $z$-scored information uptake [@pexman2018a]. This covariate is related to vocabulary size [@ratcliff2010a; also see @james2018a; @pexman2018a].
+
+
+### Diagnostics for the frequentist model
+
+The model presented convergence warnings. To avoid removing important random slopes, which could increase the Type I error [@brauer2018a; @singmann2019a], we examined the model after refitting it using seven optimization algorithms through the 'allFit' function of the 'lme4' package [@batesPackageLme42021]. The results showed that all optimizers produced virtually identical means for all effects, suggesting that the convergence warnings were not consequential (Bates et al., 2021; see [\underline{Appendix B}](#appendix-B-frequentist-analysis-diagnostics)).
+
+The residual errors were not normally distributed, and attempts to mitigate this deviation proved unsuccessful (see [\underline{Appendix B}](#appendix-B-frequentist-analysis-diagnostics)). However, this is not likely to have posed a major problem, as mixed-effects models are fairly robust to deviations from normality [@kniefViolatingNormalityAssumption2021; @schielzethRobustnessLinearMixed2020].
+
+```{r}
+
+# Calculate VIF for every predictor and return only the maximum VIF rounded up
+maxVIF_semanticdecision = car::vif(semanticdecision_lmerTest) %>% max %>% ceiling
+
+```
+
+The model did not present multicollinearity problems, all VIFs being smaller than `r maxVIF_semanticdecision` [@dormannCollinearityReviewMethods2013; @harrison2018a].
+
+
+### Diagnostics for the Bayesian model
+
+```{r}
+
+# Calculate number of post-warmup draws (as in 'brms' version 2.17.0).
+# Informative prior model used but same numbers in all three models.
+semanticdecision_post_warmup_draws = 
+  (semanticdecision_summary_informativepriors_exgaussian$iter -
+     semanticdecision_summary_informativepriors_exgaussian$warmup) *
+  semanticdecision_summary_informativepriors_exgaussian$chains
+
+# As a convergence diagnostic, find maximum R-hat value for the 
+# fixed effects across the three models.
+semanticdecision_fixedeffects_max_Rhat = 
+  max(semanticdecision_summary_informativepriors_exgaussian$fixed$Rhat,
+      semanticdecision_summary_weaklyinformativepriors_exgaussian$fixed$Rhat,
+      semanticdecision_summary_diffusepriors_exgaussian$fixed$Rhat) %>% 
+  # Round
+  sprintf('%.2f', .)
+
+# Next, find find maximum R-hat value for the random effects 
+# across the three models. 
+semanticdecision_randomeffects_max_Rhat = 
+  max(semanticdecision_summary_informativepriors_exgaussian$random[['Participant']]$Rhat,
+      semanticdecision_summary_weaklyinformativepriors_exgaussian$random[['Participant']]$Rhat,
+      semanticdecision_summary_diffusepriors_exgaussian$random[['Participant']]$Rhat,
+      semanticdecision_summary_informativepriors_exgaussian$random[['Word']]$Rhat,
+      semanticdecision_summary_weaklyinformativepriors_exgaussian$random[['Word']]$Rhat,
+      semanticdecision_summary_diffusepriors_exgaussian$random[['Word']]$Rhat) %>% 
+  # Round
+  sprintf('%.2f', .)
+
+```
+
+
+Three Bayesian models were run that were respectively characterised by informative, weakly-informative and diffuse priors. In each model, `r semanticdecision_summary_informativepriors_exgaussian$chains` chains were used. In each chain, `r semanticdecision_summary_informativepriors_exgaussian$warmup %>% formattable::comma(digits = 0)` warmup iterations were run, followed by `r (semanticdecision_summary_informativepriors_exgaussian$iter - semanticdecision_summary_informativepriors_exgaussian$warmup) %>% formattable::comma(digits = 0)` post-warmup iterations. Thus, a total of `r semanticdecision_post_warmup_draws %>% formattable::comma(digits = 0)` post-warmup draws were produced over all the chains. 
+
+The maximum $\widehat R$ value for the fixed effects across the three models was `r semanticdecision_fixedeffects_max_Rhat`, far exceeding the 1.01 threshold [@vehtariRanknormalizationFoldingLocalization2021; also see @schootBayesianStatisticsModelling2021]. Similarly, the maximum $\widehat R$ value for the random effects was `r semanticdecision_randomeffects_max_Rhat`. Furthermore, the posterior predictive checks revealed major divergences between the observed data and the predicted outcome (see [\underline{Appendix C}](#appendix-C-Bayesian-analysis-diagnostics)). Since the results were not valid, they are not shown in the main text but instead in [\underline{Appendix E}](#appendix-E-Bayesian-analysis-results).
+
+
+## Results
+
+Table \@ref(tab:semanticdecision-frequentist-model) presents the results of the mixed-effects model.
+
+```{r semanticdecision-frequentist-model, results = 'asis'}
+
+# Rename effects in plain language and specify the random slopes
+# (if any) for each effect, in the footnote. For this purpose, 
+# superscripts are added to the names of the appropriate effects.
+# 
+# In the interactions below, word-level variables are presented 
+# first for the sake of consistency (the order does not affect 
+# the results in any way). Also in the interactions, double 
+# colons are used to inform the 'frequentist_model_table' 
+# function that the two terms in the interaction must be split 
+# into two lines.
+
+rownames(KR_summary_semanticdecision_lmerTest$coefficients)[
+  rownames(KR_summary_semanticdecision_lmerTest$coefficients) == 
+    'z_information_uptake'] = 'Information uptake'
+
+rownames(KR_summary_semanticdecision_lmerTest$coefficients)[
+  rownames(KR_summary_semanticdecision_lmerTest$coefficients) == 
+    'z_vocabulary_size'] = 'Vocabulary size $^{\\text{a}}$'
+
+rownames(KR_summary_semanticdecision_lmerTest$coefficients)[
+  rownames(KR_summary_semanticdecision_lmerTest$coefficients) == 
+    'z_recoded_participant_gender'] = 'Gender $^{\\text{a}}$'
+
+rownames(KR_summary_semanticdecision_lmerTest$coefficients)[
+  rownames(KR_summary_semanticdecision_lmerTest$coefficients) == 
+    'z_word_frequency'] = 'Word frequency'
+
+rownames(KR_summary_semanticdecision_lmerTest$coefficients)[
+  rownames(KR_summary_semanticdecision_lmerTest$coefficients) == 
+    'z_orthographic_Levenshtein_distance'] = 'Orthographic Levenshtein distance'
+
+rownames(KR_summary_semanticdecision_lmerTest$coefficients)[
+  rownames(KR_summary_semanticdecision_lmerTest$coefficients) == 
+    'z_word_concreteness'] = 'Word concreteness'
+
+rownames(KR_summary_semanticdecision_lmerTest$coefficients)[
+  rownames(KR_summary_semanticdecision_lmerTest$coefficients) == 
+    'z_word_cooccurrence'] = "Distance to word 'abstract' $^{\\text{b}}$"
+
+rownames(KR_summary_semanticdecision_lmerTest$coefficients)[
+  rownames(KR_summary_semanticdecision_lmerTest$coefficients) == 
+    'z_visual_rating'] = 'Visual strength $^{\\text{b}}$'
+
+rownames(KR_summary_semanticdecision_lmerTest$coefficients)[
+  rownames(KR_summary_semanticdecision_lmerTest$coefficients) == 
+    'z_word_concreteness:z_vocabulary_size'] = 
+  'Word concreteness : Vocabulary size'
+
+rownames(KR_summary_semanticdecision_lmerTest$coefficients)[
+  rownames(KR_summary_semanticdecision_lmerTest$coefficients) == 
+    'z_word_concreteness:z_recoded_participant_gender'] = 
+  'Word concreteness : Gender'
+
+rownames(KR_summary_semanticdecision_lmerTest$coefficients)[
+  rownames(KR_summary_semanticdecision_lmerTest$coefficients) == 
+    'z_information_uptake:z_word_cooccurrence'] = 
+  "Information uptake :: Distance to word 'abstract'"
+
+rownames(KR_summary_semanticdecision_lmerTest$coefficients)[
+  rownames(KR_summary_semanticdecision_lmerTest$coefficients) == 
+    'z_information_uptake:z_visual_rating'] = 
+  'Visual strength : Information uptake'
+
+rownames(KR_summary_semanticdecision_lmerTest$coefficients)[
+  rownames(KR_summary_semanticdecision_lmerTest$coefficients) == 
+    'z_vocabulary_size:z_word_cooccurrence'] = 
+  "Distance to word 'abstract' :: Vocabulary size"
+
+rownames(KR_summary_semanticdecision_lmerTest$coefficients)[
+  rownames(KR_summary_semanticdecision_lmerTest$coefficients) == 
+    'z_vocabulary_size:z_visual_rating'] = 
+  'Visual strength : Vocabulary size'
+
+rownames(KR_summary_semanticdecision_lmerTest$coefficients)[
+  rownames(KR_summary_semanticdecision_lmerTest$coefficients) == 
+    'z_recoded_participant_gender:z_word_cooccurrence'] = 
+  "Distance to word 'abstract' : Gender"
+
+rownames(KR_summary_semanticdecision_lmerTest$coefficients)[
+  rownames(KR_summary_semanticdecision_lmerTest$coefficients) == 
+    'z_recoded_participant_gender:z_visual_rating'] = 
+  'Visual strength : Gender'
+
+
+# Next, change the names in the confidence intervals object
+
+rownames(confint_semanticdecision_lmerTest)[
+  rownames(confint_semanticdecision_lmerTest) == 
+    'z_information_uptake'] = 'Information uptake'
+
+rownames(confint_semanticdecision_lmerTest)[
+  rownames(confint_semanticdecision_lmerTest) == 
+    'z_vocabulary_size'] = 'Vocabulary size $^{\\text{a}}$'
+
+rownames(confint_semanticdecision_lmerTest)[
+  rownames(confint_semanticdecision_lmerTest) == 
+    'z_recoded_participant_gender'] = 'Gender $^{\\text{a}}$'
+
+rownames(confint_semanticdecision_lmerTest)[
+  rownames(confint_semanticdecision_lmerTest) == 
+    'z_word_frequency'] = 'Word frequency'
+
+rownames(confint_semanticdecision_lmerTest)[
+  rownames(confint_semanticdecision_lmerTest) == 
+    'z_orthographic_Levenshtein_distance'] = 'Orthographic Levenshtein distance'
+
+rownames(confint_semanticdecision_lmerTest)[
+  rownames(confint_semanticdecision_lmerTest) == 
+    'z_word_concreteness'] = 'Word concreteness'
+
+rownames(confint_semanticdecision_lmerTest)[
+  rownames(confint_semanticdecision_lmerTest) == 
+    'z_word_cooccurrence'] = "Distance to word 'abstract' $^{\\text{b}}$"
+
+rownames(confint_semanticdecision_lmerTest)[
+  rownames(confint_semanticdecision_lmerTest) == 
+    'z_visual_rating'] = 'Visual strength $^{\\text{b}}$'
+
+rownames(confint_semanticdecision_lmerTest)[
+  rownames(confint_semanticdecision_lmerTest) == 
+    'z_word_concreteness:z_vocabulary_size'] = 
+  'Word concreteness : Vocabulary size'
+
+rownames(confint_semanticdecision_lmerTest)[
+  rownames(confint_semanticdecision_lmerTest) == 
+    'z_word_concreteness:z_recoded_participant_gender'] = 
+  'Word concreteness : Gender'
+
+rownames(confint_semanticdecision_lmerTest)[
+  rownames(confint_semanticdecision_lmerTest) == 
+    'z_information_uptake:z_word_cooccurrence'] = 
+  "Information uptake :: Distance to word 'abstract'"
+
+rownames(confint_semanticdecision_lmerTest)[
+  rownames(confint_semanticdecision_lmerTest) == 
+    'z_information_uptake:z_visual_rating'] = 
+  'Visual strength : Information uptake'
+
+rownames(confint_semanticdecision_lmerTest)[
+  rownames(confint_semanticdecision_lmerTest) == 
+    'z_vocabulary_size:z_word_cooccurrence'] = 
+  "Distance to word 'abstract' :: Vocabulary size"
+
+rownames(confint_semanticdecision_lmerTest)[
+  rownames(confint_semanticdecision_lmerTest) == 
+    'z_vocabulary_size:z_visual_rating'] = 
+  'Visual strength : Vocabulary size'
+
+rownames(confint_semanticdecision_lmerTest)[
+  rownames(confint_semanticdecision_lmerTest) == 
+    'z_recoded_participant_gender:z_word_cooccurrence'] = 
+  "Distance to word 'abstract' : Gender"
+
+rownames(confint_semanticdecision_lmerTest)[
+  rownames(confint_semanticdecision_lmerTest) == 
+    'z_recoded_participant_gender:z_visual_rating'] = 
+  'Visual strength : Gender'
+
+
+# Create table (using custom function from the 'R_functions' folder)
+frequentist_model_table(
+  KR_summary_semanticdecision_lmerTest, 
+  confint_semanticdecision_lmerTest,
+  order_effects = c('(Intercept)',
+                    'Information uptake',
+                    'Vocabulary size $^{\\text{a}}$',
+                    'Gender $^{\\text{a}}$',
+                    'Word frequency',
+                    'Orthographic Levenshtein distance',
+                    'Word concreteness',
+                    "Distance to word 'abstract' $^{\\text{b}}$",
+                    'Visual strength $^{\\text{b}}$',
+                    'Vocabulary size : Word concreteness',
+                    'Word concreteness : Gender',
+                    "Distance to word 'abstract' :: Information uptake",
+                    'Visual strength : Information uptake',
+                    "Distance to word 'abstract' :: Vocabulary size",
+                    'Visual strength : Vocabulary size',
+                    "Distance to word 'abstract' : Gender",
+                    'Visual strength : Gender'),
+  interaction_symbol_x = TRUE,
+  caption = 'Frequentist model for the semantic decision study.') %>%
+  # kable_styling(latex_options = 'scale_down') %>%
+  
+  # Group predictors under headings
+  pack_rows('Individual differences', 2, 4) %>% 
+  pack_rows('Lexical covariates', 5, 6) %>% 
+  pack_rows('Semantic variables', 7, 9) %>% 
+  pack_rows('Interactions', 10, 17) %>% 
+  
+  # Place table close to designated position and highlight covariates
+  kable_styling(latex_options = c('hold_position', 'striped'), 
+                stripe_index = c(2, 5:7, 10:11)) %>%
+  
+  # Footnote describing abbreviations, random slopes, etc. 
+  # LaTeX code used to format the text.
+  footnote(escape = FALSE, threeparttable = TRUE, general_title = '\\\\linebreak', 
+           general = paste('\\\\textit{Note}. $\\\\upbeta$ = Estimate based on $z$-scored variables; \\\\textit{SE} = standard error;',
+                           'CI = confidence interval. Shaded rows contain covariates. Some interactions are',
+                           'split over two lines, with the second line indented. \\\\linebreak', 
+                           '$^{\\\\text{a}}$ By-word random slopes were included for this effect.',
+                           '$^{\\\\text{b}}$ By-participant random slopes were included for this effect.', 
+                           # Begin lines after first one with a dot-sized indent
+                           sep = ' \\\\linebreak \\\\phantom{.}'))
+
+
+# Calculate R^2. This coefficient must be interpreted with caution 
+# (Nakagawa et al., 2017; https://doi.org/10.1098/rsif.2017.0213). 
+# Also, transform coefficient to rounded percentage.
+
+Nakagawa2017_fixedeffects_R2_semanticdecision_lmerTest = 
+  paste0(
+    (MuMIn::r.squaredGLMM(semanticdecision_lmerTest)[1, 'R2m'][[1]] * 100) %>% 
+      sprintf('%.2f', .), '%'
+  )
+
+Nakagawa2017_randomeffects_R2_semanticdecision_lmerTest = 
+  paste0(
+    (MuMIn::r.squaredGLMM(semanticdecision_lmerTest)[1, 'R2c'][[1]] * 100) %>% 
+      sprintf('%.2f', .), '%'
+  )
+
+```
+
+
+The fixed effects of this model explained `r Nakagawa2017_fixedeffects_R2_semanticdecision_lmerTest` of the variance, and the random effects explained `r Nakagawa2017_randomeffects_R2_semanticdecision_lmerTest` [@nakagawaCoefficientDeterminationR22017].
+
+Figures \@ref(fig:semanticdecision-interactions-with-vocabulary-size)-a and \@ref(fig:semanticdecision-interactions-with-vocabulary-size)-b demonstrate how lower-vocabulary participants (compared to higher-vocabulary participants) were more strongly influenced by both language- and vision-based similarity. In contrast, Figure \@ref(fig:semanticdecision-interactions-with-vocabulary-size)-c shows that higher-vocabulary participants benefitted more strongly from word concreteness. Since the variable that is most relevant to the semantic decision task is word concreteness, the present interactions suggest that higher-vocabulary participants were better able to focus on the most relevant information, whereas lower-vocabulary participants were sensitive to a greater breadth of information [@lim2020a; @pexman2018a; @yap2012a; @yap2017a]. 
+
+(ref:semanticdecision-interactions-with-vocabulary-size) Interactions of vocabulary size with (a) language-based information, (b) visual strength and (c) word concreteness. Vocabulary size is constrained to deciles, whereas in the statistical analysis it contained more values within the current range. *n* = number of participants contained between decile values.
+
+```{r semanticdecision-interactions-with-vocabulary-size, fig.cap = '(ref:semanticdecision-interactions-with-vocabulary-size)', out.height = '95%'}
+
+# Run plot through source() rather than directly in this R Markdown document 
+# to preserve the italicised text.
+
+source('semanticdecision/frequentist_analysis/semanticdecision-interactions-with-vocabulary-size.R', 
+       local = TRUE)
+
+include_graphics(
+  paste0(
+    getwd(),  # Circumvent illegal characters in file path
+    '/semanticdecision/frequentist_analysis/plots/semanticdecision-interactions-with-vocabulary-size.pdf'
+  ))
+
+```
+
+
+The present analysis uses a continuous measure of word concreteness. In contrast, @pexman2018a analysed the same data set after dividing the stimulus words into abstract and concrete subsets, which they analysed separately. Pexman and Yap found that high-vocabulary participants were more sensitive to the relative abstractness of words. Specifically, these participants were faster to classify very abstract words than mid-abstract ones, thus presenting a reverse concreteness effect. Such a reverse effect might stem from the bimodal distributions of concreteness ratings [@brysbaert2014a] and semantic decisions [@pexman2018a]. The reverse effect has also been found in semantic dementia patients [@connellStrengthPerceptualExperience2012]. Since the reverse effect contrasted with the long-established concreteness effect, the former has sometimes been regarded as an inconsistency. 
+
+Notwithstanding the aforementioned bimodal distributions, @trocheDefiningConceptualTopography2017 suggested that a continuous analysis remains necessary to study word concreteness [also see @cohenCostDichotomization1983]. Consistent with this, our present findings demonstrated the sensitivity of a continuous word-concreteness variable to patterns such as the greater role of task-relevant variables in high-vocabulary participants. In conclusion, the literature and our findings suggest that the split-data approach and the continuous approach to word concreteness are both useful. Where feasible, the application of both approaches would provide the most information.
+
+
+### Visualising the estimates
+
+Figure \@ref(fig:semanticdecision-confidence-intervals-plot) presents the means and 95% confidence intervals for the effects of interest.^[Bayesian estimates not shown as they were not valid. They are nonetheless available in [\underline{Appendix E}](#appendix-E-Bayesian-analysis-results).] 
+
+```{r semanticdecision-confidence-intervals-plot, fig.cap = 'Means and 95\\% confidence intervals for the effects of interest in the semantic decision model.', out.width = '110%'}
+
+# Run plot through source() rather than directly in this R Markdown document
+# to preserve the format.
+
+source('semanticdecision/frequentist_analysis/semanticdecision_confidence_intervals_plot.R', 
+       local = TRUE)
+
+include_graphics(
+  paste0(
+    getwd(),  # Circumvent illegal characters in file path
+    '/semanticdecision/frequentist_analysis/plots/semanticdecision_confidence_intervals_plot.pdf'
+  ))
+
+```
+
+
+### Statistical power analysis
+
+Figures \@ref(fig:semanticdecision-powercurve-plots-1-2-3) and \@ref(fig:semanticdecision-powercurve-plots-4-5-6-7) show the estimated power available for main effects and interactions of interest, respectively.
+
+```{r semanticdecision-powercurve-plots-1-2-3, fig.cap = 'Power curves for some main effects in the semantic decision study.'}
+
+# Run plot through source() rather than directly in this R Markdown document 
+# to preserve the italicised text.
+source('semanticdecision/power_analysis/semanticdecision_all_powercurves.R', 
+       local = TRUE)
+
+include_graphics(
+  paste0(
+    getwd(),  # Circumvent illegal characters in file path
+    '/semanticdecision/power_analysis/plots/semanticdecision_powercurve_plots_1_2_3.pdf'
+  ))
+
+```
+
+```{r semanticdecision-powercurve-plots-4-5-6-7, fig.cap = 'Power curves for some interactions in the semantic decision study.'}
+
+include_graphics(
+  paste0(
+    getwd(),  # Circumvent illegal characters in file path
+    '/semanticdecision/power_analysis/plots/semanticdecision_powercurve_plots_4_5_6_7.pdf'
+  ))
+
+```
+
+
+_______ interpret ____________
+
+
+## Discussion
+
+___________________
+
+
+\clearpage
+
+
+
+# Study 3: Lexical decision
+
+The core data set in this study was the lexical decision subset of the English Lexicon Project---ELP [@balota2007a]. The lexical decision task differs from semantic priming and semantic decision in two important aspects.
+
+1. **Less semantic processing.** The lexical decision paradigm is likely to involve less semantic processing than the other paradigms. ____________
+
+2. **Single-word measures.** Compared to semantic priming and semantic decision, it is more difficult in the lexical decision paradigm to create word-to-word distance measures to capture language-based and vision-based information. The possibility of calculating the distance between words in consecutive trials is hindered by the need to skip trials, owing to the high prevalence of nonword trials in the lexical decision paradigm. Therefore, the measures must be based on each word alone. Accordingly, vision-based information can be operationalised as the visual strength of each word. Language-based information could be operationalised as any of several lexical variables. In the present study, word frequency was chosen as it had the most explanatory power out of 5 candidates---the other candidates being number of letters, number of syllables, orthographic Levenshtein distance and phonological Levenshtein distance (see [\underline{Appendix A}](#appendix-A-lexical-covariates)). It should also be noted that word frequency has been found to be more closely related to semantic variables than to lexical ones, such as word length, orthography, phonology [see Table 4 in @yap2012a].
+
+Word frequency is also of interest due to its varying relationship to vocabulary size across different paradigms. @yap2012a found that higher-vocabulary participants in the ELP were more strongly influenced by word frequency than lower-vocabulary participants. The same finding also appeared in a lexical decision study in Chinese [@lim2020a]. In contrast, deeper semantic tasks, such as semantic priming [@yap2017a] and semantic decision [@pexman2018a], have yielded the opposite pattern, with the effect of word frequency decreasing in higher-vocabulary participants.
+
+
+## Effects of interest
+
+- $Z$-scored vocabulary age [`z_vocabulary_age`; calculated from `vocabAge` in @balota2007a]
+
+- $Z$-scored, recoded participant's gender [`z_recoded_participant_gender`; calculated from `Gender` in @balota2007a]
+
+- $Z$-scored word frequency [`z_word_frequency`; calculated from `LgSUBTLWF` in @balota2007a]
+
+- $Z$-scored vision-based information in words [`z_visual_rating`; calculated from `Visual.mean` in @lynott2020a]
+
+
+```{r}
+
+# Calculate numbers to be reported in the paragraph below
+
+# Save number of participants and words
+lexicaldecision_number_participants = 
+  length(unique(lexicaldecision$Participant))
+
+lexicaldecision_number_words = length(unique(lexicaldecision$word))
+
+# Number of words per participant.
+# Save mean as integer and SD rounded while keeping trailing zeros
+lexicaldecision_mean_words_per_participant = 
+  lexicaldecision %>% group_by(Participant) %>% 
+  summarise(length(unique(word))) %>% 
+  select(2) %>% unlist %>% mean %>% round(0)
+
+lexicaldecision_SD_words_per_participant = 
+  lexicaldecision %>% group_by(Participant) %>% 
+  summarise(length(unique(word))) %>% 
+  select(2) %>% unlist %>% sd %>% sprintf('%.2f', .)
+
+# Number of participants per word.
+# Save mean as integer and SD rounded while keeping trailing zeros
+lexicaldecision_mean_participants_per_word = 
+  lexicaldecision %>% group_by(word) %>% 
+  summarise(length(unique(Participant))) %>% 
+  select(2) %>% unlist %>% mean %>% round(0)
+
+lexicaldecision_SD_participants_per_word = 
+  lexicaldecision %>% group_by(word) %>% 
+  summarise(length(unique(Participant))) %>% 
+  select(2) %>% unlist %>% sd %>% sprintf('%.2f', .)
+
+```
+
+
+The final data set contained `r lexicaldecision_number_participants` participants, `r lexicaldecision_number_words %>% formattable::comma(digits = 0)` words, and a total of `r length(lexicaldecision$z_RT) %>% formattable::comma(digits = 0)` RTs. On average, there were `r lexicaldecision_mean_words_per_participant` words per participant ($SD$ = `r lexicaldecision_SD_words_per_participant`), and conversely, `r lexicaldecision_mean_participants_per_word` participants per word ($SD$ = `r lexicaldecision_SD_participants_per_word`).
+
+Figure \@ref(fig:lexicaldecision-correlations) shows the zero-order correlations among the predictors and the dependent variable.
+
+```{r lexicaldecision-correlations, fig.cap = 'Zero-order correlations in the lexical decision study.', fig.width = 6, fig.height = 3.5, out.width = '50%'}
+
+# Using the following variables...
+lexicaldecision[, c('z_RT', 'z_vocabulary_age', 'z_word_frequency', 
+                    'z_visual_rating', 'z_word_concreteness', 
+                    'z_orthographic_Levenshtein_distance')] %>%
+  
+  # renamed for the sake of clarity
+  rename('RT' = z_RT, 
+         'Vocabulary age' = z_vocabulary_age, 
+         'Word frequency' = z_word_frequency,
+         'Visual strength' = z_visual_rating,
+         'Word concreteness' = z_word_concreteness,
+         'Orthographic Levenshtein distance' = z_orthographic_Levenshtein_distance) %>%
+  
+  # make correlation matrix (custom function from the 'R_functions' folder)
+  correlation_matrix() + 
+  theme(plot.margin = unit(c(0, 0, 0.1, -2), 'in'))
+
+```
+
+
+## Covariates
+
+The following lexical covariates were included in the model to allow a rigorous analysis of the effects of interest.
+
+- Lexical (see [\underline{Appendix A}](#appendix-A-lexical-covariates)): $Z$-scored orthographic Levenshtein distance [@balota2007a]
+
+- Semantic: $z$-scored word concreteness [@brysbaert2014a], used as a covariate of visual rating.
+
+### Diagnostics for the frequentist model
+
+The model presented convergence warnings. To avoid removing important random slopes, which could increase the Type I error [@brauer2018a; @singmann2019a], we examined the model after refitting it using seven optimization algorithms through the 'allFit' function of the 'lme4' package [@batesPackageLme42021]. The results showed that all optimizers produced virtually identical means for all effects, suggesting that the convergence warnings were not consequential (Bates et al., 2021; see [\underline{Appendix B}](#appendix-B-frequentist-analysis-diagnostics)).
+
+The residual errors were not normally distributed, and attempts to mitigate this deviation proved unsuccessful (see [\underline{Appendix B}](#appendix-B-frequentist-analysis-diagnostics)). However, this is not likely to have posed a major problem, as mixed-effects models are fairly robust to deviations from normality [@kniefViolatingNormalityAssumption2021; @schielzethRobustnessLinearMixed2020].
+
+```{r}
+
+# Calculate VIF for every predictor and return only the maximum VIF rounded up
+maxVIF_lexicaldecision = car::vif(lexicaldecision_lmerTest) %>% max %>% ceiling
+
+```
+
+The model did not present multicollinearity problems, all VIFs being smaller than `r maxVIF_lexicaldecision` [@dormannCollinearityReviewMethods2013; @harrison2018a].
+
+### Diagnostics for the Bayesian model
+
+```{r}
+
+# Calculate number of post-warmup draws (as in 'brms' version 2.17.0).
+# Informative prior model used but same numbers in all three models.
+lexicaldecision_post_warmup_draws = 
+  (lexicaldecision_summary_informativepriors_exgaussian$iter -
+     lexicaldecision_summary_informativepriors_exgaussian$warmup) *
+  lexicaldecision_summary_informativepriors_exgaussian$chains
+
+# As a convergence diagnostic, find maximum R-hat value for the 
+# fixed effects across the three models.
+lexicaldecision_fixedeffects_max_Rhat = 
+  max(lexicaldecision_summary_informativepriors_exgaussian$fixed$Rhat,
+      lexicaldecision_summary_weaklyinformativepriors_exgaussian$fixed$Rhat,
+      lexicaldecision_summary_diffusepriors_exgaussian$fixed$Rhat) %>% 
+  # Round
+  sprintf('%.2f', .)
+
+# Next, find find maximum R-hat value for the random effects 
+# across the three models. 
+lexicaldecision_randomeffects_max_Rhat = 
+  max(lexicaldecision_summary_informativepriors_exgaussian$random[['Participant']]$Rhat,
+      lexicaldecision_summary_weaklyinformativepriors_exgaussian$random[['Participant']]$Rhat,
+      lexicaldecision_summary_diffusepriors_exgaussian$random[['Participant']]$Rhat,
+      lexicaldecision_summary_informativepriors_exgaussian$random[['word']]$Rhat,
+      lexicaldecision_summary_weaklyinformativepriors_exgaussian$random[['word']]$Rhat,
+      lexicaldecision_summary_diffusepriors_exgaussian$random[['word']]$Rhat) %>% 
+  # Round
+  sprintf('%.2f', .)
+
+```
+
+
+Three Bayesian models were run that were respectively characterised by informative, weakly-informative and diffuse priors. In each model, `r lexicaldecision_summary_informativepriors_exgaussian$chains` chains were used. In each chain, `r lexicaldecision_summary_informativepriors_exgaussian$warmup %>% formattable::comma(digits = 0)` warmup iterations were run, followed by `r (lexicaldecision_summary_informativepriors_exgaussian$iter - lexicaldecision_summary_informativepriors_exgaussian$warmup) %>% formattable::comma(digits = 0)` post-warmup iterations. Thus, a total of `r lexicaldecision_post_warmup_draws %>% formattable::comma(digits = 0)` post-warmup draws were produced over all the chains. 
+
+The maximum $\widehat R$ value for the fixed effects across the three models was `r lexicaldecision_fixedeffects_max_Rhat`, suggesting that these effects converged [@schootBayesianStatisticsModelling2021; @vehtariRanknormalizationFoldingLocalization2021]. For the random effects, the maximum $\widehat R$ value was `r lexicaldecision_randomeffects_max_Rhat`, barely exceeding the 1.01 threshold [@vehtariRanknormalizationFoldingLocalization2021].
+
+The posterior predictive checks were sound (see [\underline{Appendix C}](#appendix-C-Bayesian-analysis-diagnostics)). Furthermore, in the prior sensitivity analysis, the results were virtually identical with the three priors that were considered (to recall the priors, see Figure \@ref(fig:bayesian-priors) above; to view the results in detail, see [\underline{Appendix E}](#appendix-E-Bayesian-analysis-results)).
+
+
+## Results
+
+Table \@ref(tab:lexicaldecision-frequentist-model) presents the results of the mixed-effects model.
+
+```{r lexicaldecision-frequentist-model, results = 'asis'}
+
+# Rename effects in plain language and specify the random slopes
+# (if any) for each effect, in the footnote. For this purpose, 
+# superscripts are added to the names of the appropriate effects.
+# 
+# In the interactions below, word-level variables are presented 
+# first for the sake of consistency (the order does not affect 
+# the results in any way). Also in the interactions, double 
+# colons are used to inform the 'frequentist_model_table' 
+# function that the two terms in the interaction must be split 
+# into two lines.
+
+rownames(KR_summary_lexicaldecision_lmerTest$coefficients)[
+  rownames(KR_summary_lexicaldecision_lmerTest$coefficients) == 
+    'z_vocabulary_age'] = 'Vocabulary age $^{\\text{a}}$'
+
+rownames(KR_summary_lexicaldecision_lmerTest$coefficients)[
+  rownames(KR_summary_lexicaldecision_lmerTest$coefficients) == 
+    'z_recoded_participant_gender'] = 'Gender $^{\\text{a}}$'
+
+rownames(KR_summary_lexicaldecision_lmerTest$coefficients)[
+  rownames(KR_summary_lexicaldecision_lmerTest$coefficients) == 
+    'z_orthographic_Levenshtein_distance'] = 'Orthographic Levenshtein distance'
+
+rownames(KR_summary_lexicaldecision_lmerTest$coefficients)[
+  rownames(KR_summary_lexicaldecision_lmerTest$coefficients) == 
+    'z_word_concreteness'] = 'Word concreteness'
+
+rownames(KR_summary_lexicaldecision_lmerTest$coefficients)[
+  rownames(KR_summary_lexicaldecision_lmerTest$coefficients) == 
+    'z_word_frequency'] = 'Word frequency $^{\\text{b}}$'
+
+rownames(KR_summary_lexicaldecision_lmerTest$coefficients)[
+  rownames(KR_summary_lexicaldecision_lmerTest$coefficients) == 
+    'z_visual_rating'] = 'Visual strength $^{\\text{b}}$'
+
+rownames(KR_summary_lexicaldecision_lmerTest$coefficients)[
+  rownames(KR_summary_lexicaldecision_lmerTest$coefficients) == 
+    'z_word_concreteness:z_vocabulary_age'] = 
+  'Word concreteness : Vocabulary age'
+
+rownames(KR_summary_lexicaldecision_lmerTest$coefficients)[
+  rownames(KR_summary_lexicaldecision_lmerTest$coefficients) == 
+    'z_word_concreteness:z_recoded_participant_gender'] = 
+  'Word concreteness : Gender'
+
+rownames(KR_summary_lexicaldecision_lmerTest$coefficients)[
+  rownames(KR_summary_lexicaldecision_lmerTest$coefficients) == 
+    'z_vocabulary_age:z_word_frequency'] = 
+  'Word frequency : Vocabulary age'
+
+rownames(KR_summary_lexicaldecision_lmerTest$coefficients)[
+  rownames(KR_summary_lexicaldecision_lmerTest$coefficients) == 
+    'z_vocabulary_age:z_visual_rating'] = 
+  'Visual strength : Vocabulary age'
+
+rownames(KR_summary_lexicaldecision_lmerTest$coefficients)[
+  rownames(KR_summary_lexicaldecision_lmerTest$coefficients) == 
+    'z_recoded_participant_gender:z_word_frequency'] = 
+  'Word frequency : Gender'
+
+rownames(KR_summary_lexicaldecision_lmerTest$coefficients)[
+  rownames(KR_summary_lexicaldecision_lmerTest$coefficients) == 
+    'z_recoded_participant_gender:z_visual_rating'] = 
+  'Visual strength : Gender'
+
+
+# Next, change the names in the confidence intervals object
+
+rownames(confint_lexicaldecision_lmerTest)[
+  rownames(confint_lexicaldecision_lmerTest) == 
+    'z_vocabulary_age'] = 'Vocabulary age $^{\\text{a}}$'
+
+rownames(confint_lexicaldecision_lmerTest)[
+  rownames(confint_lexicaldecision_lmerTest) == 
+    'z_recoded_participant_gender'] = 'Gender $^{\\text{a}}$'
+
+rownames(confint_lexicaldecision_lmerTest)[
+  rownames(confint_lexicaldecision_lmerTest) == 
+    'z_orthographic_Levenshtein_distance'] = 'Orthographic Levenshtein distance'
+
+rownames(confint_lexicaldecision_lmerTest)[
+  rownames(confint_lexicaldecision_lmerTest) == 
+    'z_word_concreteness'] = 'Word concreteness'
+
+rownames(confint_lexicaldecision_lmerTest)[
+  rownames(confint_lexicaldecision_lmerTest) == 
+    'z_word_frequency'] = 'Word frequency $^{\\text{b}}$'
+
+rownames(confint_lexicaldecision_lmerTest)[
+  rownames(confint_lexicaldecision_lmerTest) == 
+    'z_visual_rating'] = 'Visual strength $^{\\text{b}}$'
+
+rownames(confint_lexicaldecision_lmerTest)[
+  rownames(confint_lexicaldecision_lmerTest) == 
+    'z_word_concreteness:z_vocabulary_age'] = 
+  'Word concreteness : Vocabulary age'
+
+rownames(confint_lexicaldecision_lmerTest)[
+  rownames(confint_lexicaldecision_lmerTest) == 
+    'z_word_concreteness:z_recoded_participant_gender'] = 
+  'Word concreteness : Gender'
+
+rownames(confint_lexicaldecision_lmerTest)[
+  rownames(confint_lexicaldecision_lmerTest) == 
+    'z_vocabulary_age:z_word_frequency'] = 
+  'Word frequency : Vocabulary age'
+
+rownames(confint_lexicaldecision_lmerTest)[
+  rownames(confint_lexicaldecision_lmerTest) == 
+    'z_vocabulary_age:z_visual_rating'] = 
+  'Visual strength : Vocabulary age'
+
+rownames(confint_lexicaldecision_lmerTest)[
+  rownames(confint_lexicaldecision_lmerTest) == 
+    'z_recoded_participant_gender:z_word_frequency'] = 
+  'Word frequency : Gender'
+
+rownames(confint_lexicaldecision_lmerTest)[
+  rownames(confint_lexicaldecision_lmerTest) == 
+    'z_recoded_participant_gender:z_visual_rating'] = 
+  'Visual strength : Gender'
+
+
+# Create table (using custom function from the 'R_functions' folder)
+frequentist_model_table(
+  KR_summary_lexicaldecision_lmerTest, 
+  confint_lexicaldecision_lmerTest,
+  order_effects = c('(Intercept)',
+                    'Vocabulary age $^{\\text{a}}$',
+                    'Gender $^{\\text{a}}$',
+                    'Orthographic Levenshtein distance',
+                    'Word concreteness',
+                    'Word frequency $^{\\text{b}}$',
+                    'Visual strength $^{\\text{b}}$',
+                    'Word concreteness : Vocabulary age',
+                    'Word concreteness : Gender',
+                    'Word frequency : Vocabulary age',
+                    'Visual strength : Vocabulary age',
+                    'Word frequency : Gender',
+                    'Visual strength : Gender'),
+  interaction_symbol_x = TRUE,
+  caption = 'Frequentist model for the lexical decision study.') %>%
+  # kable_styling(latex_options = 'scale_down') %>%
+  
+  # Group predictors under headings
+  pack_rows('Individual differences', 2, 3) %>% 
+  pack_rows('Lexical covariate', 4, 4) %>% 
+  pack_rows('Semantic variables', 5, 7) %>% 
+  pack_rows('Interactions', 8, 13) %>% 
+  
+  # Place table close to designated position and highlight covariates
+  kable_styling(latex_options = c('HOLD_position', 'striped'), 
+                stripe_index = c(4:5, 8:9)) %>%
+  
+  # Footnote describing abbreviations, random slopes, etc. 
+  # LaTeX code used to format the text.
+  footnote(escape = FALSE, threeparttable = TRUE, general_title = '\\\\linebreak', 
+           general = paste('\\\\textit{Note}. $\\\\upbeta$ = Estimate based on $z$-scored variables; \\\\textit{SE} = standard error;',
+                           'CI = confidence interval. Shaded rows contain covariates. \\\\linebreak', 
+                           '$^{\\\\text{a}}$ By-word random slopes were included for this effect.',
+                           '$^{\\\\text{b}}$ By-participant random slopes were included for this effect.', 
+                           # Begin lines after first one with a dot-sized indent
+                           sep = ' \\\\linebreak \\\\phantom{.}'))
+
+
+# Calculate R^2. This coefficient must be interpreted with caution 
+# (Nakagawa et al., 2017; https://doi.org/10.1098/rsif.2017.0213). 
+# Also, transform coefficient to rounded percentage.
+
+Nakagawa2017_fixedeffects_R2_lexicaldecision_lmerTest = 
+  paste0(
+    (MuMIn::r.squaredGLMM(lexicaldecision_lmerTest)[1, 'R2m'][[1]] * 100) %>% 
+      sprintf('%.2f', .), '%'
+  )
+
+Nakagawa2017_randomeffects_R2_lexicaldecision_lmerTest = 
+  paste0(
+    (MuMIn::r.squaredGLMM(lexicaldecision_lmerTest)[1, 'R2c'][[1]] * 100) %>% 
+      sprintf('%.2f', .), '%'
+  )
+
+```
+
+
+The fixed effects of this model explained `r Nakagawa2017_fixedeffects_R2_lexicaldecision_lmerTest` of the variance, and the random effects explained `r Nakagawa2017_randomeffects_R2_lexicaldecision_lmerTest` [@nakagawaCoefficientDeterminationR22017].
+
+
+### Visualising the estimates
+
+Figure \@ref(fig:lexicaldecision-frequentist-bayesian-plot-weaklyinformativepriors-exgaussian) presents the posterior distribution of each effect, based on the informative prior model. The models with the other priors produced virtually identical results (see [\underline{Appendix E}](#appendix-E-Bayesian-analysis-results)). The figure also shows the frequentist estimates from Table \@ref(tab:lexicaldecision-frequentist-model), to facilitate the comparison.
+
+```{r lexicaldecision-frequentist-bayesian-plot-weaklyinformativepriors-exgaussian, fig.cap = 'Estimates from the frequentist analysis (in red) and from the Bayesian analysis (in blue) for the lexical decision study. The frequentist means (represented by points) are flanked by 95\\% confidence intervals. The Bayesian means (represented by vertical lines) are flanked by 95\\% credible intervals, in light blue (in some cases, the interval is covered up by the bar of the mean).'}
+
+# Run plot through source() rather than directly in this R Markdown document
+# to preserve the format.
+
+source('lexicaldecision/frequentist_bayesian_plots/lexicaldecision_frequentist_bayesian_plots.R', 
+       local = TRUE)
+
+include_graphics(
+  paste0(
+    getwd(),  # Circumvent illegal characters in file path
+    '/lexicaldecision/frequentist_bayesian_plots/plots/lexicaldecision_frequentist_bayesian_plot_weaklyinformativepriors_exgaussian.pdf'
+  ))
+
+```
+
+
+### Statistical power analysis
+
+Figures \@ref(fig:lexicaldecision-powercurve-plots-1-2-3) and \@ref(fig:lexicaldecision-powercurve-plots-4-5-6-7) show the estimated power available for main effects and interactions of interest, respectively.
+
+```{r lexicaldecision-powercurve-plots-1-2-3, fig.cap = 'Power curves for some main effects in the lexical decision study.'}
+
+# Run plot through source() rather than directly in this R Markdown document 
+# to preserve the italicised text.
+source('lexicaldecision/power_analysis/lexicaldecision_all_powercurves.R', 
+       local = TRUE)
+
+include_graphics(
+  paste0(
+    getwd(),  # Circumvent illegal characters in file path
+    '/lexicaldecision/power_analysis/plots/lexicaldecision_powercurve_plots_1_2_3.pdf'
+  ))
+
+```
+
+```{r lexicaldecision-powercurve-plots-4-5-6-7, fig.cap = 'Power curves for some interactions in the lexical decision study.'}
+
+include_graphics(
+  paste0(
+    getwd(),  # Circumvent illegal characters in file path
+    '/lexicaldecision/power_analysis/plots/lexicaldecision_powercurve_plots_4_5_6_7.pdf'
+  ))
+
+```
+
+
+_______ interpret ____________
+
+
+## Discussion
+
+___________________
+
+
+
+# General discussion
+
+In all three studies, the main effects and the interactions of language-based information were larger than those of vision-based information, consistent with previous research [...]. Beyond that, the results revealed a dynamic process influenced by three levels of variation: participants, words and tasks. The associations that appeared across these levels revealed the roles of language-based and vision-based mechanisms in conceptual processing.
+
+The RTs of higher-vocabulary participants were influenced by a smaller number of variables than those of lower-vocabulary participants. This converges with previous findings suggesting that higher and lower-vocabulary participants are affected by different variables. Potentially, the variables affecting higher-vocabulary participants are more relevant to the task [@lim2020a; @pexman2018a; @yap2012a; @yap2017a].
+
+
+## Differences between measurement instruments and the associated risks
+
+We also compared two measures of visual priming. The first measure was operationalised as the difference in visual strength [@lynott2020a] between the prime and the target word in each trial. The second measure, created by [@petilli2021a], was based on vector representations trained on images. The results revealed that the visual strength measure was significantly superior in explaining RTs. This difference was not due to an excessive collinearity between these measures ($r$ = .02). Also importantly, both measures appeared to be valid based on their correlations with language-based similarity and with word concreteness. 
+
+If we indeed accept that both the above measures were valid, we must reflect on the possibility that measurement instruments create confounds when different systems are compared. That is, in the case of linguistic and embodied processing, the large difference between the effect sizes of these systems---found in the three current studies and in the previous literature [...]---would not be trustworthy if the instruments that were used to measure the language system were far more precise than the instruments used to measure the embodiment system. In this sense, consider how variables are refined in research: it is done by comparing the performance of different variables. Critically, the literature seems to contain many comparisons of text-based variables, some dating from the 1990s [@jones2006a; @lund1996a; @mikolovEfficientEstimationWord2013; @dedeyneBetterExplanationsLexical2013; @de2016a; @guenther2016a; @guntherLatentSemanticAnalysis2016; @wingfieldUnderstandingRoleLinguistic2022]. In contrast, the work on embodiment variables began more than a decade afterwards, and this work has been more concerned with comparisons of different *modalities*---e.g., valence, visual strength, auditory strength, etc. [@lynott2020a; @lynottModalityExclusivityNorms2009; @newcombeEffectsEmotionalSensorimotor2012]. Thus, this historical accident could account for a portion of the superiority of linguistic information over embodied information [as found in @lam2015a; @pecherDoesPizzaPrime1998; @petilli2021a; @banksLinguisticDistributionalKnowledge2021; @kiela2014a; @louwerse2015a].
+
+The case of different measurement instruments is one of several factors that can exert a great influence in analyses. In the medium term, it may pay dividends to devote more work to comparing different instruments and, more generally, different analyses [see @barsalouEstablishingGeneralizableMechanisms2019; @botvinik-nezerVariabilityAnalysisSingle2020; @wagenmakersOneStatisticalAnalysis2022].
+
+
+## Statistical power
+
+Power analyses were performed to _____________________. _______________________. The sample sizes required for some of the effects are not easily feasible with the usual distribution of funding in psychological research projects. 
+
+
+\clearpage
+
+
+# References
+
+::: {#refs}
+:::
+
+\newpage
+
+
+# (APPENDIX) Appendix {-}
+
+<!-- Every appendix must be referenced below (see https://github.com/crsh/papaja/issues/496#issuecomment-996084228) -->
+
+<!-- Following APA format, precede figure and table numbers with the title letter of this appendix -->
+\renewcommand{\thefigure}{A\arabic{figure}} \setcounter{figure}{0}
+\renewcommand{\thetable}{A\arabic{table}} \setcounter{table}{0}
+
+```{r, child = 'manuscript/appendix-A-lexical-covariates.Rmd'}
+```
+
+\clearpage
+
+
+<!-- Following APA format, precede figure and table numbers with the title letter of this appendix -->
+\renewcommand{\thefigure}{B\arabic{figure}} \setcounter{figure}{0}
+\renewcommand{\thetable}{B\arabic{table}} \setcounter{table}{0}
+
+```{r, child = 'manuscript/appendix-B-frequentist-analysis-diagnostics.Rmd'}
+```
+
+\clearpage
+
+
+<!-- Following APA format, precede figure and table numbers with the title letter of this appendix -->
+\renewcommand{\thefigure}{C\arabic{figure}} \setcounter{figure}{0}
+\renewcommand{\thetable}{C\arabic{table}} \setcounter{table}{0}
+
+```{r, child = 'manuscript/appendix-C-Bayesian-analysis-diagnostics.Rmd'}
+```
+
+\clearpage
+
+
+<!-- Following APA format, precede figure and table numbers with the title letter of this appendix -->
+\renewcommand{\thefigure}{D\arabic{figure}} \setcounter{figure}{0}
+\renewcommand{\thetable}{D\arabic{table}} \setcounter{table}{0}
+
+```{r, child = 'manuscript/appendix-D-interaction-plots.Rmd'}
+```
+
+\clearpage
+
+
+<!-- Following APA format, precede figure and table numbers with the title letter of this appendix -->
+\renewcommand{\thefigure}{E\arabic{figure}} \setcounter{figure}{0}
+\renewcommand{\thetable}{E\arabic{table}} \setcounter{table}{0}
+
+```{r, child = 'manuscript/appendix-E-Bayesian-analysis-results.Rmd'}
+```
+
+\clearpage
+
+
