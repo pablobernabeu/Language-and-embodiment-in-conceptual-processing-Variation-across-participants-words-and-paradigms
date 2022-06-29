@@ -32,7 +32,7 @@ source('R_functions/correlation_matrix.R')
     rename('RT' = z_RTclean, 
            'Vocabulary size' = z_vocabulary_size,
            'Information uptake' = z_information_uptake,
-           "Distance to word 'abstract'" = z_word_cooccurrence,
+           "Word co-occurrence" = z_word_cooccurrence,
            'Visual strength' = z_visual_rating,
            'Word concreteness' = z_word_concreteness,
            'Word frequency' = z_word_frequency,

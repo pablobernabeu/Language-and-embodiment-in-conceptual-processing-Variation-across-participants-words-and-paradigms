@@ -12,8 +12,7 @@ library(patchwork)
 
 # Data set below created in the script 'semanticpriming_data_preparation.R',
 # which is stored in the folder 'semanticpriming/data'
-semanticpriming = 
-  read.csv('semanticpriming/data/final_dataset/semanticpriming.csv')
+semanticpriming = read.csv('semanticpriming/data/final_dataset/semanticpriming.csv')
 
 
 ## Convert interstimulus interval to stimulus-onset asynchrony ##
@@ -36,12 +35,12 @@ semanticpriming =
 # et al., 1998; Petilli et al., 2021; Yap et al., 2017).
 
 # The 'SOA' column is created below by replacing ISI values of 50 with 
-# 200 and ISI values of 1050 (i.e., all other values) with 1200.
+# 200 and ISI values of 1050 with 1200.
 
 semanticpriming$SOA = 
-  ifelse(test = semanticpriming$interstimulus_interval == 50, 
-         yes = 200, 
-         no = 1200)
+  ifelse(semanticpriming$interstimulus_interval == 50, 200, 
+         ifelse(semanticpriming$interstimulus_interval == 1050, 1200, 
+                semanticpriming$interstimulus_interval))
 
 
 # Model below created in the script 'semanticpriming_lmerTest.R',
@@ -62,9 +61,8 @@ plot1 =
     x_title = 'Language-based similarity (*z*)',
     y_title = 'Predicted RT (*z*)',
     fill_title = 'SOA (ms)'
-  ) +
-  theme(plot.tag.position = c(0, 1), 
-        legend.position = c(.9, .82))
+  ) + theme(plot.tag.position = c(0, 1), 
+            legend.position = c(.9, .82))
 
 plot2 = 
   alias_interaction_plot(
@@ -76,14 +74,13 @@ plot2 =
     x_title = 'Visual-strength difference (*z*)',
     y_title = 'Predicted RT (*z*)',
     fill_title = 'SOA (ms)'
-  ) +
-  theme(plot.tag.position = c(0, 1), 
-        legend.position = 'none')
+  ) + theme(plot.tag.position = c(0, 1), 
+            legend.position = 'none')
 
 # Combine plots using {patchwork} and save the result to disk
 ( plot1 + plot2 + 
-    plot_annotation(tag_levels = list(c('(a)', '(b)', '(c)'))) + 
+    plot_annotation(tag_levels = list(c('(a)', '(b)'))) + 
     plot_layout(ncol = 1) ) %>%
   ggsave(filename = 'semanticpriming/frequentist_analysis/plots/semanticpriming-interactions-with-SOA.pdf',
-         device = cairo_pdf, width = 6.5, height = 7, dpi = 900)
+         device = cairo_pdf, width = 6, height = 7, dpi = 900)
 

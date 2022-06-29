@@ -5,8 +5,8 @@
 
 ```{r}
 
-# This appendix inherits the libraries, the working directory and the
-# data sets loaded in manuscript.Rmd, when the latter is knitted.
+# This appendix is rendered by the main manuscript. It inherits the 
+# working directory and all the objects loaded in the main manuscript.
 
 ```
 
@@ -167,7 +167,7 @@ bayesian_model_table(
   # Footnote describing abbreviations, random slopes, etc. 
   # LaTeX code used to format the text.
   footnote(escape = FALSE, threeparttable = TRUE, general_title = '\\\\linebreak', 
-           general = paste('\\\\textit{Note}. $\\\\upbeta$ = Estimate based on z-scored variables; \\\\textit{SE} = standard error;',
+           general = paste('\\\\textit{Note}. $\\\\upbeta$ = Estimate based on $z$-scored variables; \\\\textit{SE} = standard error;',
                            'CrI = credible interval. Shaded rows contain covariates. Some interactions',
                            'are split over two lines, with the second line indented. \\\\linebreak', 
                            '$^{\\\\text{a}}$ By-word random slopes were included for this effect.',
@@ -325,7 +325,7 @@ bayesian_model_table(
   # Footnote describing abbreviations, random slopes, etc. 
   # LaTeX code used to format the text.
   footnote(escape = FALSE, threeparttable = TRUE, general_title = '\\\\linebreak', 
-           general = paste('\\\\textit{Note}. $\\\\upbeta$ = Estimate based on z-scored variables; \\\\textit{SE} = standard error;',
+           general = paste('\\\\textit{Note}. $\\\\upbeta$ = Estimate based on $z$-scored variables; \\\\textit{SE} = standard error;',
                            'CrI = credible interval. Shaded rows contain covariates. Some interactions',
                            'are split over two lines, with the second line indented. \\\\linebreak', 
                            '$^{\\\\text{a}}$ By-word random slopes were included for this effect.',
@@ -399,7 +399,7 @@ rownames(semanticdecision_summary_informativepriors_exgaussian$fixed)[
 
 rownames(semanticdecision_summary_informativepriors_exgaussian$fixed)[
   rownames(semanticdecision_summary_informativepriors_exgaussian$fixed) == 
-    'z_word_cooccurrence'] = "Distance to word 'abstract' $^{\\text{b}}$"
+    'z_word_cooccurrence'] = "Word co-occurrence $^{\\text{b}}$"
 
 rownames(semanticdecision_summary_informativepriors_exgaussian$fixed)[
   rownames(semanticdecision_summary_informativepriors_exgaussian$fixed) == 
@@ -418,7 +418,7 @@ rownames(semanticdecision_summary_informativepriors_exgaussian$fixed)[
 rownames(semanticdecision_summary_informativepriors_exgaussian$fixed)[
   rownames(semanticdecision_summary_informativepriors_exgaussian$fixed) == 
     'z_information_uptake:z_word_cooccurrence'] = 
-  "Information uptake :: Distance to word 'abstract'"
+  "Word co-occurrence : Information uptake"
 
 rownames(semanticdecision_summary_informativepriors_exgaussian$fixed)[
   rownames(semanticdecision_summary_informativepriors_exgaussian$fixed) == 
@@ -428,7 +428,7 @@ rownames(semanticdecision_summary_informativepriors_exgaussian$fixed)[
 rownames(semanticdecision_summary_informativepriors_exgaussian$fixed)[
   rownames(semanticdecision_summary_informativepriors_exgaussian$fixed) == 
     'z_vocabulary_size:z_word_cooccurrence'] = 
-  "Distance to word 'abstract' :: Vocabulary size"
+  "Word co-occurrence : Vocabulary size"
 
 rownames(semanticdecision_summary_informativepriors_exgaussian$fixed)[
   rownames(semanticdecision_summary_informativepriors_exgaussian$fixed) == 
@@ -438,7 +438,7 @@ rownames(semanticdecision_summary_informativepriors_exgaussian$fixed)[
 rownames(semanticdecision_summary_informativepriors_exgaussian$fixed)[
   rownames(semanticdecision_summary_informativepriors_exgaussian$fixed) == 
     'z_recoded_participant_gender:z_word_cooccurrence'] = 
-  "Distance to word 'abstract' : Gender"
+  "Word co-occurrence : Gender"
 
 rownames(semanticdecision_summary_informativepriors_exgaussian$fixed)[
   rownames(semanticdecision_summary_informativepriors_exgaussian$fixed) == 
@@ -456,15 +456,15 @@ bayesian_model_table(
                     'Word frequency',
                     'Orthographic Levenshtein distance',
                     'Word concreteness',
-                    "Distance to word 'abstract' $^{\\text{b}}$",
+                    "Word co-occurrence $^{\\text{b}}$",
                     'Visual strength $^{\\text{b}}$',
-                    'Vocabulary size : Word concreteness',
+                    'Word concreteness : Vocabulary size',
                     'Word concreteness : Gender',
-                    "Distance to word 'abstract' :: Information uptake",
+                    "Word co-occurrence : Information uptake",
                     'Visual strength : Information uptake',
-                    "Distance to word 'abstract' :: Vocabulary size",
+                    "Word co-occurrence : Vocabulary size",
                     'Visual strength : Vocabulary size',
-                    "Distance to word 'abstract' : Gender",
+                    "Word co-occurrence : Gender",
                     'Visual strength : Gender'),
   interaction_symbol_x = TRUE,
   caption = 'Informative prior model for the semantic decision study.') %>%
@@ -478,12 +478,12 @@ bayesian_model_table(
   
   # Place table close to designated position and highlight covariates
   kable_styling(latex_options = c('HOLD_position', 'striped'), 
-                stripe_index = c(2, 5:7, 10:11)) %>%
+                stripe_index = c(2, 5:7, 10:13)) %>%
   
   # Footnote describing abbreviations, random slopes, etc. 
   # LaTeX code used to format the text.
   footnote(escape = FALSE, threeparttable = TRUE, general_title = '\\\\linebreak', 
-           general = paste('\\\\textit{Note}. $\\\\upbeta$ = Estimate based on z-scored variables; \\\\textit{SE} = standard error;',
+           general = paste('\\\\textit{Note}. $\\\\upbeta$ = Estimate based on $z$-scored variables; \\\\textit{SE} = standard error;',
                            'CrI = credible interval. Shaded rows contain covariates. Some interactions',
                            'are split over two lines, with the second line indented. \\\\linebreak', 
                            '$^{\\\\text{a}}$ By-word random slopes were included for this effect.',
@@ -533,7 +533,7 @@ rownames(semanticdecision_summary_weaklyinformativepriors_exgaussian$fixed)[
 
 rownames(semanticdecision_summary_weaklyinformativepriors_exgaussian$fixed)[
   rownames(semanticdecision_summary_weaklyinformativepriors_exgaussian$fixed) == 
-    'z_word_cooccurrence'] = "Distance to word 'abstract' $^{\\text{b}}$"
+    'z_word_cooccurrence'] = "Word co-occurrence $^{\\text{b}}$"
 
 rownames(semanticdecision_summary_weaklyinformativepriors_exgaussian$fixed)[
   rownames(semanticdecision_summary_weaklyinformativepriors_exgaussian$fixed) == 
@@ -552,7 +552,7 @@ rownames(semanticdecision_summary_weaklyinformativepriors_exgaussian$fixed)[
 rownames(semanticdecision_summary_weaklyinformativepriors_exgaussian$fixed)[
   rownames(semanticdecision_summary_weaklyinformativepriors_exgaussian$fixed) == 
     'z_information_uptake:z_word_cooccurrence'] = 
-  "Information uptake :: Distance to word 'abstract'"
+  "Word co-occurrence : Information uptake"
 
 rownames(semanticdecision_summary_weaklyinformativepriors_exgaussian$fixed)[
   rownames(semanticdecision_summary_weaklyinformativepriors_exgaussian$fixed) == 
@@ -562,7 +562,7 @@ rownames(semanticdecision_summary_weaklyinformativepriors_exgaussian$fixed)[
 rownames(semanticdecision_summary_weaklyinformativepriors_exgaussian$fixed)[
   rownames(semanticdecision_summary_weaklyinformativepriors_exgaussian$fixed) == 
     'z_vocabulary_size:z_word_cooccurrence'] = 
-  "Distance to word 'abstract' :: Vocabulary size"
+  "Word co-occurrence : Vocabulary size"
 
 rownames(semanticdecision_summary_weaklyinformativepriors_exgaussian$fixed)[
   rownames(semanticdecision_summary_weaklyinformativepriors_exgaussian$fixed) == 
@@ -572,7 +572,7 @@ rownames(semanticdecision_summary_weaklyinformativepriors_exgaussian$fixed)[
 rownames(semanticdecision_summary_weaklyinformativepriors_exgaussian$fixed)[
   rownames(semanticdecision_summary_weaklyinformativepriors_exgaussian$fixed) == 
     'z_recoded_participant_gender:z_word_cooccurrence'] = 
-  "Distance to word 'abstract' : Gender"
+  "Word co-occurrence : Gender"
 
 rownames(semanticdecision_summary_weaklyinformativepriors_exgaussian$fixed)[
   rownames(semanticdecision_summary_weaklyinformativepriors_exgaussian$fixed) == 
@@ -590,15 +590,15 @@ bayesian_model_table(
                     'Word frequency',
                     'Orthographic Levenshtein distance',
                     'Word concreteness',
-                    "Distance to word 'abstract' $^{\\text{b}}$",
+                    "Word co-occurrence $^{\\text{b}}$",
                     'Visual strength $^{\\text{b}}$',
-                    'Vocabulary size : Word concreteness',
+                    'Word concreteness : Vocabulary size',
                     'Word concreteness : Gender',
-                    "Distance to word 'abstract' :: Information uptake",
+                    "Word co-occurrence : Information uptake",
                     'Visual strength : Information uptake',
-                    "Distance to word 'abstract' :: Vocabulary size",
+                    "Word co-occurrence : Vocabulary size",
                     'Visual strength : Vocabulary size',
-                    "Distance to word 'abstract' : Gender",
+                    "Word co-occurrence : Gender",
                     'Visual strength : Gender'),
   interaction_symbol_x = TRUE,
   caption = 'Weakly-informative prior model for the semantic decision study.') %>%
@@ -612,12 +612,12 @@ bayesian_model_table(
   
   # Place table close to designated position and highlight covariates
   kable_styling(latex_options = c('HOLD_position', 'striped'), 
-                stripe_index = c(2, 5:7, 10:11)) %>%
+                stripe_index = c(2, 5:7, 10:13)) %>%
   
   # Footnote describing abbreviations, random slopes, etc. 
   # LaTeX code used to format the text.
   footnote(escape = FALSE, threeparttable = TRUE, general_title = '\\\\linebreak', 
-           general = paste('\\\\textit{Note}. $\\\\upbeta$ = Estimate based on z-scored variables; \\\\textit{SE} = standard error;',
+           general = paste('\\\\textit{Note}. $\\\\upbeta$ = Estimate based on $z$-scored variables; \\\\textit{SE} = standard error;',
                            'CrI = credible interval. Shaded rows contain covariates. Some interactions',
                            'are split over two lines, with the second line indented. \\\\linebreak', 
                            '$^{\\\\text{a}}$ By-word random slopes were included for this effect.',
@@ -667,7 +667,7 @@ rownames(semanticdecision_summary_diffusepriors_exgaussian$fixed)[
 
 rownames(semanticdecision_summary_diffusepriors_exgaussian$fixed)[
   rownames(semanticdecision_summary_diffusepriors_exgaussian$fixed) == 
-    'z_word_cooccurrence'] = "Distance to word 'abstract' $^{\\text{b}}$"
+    'z_word_cooccurrence'] = "Word co-occurrence $^{\\text{b}}$"
 
 rownames(semanticdecision_summary_diffusepriors_exgaussian$fixed)[
   rownames(semanticdecision_summary_diffusepriors_exgaussian$fixed) == 
@@ -686,7 +686,7 @@ rownames(semanticdecision_summary_diffusepriors_exgaussian$fixed)[
 rownames(semanticdecision_summary_diffusepriors_exgaussian$fixed)[
   rownames(semanticdecision_summary_diffusepriors_exgaussian$fixed) == 
     'z_information_uptake:z_word_cooccurrence'] = 
-  "Information uptake :: Distance to word 'abstract'"
+  "Word co-occurrence : Information uptake"
 
 rownames(semanticdecision_summary_diffusepriors_exgaussian$fixed)[
   rownames(semanticdecision_summary_diffusepriors_exgaussian$fixed) == 
@@ -696,7 +696,7 @@ rownames(semanticdecision_summary_diffusepriors_exgaussian$fixed)[
 rownames(semanticdecision_summary_diffusepriors_exgaussian$fixed)[
   rownames(semanticdecision_summary_diffusepriors_exgaussian$fixed) == 
     'z_vocabulary_size:z_word_cooccurrence'] = 
-  "Distance to word 'abstract' :: Vocabulary size"
+  "Word co-occurrence : Vocabulary size"
 
 rownames(semanticdecision_summary_diffusepriors_exgaussian$fixed)[
   rownames(semanticdecision_summary_diffusepriors_exgaussian$fixed) == 
@@ -706,7 +706,7 @@ rownames(semanticdecision_summary_diffusepriors_exgaussian$fixed)[
 rownames(semanticdecision_summary_diffusepriors_exgaussian$fixed)[
   rownames(semanticdecision_summary_diffusepriors_exgaussian$fixed) == 
     'z_recoded_participant_gender:z_word_cooccurrence'] = 
-  "Distance to word 'abstract' : Gender"
+  "Word co-occurrence : Gender"
 
 rownames(semanticdecision_summary_diffusepriors_exgaussian$fixed)[
   rownames(semanticdecision_summary_diffusepriors_exgaussian$fixed) == 
@@ -724,15 +724,15 @@ bayesian_model_table(
                     'Word frequency',
                     'Orthographic Levenshtein distance',
                     'Word concreteness',
-                    "Distance to word 'abstract' $^{\\text{b}}$",
+                    "Word co-occurrence $^{\\text{b}}$",
                     'Visual strength $^{\\text{b}}$',
-                    'Vocabulary size : Word concreteness',
+                    'Word concreteness : Vocabulary size',
                     'Word concreteness : Gender',
-                    "Distance to word 'abstract' :: Information uptake",
+                    "Word co-occurrence : Information uptake",
                     'Visual strength : Information uptake',
-                    "Distance to word 'abstract' :: Vocabulary size",
+                    "Word co-occurrence : Vocabulary size",
                     'Visual strength : Vocabulary size',
-                    "Distance to word 'abstract' : Gender",
+                    "Word co-occurrence : Gender",
                     'Visual strength : Gender'),
   interaction_symbol_x = TRUE,
   caption = 'Diffuse prior model for the semantic decision study.') %>%
@@ -746,12 +746,12 @@ bayesian_model_table(
   
   # Place table close to designated position and highlight covariates
   kable_styling(latex_options = c('HOLD_position', 'striped'), 
-                stripe_index = c(2, 5:7, 10:11)) %>%
+                stripe_index = c(2, 5:7, 10:13)) %>%
   
   # Footnote describing abbreviations, random slopes, etc. 
   # LaTeX code used to format the text.
   footnote(escape = FALSE, threeparttable = TRUE, general_title = '\\\\linebreak', 
-           general = paste('\\\\textit{Note}. $\\\\upbeta$ = Estimate based on z-scored variables; \\\\textit{SE} = standard error;',
+           general = paste('\\\\textit{Note}. $\\\\upbeta$ = Estimate based on $z$-scored variables; \\\\textit{SE} = standard error;',
                            'CrI = credible interval. Shaded rows contain covariates. Some interactions',
                            'are split over two lines, with the second line indented. \\\\linebreak', 
                            '$^{\\\\text{a}}$ By-word random slopes were included for this effect.',
@@ -887,7 +887,7 @@ bayesian_model_table(
   # Footnote describing abbreviations, random slopes, etc. 
   # LaTeX code used to format the text.
   footnote(escape = FALSE, threeparttable = TRUE, general_title = '\\\\linebreak', 
-           general = paste('\\\\textit{Note}. $\\\\upbeta$ = Estimate based on z-scored variables; \\\\textit{SE} = standard error;',
+           general = paste('\\\\textit{Note}. $\\\\upbeta$ = Estimate based on $z$-scored variables; \\\\textit{SE} = standard error;',
                            'CrI = credible interval. Shaded rows contain covariates. \\\\linebreak', 
                            '$^{\\\\text{a}}$ By-word random slopes were included for this effect.',
                            '$^{\\\\text{b}}$ By-participant random slopes were included for this effect.', 
@@ -987,7 +987,7 @@ bayesian_model_table(
   # Footnote describing abbreviations, random slopes, etc. 
   # LaTeX code used to format the text.
   footnote(escape = FALSE, threeparttable = TRUE, general_title = '\\\\linebreak', 
-           general = paste('\\\\textit{Note}. $\\\\upbeta$ = Estimate based on z-scored variables; \\\\textit{SE} = standard error;',
+           general = paste('\\\\textit{Note}. $\\\\upbeta$ = Estimate based on $z$-scored variables; \\\\textit{SE} = standard error;',
                            'CrI = credible interval. Shaded rows contain covariates. \\\\linebreak', 
                            '$^{\\\\text{a}}$ By-word random slopes were included for this effect.',
                            '$^{\\\\text{b}}$ By-participant random slopes were included for this effect.', 
@@ -1087,7 +1087,7 @@ bayesian_model_table(
   # Footnote describing abbreviations, random slopes, etc. 
   # LaTeX code used to format the text.
   footnote(escape = FALSE, threeparttable = TRUE, general_title = '\\\\linebreak', 
-           general = paste('\\\\textit{Note}. $\\\\upbeta$ = Estimate based on z-scored variables; \\\\textit{SE} = standard error;',
+           general = paste('\\\\textit{Note}. $\\\\upbeta$ = Estimate based on $z$-scored variables; \\\\textit{SE} = standard error;',
                            'CrI = credible interval. Shaded rows contain covariates. \\\\linebreak', 
                            '$^{\\\\text{a}}$ By-word random slopes were included for this effect.',
                            '$^{\\\\text{b}}$ By-participant random slopes were included for this effect.', 

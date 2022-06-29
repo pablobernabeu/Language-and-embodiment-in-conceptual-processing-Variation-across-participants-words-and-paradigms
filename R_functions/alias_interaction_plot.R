@@ -22,8 +22,8 @@
 #   fill_title = 'Gender'
 # )
 
-# Note: if you wished to verify the accuracy of these involved plots, 
-# you could use sjPlot::plot_model() to obtain more basic versions.
+# Note: should you wish to verify the accuracy of these involved plots, 
+# you could use sjPlot::plot_model() to produce simpler versions.
 
 #################################
 
@@ -54,8 +54,8 @@ alias_interaction_plot =
     # `fill_nesting_factor` to `fill_alias`
     if(!is.null(fill_nesting_factor)) {
       
-      # Proceed only if the `fill` and the `fill_alias` variables contain 
-      # the same number of unique values.
+      # Proceed only if the `fill` and the `fill_alias` variables 
+      # contain the same number of unique values.
       if(identical(n_distinct(model_df[,fill]), 
                    n_distinct(model_df[,fill_alias]))) {
         
@@ -76,13 +76,13 @@ alias_interaction_plot =
         model_df = as.data.frame(model_df)
         
         # If the `fill` and the `fill_alias` variables do not contain the
-        # same number of unique values, warn that`fill_nesting_factor` will 
-        # be ignored.
+        # same number of unique values, warn that`fill_nesting_factor` 
+        # will be ignored.
       } else {
         message(
           paste('The argument `fill_nesting_factor` has been ignored, as it requires', 
-                'that the `fill` variable contain the same number of unique', 
-                'values as the `fill_alias` variable.',
+                'that the `fill` variable contain the same number of unique values', 
+                'as the `fill_alias` variable.',
                 sep = '\n')
         )
       }
@@ -112,8 +112,7 @@ alias_interaction_plot =
       # unique values, assign values of `fill_alias` to `fill`, format it 
       # as a factor, and create fill labels directly from its levels.
     } else {
-      model@frame[,fill] = model@frame[,fill_alias]
-      model@frame[,fill] = as.factor(model@frame[,fill])
+      model@frame[,fill] = as.factor(model@frame[,fill_alias])
       fill_labels = levels(model@frame[,fill])
     }
     
@@ -130,7 +129,9 @@ alias_interaction_plot =
     if(is.null(fill_title)) fill_title = fill
     
     # Plot
+    
     plot_model(model, type = 'pred', terms = c(x, fill), ci.lvl = .95) +
+      
       geom_point(show.legend = FALSE) + 
       scale_x_continuous(expand = expansion(mult = c(.01, .01))) + 
       scale_y_continuous(expand = expansion(mult = c(.01, .01))) + 
@@ -153,21 +154,27 @@ alias_interaction_plot =
       xlab(x_title) + ylab(y_title) +
       theme(plot.title = element_blank(), panel.grid.major = element_blank(), 
             panel.grid.minor = element_blank(), panel.background = element_blank(), 
-            axis.title.x = ggtext::element_markdown(size = 11.2, 
+            axis.title.x = ggtext::element_markdown(size = 12.5, 
                                                     margin = margin(t = 6)),
-            axis.title.y = ggtext::element_markdown(size = 11.2, 
+            axis.title.y = ggtext::element_markdown(size = 12.5, 
                                                     margin = margin(r = 6)),
-            axis.text = element_text(size = 9.1), 
+            axis.text = element_text(size = 11), 
             axis.line = element_line(colour = 'black'), 
             legend.title = 
-              ggtext::element_markdown(size = 11.2, hjust = 0.5, vjust = 0.5, 
+              ggtext::element_markdown(size = 12.5, hjust = 0.5, vjust = 0.5, 
                                        margin = margin(b = 5), lineheight = 1.4), 
-            legend.text = ggtext::element_markdown(size = 9.8, vjust = .5), 
-            legend.title.align = 0.5, legend.key.size = unit(0.6, 'cm'), 
-            legend.background = element_rect(colour = 'grey82', 
+            legend.title.align = 0.5, 
+            legend.text = ggtext::element_markdown(
+              # Adjust size of text depending on number of levels in fill_labels
+              size = ifelse(length(fill_labels) < 4, 11, 10.5), 
+              vjust = .5), 
+            # Adjust size of legend keys depending on number of levels in fill_labels
+            legend.key.size = unit(ifelse(length(fill_labels) < 4, 0.7, 0.6), 'cm'), 
+            legend.background = element_rect(colour = 'grey70', 
                                              fill = 'transparent'),
-            legend.margin = margin(10, 10, 10, 10),
+            legend.margin = margin(7, 7, 7, 7),
             plot.margin = margin(10, 6, 10, 10))
+    
   }
 
 

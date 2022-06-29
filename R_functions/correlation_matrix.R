@@ -360,7 +360,8 @@ correlation_matrix = function(data) {
       aes(
         # Format coefficient label by rounding off, then removing minus signs 
         # from 0.00 coefficients, and removing leading zeros.
-        label = label %>% sprintf('%.2f', .) %>% sub('-0.00', '0.00', .) %>% 
+        label = label %>% 
+          sprintf('%.2f', .) %>% sub('-0.00', '0.00', .) %>% 
           sub('^(-)?0[.]', '\\1.', .),
         
         # Below, the object `coefficient`--internally created by ggcorr--contains the 

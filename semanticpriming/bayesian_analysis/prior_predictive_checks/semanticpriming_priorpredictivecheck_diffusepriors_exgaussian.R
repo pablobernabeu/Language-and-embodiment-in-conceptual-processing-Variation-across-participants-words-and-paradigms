@@ -81,7 +81,7 @@ get_prior(
     # In the random slopes below, `0 +` helps avoid redundant random intercepts
     # (background: https://github.com/lme4/lme4/issues/625)
     
-    # By-subject random slopes
+    # By-participant random slopes
     (0 + z_cosine_similarity | Participant) +
     (0 + z_visual_rating_diff | Participant) +
     (0 + z_recoded_interstimulus_interval | Participant) +
@@ -91,7 +91,7 @@ get_prior(
     (0 + z_target_number_syllables | Participant) +
     (0 + z_word_concreteness_diff | Participant) +
     
-    # By-item random slopes
+    # Random slopes by prime-target pair
     (0 + z_vocabulary_size | primeword_targetword) +
     (0 + z_recoded_participant_gender | primeword_targetword) +
     (0 + z_attentional_control | primeword_targetword),
@@ -191,7 +191,7 @@ sampleonly_semanticpriming_brms_diffusepriors =
       # In the random slopes below, `0 +` helps avoid redundant random intercepts
       # (background: https://github.com/lme4/lme4/issues/625)
       
-      # By-subject random slopes
+      # By-participant random slopes
       (0 + z_cosine_similarity | Participant) +
       (0 + z_visual_rating_diff | Participant) +
       (0 + z_recoded_interstimulus_interval | Participant) +
@@ -201,7 +201,7 @@ sampleonly_semanticpriming_brms_diffusepriors =
       (0 + z_target_number_syllables | Participant) +
       (0 + z_word_concreteness_diff | Participant) +
       
-      # By-item random slopes
+      # Random slopes by prime-target pair
       (0 + z_vocabulary_size | primeword_targetword) +
       (0 + z_recoded_participant_gender | primeword_targetword) +
       (0 + z_attentional_control | primeword_targetword),

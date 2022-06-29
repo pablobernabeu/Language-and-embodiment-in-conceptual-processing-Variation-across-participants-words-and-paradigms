@@ -45,7 +45,7 @@ rownames(KR_summary_lexicaldecision_lmerTest$coefficients) =
   # better consistency, the code below moves those word-level variables (with 
   # their new names) to the first position in their interactions. Note that the 
   # order does not affect the results in any way.
-  sub("(\\w+.*):(Word frequency|Visual strength)", '\\2:\\1', .)
+  sub('(\\w+.*):(Word frequency|Visual strength)', '\\2:\\1', .)
 
 rownames(confint_lexicaldecision_lmerTest) =
   rownames(confint_lexicaldecision_lmerTest) %>%
@@ -70,12 +70,12 @@ rownames(confint_lexicaldecision_lmerTest) =
   # better consistency, the code below moves those word-level variables (with 
   # their new names) to the first position in their interactions. Note that the 
   # order does not affect the results in any way.
-  sub("(\\w+.*):(Word frequency|Visual strength)", '\\2:\\1', .)
+  sub('(\\w+.*):(Word frequency|Visual strength)', '\\2:\\1', .)
 
 
 ( plot_95_confidence_intervals(
   KR_summary_lexicaldecision_lmerTest, confint_lexicaldecision_lmerTest, 
-  x_title = 'Predicted RT (*z*)', interaction_symbol_x = TRUE, 
+  x_title = 'Effect size (&beta;)', interaction_symbol_x = TRUE, 
   vertical_line_at_x = 0
 ) + theme(plot.margin = margin(9, 4, 14, 12)) ) %>%
   # Save plot

@@ -75,7 +75,7 @@ system.time({
         # (see https://github.com/lme4/lme4/issues/625) and reduces the random-effects
         # structure (Brauer & Curtin, 2018).
         
-        # By-subject random slopes
+        # By-participant random slopes
         (0 + z_cosine_similarity || Participant) + 
         (0 + z_visual_rating_diff || Participant) +
         (0 + z_recoded_interstimulus_interval || Participant) +
@@ -87,7 +87,7 @@ system.time({
         # (0 + z_target_number_syllables || Participant) +
         # (0 + z_word_concreteness_diff || Participant) +
         
-        # By-item random slopes
+        # Random slopes by prime-target pair
         (0 + z_vocabulary_size || target_word) + 
         (0 + z_recoded_participant_gender || target_word),
       # Random slopes below removed due to non-convergence, following 

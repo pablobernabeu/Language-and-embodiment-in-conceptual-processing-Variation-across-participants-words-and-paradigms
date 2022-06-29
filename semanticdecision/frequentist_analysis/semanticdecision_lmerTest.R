@@ -74,7 +74,7 @@ system.time({
         # (see https://github.com/lme4/lme4/issues/625) and reduces the random-effects
         # structure (Brauer & Curtin, 2018).
         
-        # By-subject random slopes
+        # By-participant random slopes
         (0 + z_word_cooccurrence || Participant) + 
         (0 + z_visual_rating || Participant) +
         
@@ -82,13 +82,13 @@ system.time({
         # in Brauer and Curtin (2018). However, whereas Brauer and Curtin constrained such a 
         # removal to cases in which the covariate does not interact with any effects of interest,
         # the random slopes for 'z_word_concreteness' are removed below because the interactions 
-        # between this covariate and the effects of interest are controlled covariates per se, 
+        # between this covariate and the effects of interest are control covariates per se, 
         # not interactions of interest. That is, they are not critical to the research question.
         # (0 + z_word_frequency || Participant) + 
         # (0 + z_orthographic_Levenshtein_distance || Participant) +
         # (0 + z_word_concreteness || Participant) +
         
-      # By-item random slopes
+      # By-word random slopes
       (0 + z_vocabulary_size || Word) + 
         (0 + z_recoded_participant_gender || Word),
       
@@ -96,7 +96,7 @@ system.time({
       # in Brauer and Curtin (2018). However, whereas Brauer and Curtin constrained such a 
       # removal to cases in which the covariate does not interact with any effects of interest,
       # the random slopes for 'z_information_uptake' are removed below because the interactions 
-      # between this covariate and the effects of interest are controlled covariates per se, 
+      # between this covariate and the effects of interest are control covariates per se, 
       # not interactions of interest. That is, they are not critical to the research question.
       # (0 + z_information_uptake || Word),
       

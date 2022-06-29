@@ -1,8 +1,10 @@
 
 
 # Function for plotting interaction effect by splitting one of the variables 
-# (namely, the one passed to the `fill` argument) into ten deciles. The 
-# function draws on sjPlot::plot_model. Note that all arguments except 
+# (namely, the one passed to the `fill` argument) into ten parts, known as 
+# deciles. Where there's a sufficient amount of data, all parts will have 
+# the same number of data points.
+# The function draws on sjPlot::plot_model. Note that all arguments except 
 # `model` and `legend_ncol` must be enclosed in quotation marks. 
 
 # Usage example:
@@ -12,14 +14,14 @@
 #   x = 'z_word_cooccurrence',
 #   fill = 'z_vocabulary_size',
 #   fill_nesting_factor = 'Participant',
-#   x_title = "Distance to word 'abstract' (*z*)",
+#   x_title = "Word co-occurrence (*z*)",
 #   y_title = 'Predicted RT (*z*)',
 #   fill_title = 'Vocabulary size<br>(*z*, deciles)',
 #   legend_ncol = 2
 # )
 
-# Note: if you wished to verify the accuracy of these involved plots, 
-# you could use sjPlot::plot_model() to obtain more basic versions.
+# Note: should you wish to verify the accuracy of these involved plots, 
+# you could use sjPlot::plot_model() to produce simpler versions.
 
 #################################
 
@@ -153,8 +155,9 @@ deciles_interaction_plot =
     if(is.null(fill_title)) fill_title = paste0(fill, '<br>(deciles)')
     
     # Plot
-    plot_model(model, type = 'pred', 
-               terms = c(x, fill_name), ci.lvl = .95) +
+    
+    plot_model(model, type = 'pred', terms = c(x, fill_name), ci.lvl = .95) +
+      
       geom_point(show.legend = FALSE) + 
       scale_x_continuous(expand = expansion(mult = c(.01, .01))) + 
       scale_y_continuous(expand = expansion(mult = c(.01, .01))) + 
@@ -182,20 +185,26 @@ deciles_interaction_plot =
       xlab(x_title) + ylab(y_title) +
       theme(plot.title = element_blank(), panel.grid.major = element_blank(), 
             panel.grid.minor = element_blank(), panel.background = element_blank(), 
-            axis.title.x = ggtext::element_markdown(size = 11.2, 
+            axis.title.x = ggtext::element_markdown(size = 12.5, 
                                                     margin = margin(t = 6)),
-            axis.title.y = ggtext::element_markdown(size = 11.2, 
+            axis.title.y = ggtext::element_markdown(size = 12.5, 
                                                     margin = margin(r = 6)),
-            axis.text = element_text(size = 9.1), 
+            axis.text = element_text(size = 11), 
             axis.line = element_line(colour = 'black'), 
             legend.title = 
-              ggtext::element_markdown(size = 11.2, hjust = 0.5, vjust = 0.5, 
+              ggtext::element_markdown(size = 12.5, hjust = 0.5, vjust = 0.5, 
                                        margin = margin(b = 5), lineheight = 1.4), 
-            legend.text = ggtext::element_markdown(size = 9.8, vjust = .5), 
-            legend.title.align = 0.5, legend.key.size = unit(0.6, 'cm'), 
-            legend.background = element_rect(colour = 'grey82', 
+            legend.title.align = 0.5, 
+            legend.text = ggtext::element_markdown(
+              # Adjust size of text depending on number of levels in fill_labels
+              size = ifelse(length(fill_labels) < 4, 11, 10.5), 
+              vjust = .5), 
+            # Adjust size of legend keys depending on number of levels in fill_labels
+            legend.key.size = unit(ifelse(length(fill_labels) < 4, 0.7, 0.6), 'cm'), 
+            legend.background = element_rect(colour = 'grey70', 
                                              fill = 'transparent'),
-            legend.margin = margin(10, 10, 10, 10),
+            legend.margin = margin(7, 7, 7, 7),
             plot.margin = margin(10, 6, 10, 10))
+    
   }
 

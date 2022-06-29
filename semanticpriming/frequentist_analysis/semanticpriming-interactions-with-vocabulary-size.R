@@ -12,8 +12,7 @@ library(patchwork)
 
 # Data set below created in the script 'semanticpriming_data_preparation.R',
 # which is stored in the folder 'semanticpriming/data'
-semanticpriming = 
-  read.csv('semanticpriming/data/final_dataset/semanticpriming.csv')
+semanticpriming = read.csv('semanticpriming/data/final_dataset/semanticpriming.csv')
 
 # Model below created in the script 'semanticpriming_lmerTest.R',
 # which is stored in the folder 'semanticpriming/frequentist_analysis'
@@ -32,8 +31,7 @@ plot1 =
     x_title = 'Language-based similarity (*z*)',
     y_title = 'Predicted RT (*z*)',
     fill_title = 'Vocabulary size<br>(*z*, deciles)'
-  ) +
-  theme(plot.tag.position = c(0, 1))
+  ) + theme(plot.tag.position = c(0, 1))
 
 plot2 =
   deciles_interaction_plot(
@@ -44,8 +42,7 @@ plot2 =
     x_title = 'Visual-strength difference (*z*)',
     y_title = 'Predicted RT (*z*)',
     fill_title = 'Vocabulary size<br>(*z*, deciles)'
-  ) +
-  theme(plot.tag.position = c(0, 1))
+  ) + theme(plot.tag.position = c(0, 1))
 
 # Combine plots using {patchwork} and save the result to disk
 ( plot1 + plot2 + 

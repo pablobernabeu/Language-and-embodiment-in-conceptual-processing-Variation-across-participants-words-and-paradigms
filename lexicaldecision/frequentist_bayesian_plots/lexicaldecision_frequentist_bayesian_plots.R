@@ -77,7 +77,7 @@ new_labels =
   # the code below moves those word-level variables (with their new names) to 
   # the first position in their interactions. Note that the order does not 
   # affect the results in any way.
-  sub("'(\\w+.*):(Word frequency|Visual strength)'", '\\2:\\1', .) %>%
+  sub('(\\w+.*):(Word frequency|Visual strength)', '\\2:\\1', .) %>%
   
   # Replace colons denoting interactions with times symbols
   str_replace(pattern = ':', replacement = ' &times; ')
@@ -90,7 +90,7 @@ plot_lexicaldecision_frequentist_bayesian_plot_informativepriors_exgaussian =
                             confint_lexicaldecision_lmerTest,
                             lexicaldecision_posteriordistributions_informativepriors_exgaussian,
                             labels = new_labels, interaction_symbol_x = TRUE,
-                            vertical_line_at_x = 0, x_title = 'Predicted RT (*z*)', 
+                            vertical_line_at_x = 0, x_title = 'Effect size (&beta;)', 
                             note_frequentist_no_prior = TRUE) +
   ggtitle('Prior *SD* = 0.1')
 
@@ -101,8 +101,8 @@ plot_lexicaldecision_frequentist_bayesian_plot_informativepriors_exgaussian =
                             confint_lexicaldecision_lmerTest,
                             lexicaldecision_posteriordistributions_weaklyinformativepriors_exgaussian,
                             labels = new_labels, interaction_symbol_x = TRUE,
-                            vertical_line_at_x = 0, x_title = 'Predicted RT (*z*)',
-                            legend_columns = 1) + 
+                            vertical_line_at_x = 0, x_title = 'Effect size (&beta;)',
+                            legend_ncol = 1) + 
     theme(legend.position = 'bottom') ) %>%
   ggsave(filename = 'lexicaldecision/frequentist_bayesian_plots/plots/lexicaldecision_frequentist_bayesian_plot_weaklyinformativepriors_exgaussian.pdf',
          device = cairo_pdf, width = 5.4, height = 6, dpi = 900)
@@ -113,7 +113,7 @@ plot_lexicaldecision_frequentist_bayesian_plot_weaklyinformativepriors_exgaussia
                             confint_lexicaldecision_lmerTest,
                             lexicaldecision_posteriordistributions_weaklyinformativepriors_exgaussian,
                             labels = new_labels, interaction_symbol_x = TRUE,
-                            vertical_line_at_x = 0, x_title = 'Predicted RT (*z*)', 
+                            vertical_line_at_x = 0, x_title = 'Effect size (&beta;)', 
                             note_frequentist_no_prior = TRUE) +
   ggtitle('Prior *SD* = 0.2') +
   theme(axis.text.y = element_blank())
@@ -125,7 +125,7 @@ plot_lexicaldecision_frequentist_bayesian_plot_diffusepriors_exgaussian =
                             confint_lexicaldecision_lmerTest,
                             lexicaldecision_posteriordistributions_diffusepriors_exgaussian,
                             labels = new_labels, interaction_symbol_x = TRUE,
-                            vertical_line_at_x = 0, x_title = 'Predicted RT (*z*)', 
+                            vertical_line_at_x = 0, x_title = 'Effect size (&beta;)', 
                             note_frequentist_no_prior = TRUE) +
   ggtitle('Prior *SD* = 0.3') + 
   theme(axis.text.y = element_blank())
@@ -142,5 +142,5 @@ plot_lexicaldecision_frequentist_bayesian_plot_diffusepriors_exgaussian =
     plot_layout(ncol = 3, guides = 'collect') & theme(legend.position = 'bottom') ) %>%
   
   ggsave(filename = 'lexicaldecision/frequentist_bayesian_plots/plots/lexicaldecision_frequentist_bayesian_plot_allpriors_exgaussian.pdf',
-         device = cairo_pdf, width = 8.3, height = 6.1, dpi = 900)
+         device = cairo_pdf, width = 7.4, height = 6.1, dpi = 900)
 

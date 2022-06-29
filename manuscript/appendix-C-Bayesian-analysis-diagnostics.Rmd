@@ -5,8 +5,8 @@
 
 ```{r}
 
-# This appendix inherits the libraries, the working directory and the
-# data sets loaded in manuscript.Rmd, when the latter is knitted.
+# This appendix is rendered by the main manuscript. It inherits the 
+# working directory and all the objects loaded in the main manuscript.
 
 ```
 

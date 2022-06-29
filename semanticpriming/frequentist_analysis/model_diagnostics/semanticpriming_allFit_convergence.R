@@ -40,9 +40,9 @@ semanticpriming_allFit_convergence =
 saveRDS(semanticpriming_allFit_convergence,
         'semanticpriming/frequentist_analysis/model_diagnostics/results/semanticpriming_allFit_convergence.rds')
 
-# Load the result back in, if needed later
-# semanticpriming_allFit_convergence =
-#   readRDS('semanticpriming/frequentist_analysis/model_diagnostics/results/semanticpriming_allFit_convergence.rds')
+# Save (not saved because it takes up 2.1 GB)
+# saveRDS(semanticpriming_allFit_convergence,
+#         'semanticpriming/frequentist_analysis/model_diagnostics/results/semanticpriming_allFit_convergence.rds')
 
 ################################################################################
 

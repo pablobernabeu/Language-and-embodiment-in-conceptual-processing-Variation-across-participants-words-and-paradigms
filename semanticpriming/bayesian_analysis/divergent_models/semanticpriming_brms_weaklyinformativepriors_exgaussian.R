@@ -82,7 +82,7 @@ semanticpriming_brms_weaklyinformativepriors_exgaussian =
       # https://psych.wisc.edu/Brauer/BrauerLab/wp-content/uploads/2014/04/Brauer-Curtin-2018-on-LMEMs.pdf).
       # Interactions only require random slopes if all variables involved vary within the same units.
       
-      # By-subject random slopes
+      # By-participant random slopes
       (z_cosine_similarity + z_visual_rating_diff +
          z_recoded_interstimulus_interval + 
          z_cosine_similarity : z_recoded_interstimulus_interval +
@@ -90,7 +90,7 @@ semanticpriming_brms_weaklyinformativepriors_exgaussian =
          z_target_word_frequency + z_target_number_syllables + 
          z_word_concreteness_diff | Participant) +
       
-      # By-item random slopes
+      # Random slopes by prime-target pair
       (z_vocabulary_size + z_recoded_participant_gender +
          z_attentional_control | primeword_targetword),
     

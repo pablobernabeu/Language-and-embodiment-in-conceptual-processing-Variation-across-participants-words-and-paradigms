@@ -3,7 +3,7 @@
 # Part of Study 2: Semantic decision
 
 # Combination of plots:
-# 1. Interaction between gender and distance to word 'abstract'
+# 1. Interaction between gender and word co-occurrence
 # 2. Interaction between gender and visual strength
 # 3. Interaction between gender and word concreteness
 
@@ -13,13 +13,13 @@ library(patchwork)
 
 # Data set below created in the script 'semanticdecision_data_preparation.R',
 # which is stored in the folder 'semanticdecision/data'
-semanticdecision = 
-  read.csv('semanticdecision/data/final_dataset/semanticdecision.csv')
+semanticdecision = read.csv('semanticdecision/data/final_dataset/semanticdecision.csv')
 
-# Set plain-language labels
+# Set plain language labels
 semanticdecision$participant_gender = 
   ifelse(semanticdecision$participant_gender == 'F', 'Female',
-         ifelse(semanticdecision$participant_gender == 'M', 'Male', NA))
+         ifelse(semanticdecision$participant_gender == 'M', 'Male', 
+                semanticdecision$participant_gender))
 
 # Model below created in the script 'semanticdecision_lmerTest.R',
 # which is stored in the folder 'semanticdecision/frequentist_analysis'
@@ -37,7 +37,7 @@ plot1 =
     fill = 'z_recoded_participant_gender',
     fill_alias = 'participant_gender',
     fill_nesting_factor = 'Participant',
-    x_title = "Distance to word 'abstract' (*z*)",
+    x_title = "Word co-occurrence (*z*)",
     y_title = 'Predicted RT (*z*)',
     fill_title = 'Gender'
   ) +
@@ -53,8 +53,7 @@ plot1 =
                              reverse = TRUE)) +
   theme(plot.tag.position = c(0, 1), 
         legend.key.width = unit(1.2, 'cm'),
-        legend.margin = margin(t = 21),
-        legend.background = element_blank())
+        legend.margin = margin(15, 15, 15, 15))
 
 plot2 =
   alias_interaction_plot(
@@ -80,8 +79,7 @@ plot2 =
                              reverse = TRUE)) +
   theme(axis.title.y = element_blank(), 
         legend.key.width = unit(1.2, 'cm'),
-        legend.margin = margin(t = 21),
-        legend.background = element_blank())
+        legend.margin = margin(15, 15, 15, 15))
 
 plot3 =
   alias_interaction_plot(
@@ -107,13 +105,12 @@ plot3 =
                              reverse = TRUE)) +
   theme(plot.tag.position = c(0, 1), 
         legend.key.width = unit(1.2, 'cm'),
-        legend.margin = margin(t = 21),
-        legend.background = element_blank())
+        legend.margin = margin(15, 15, 15, 15))
 
 # Combine plots using {patchwork} and save the result to disk
 ( plot1 + plot2 + plot3 + 
     plot_annotation(tag_levels = list(c('(a)', '(b)', '(c)'))) + 
     guide_area() + plot_layout(ncol = 2, guides = 'collect') ) %>%
   ggsave(filename = 'semanticdecision/frequentist_analysis/plots/semanticdecision-interactions-with-gender.pdf',
-         device = cairo_pdf, width = 7, height = 7, dpi = 900)
+         device = cairo_pdf, width = 7.5, height = 7, dpi = 900)
 

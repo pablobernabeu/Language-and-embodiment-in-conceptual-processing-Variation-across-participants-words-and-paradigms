@@ -60,7 +60,7 @@ labels = colnames(semanticdecision_allFit_convergence[[1]]@pp$X) %>%
   str_replace(pattern = 'z_word_concreteness',
               replacement = 'Word concreteness') %>%
   str_replace(pattern = 'z_word_cooccurrence',
-              replacement = "Distance to word \'abstract\'") %>%
+              replacement = 'Word co-occurrence') %>%
   str_replace(pattern = 'z_visual_rating',
               replacement = 'Visual strength') %>%
   str_replace(pattern = 'z_information_uptake',
@@ -76,9 +76,7 @@ labels = colnames(semanticdecision_allFit_convergence[[1]]@pp$X) %>%
   # better consistency, the code below moves those word-level variables (with 
   # their new names) to the first position in their interactions. Note that the 
   # order does not affect the results in any way.
-  sub("(\\w+.*):(Distance to word \'abstract\'|Visual strength)", 
-      '\\2:\\1', 
-      .)
+  sub('(\\w+.*):(Word co-occurrence|Visual strength)', '\\2:\\1', .)
 
 # The for-loop below iterates over the output from the seven optimizers. 
 # In each iteration, the 'labels' created above are applied first, and

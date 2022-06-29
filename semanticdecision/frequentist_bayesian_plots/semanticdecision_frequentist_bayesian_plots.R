@@ -65,7 +65,7 @@ new_labels =
   str_replace(pattern = 'z_word_concreteness',
               replacement = 'Word concreteness') %>%
   str_replace(pattern = 'z_word_cooccurrence',
-              replacement = "Distance to word \'abstract\'") %>%
+              replacement = 'Word co-occurrence') %>%
   str_replace(pattern = 'z_visual_rating',
               replacement = 'Visual strength') %>%
   str_replace(pattern = 'z_information_uptake',
@@ -81,9 +81,7 @@ new_labels =
   # better consistency, the code below moves those word-level variables (with 
   # their new names) to the first position in their interactions. Note that the 
   # order does not affect the results in any way.
-  sub("(\\w+.*):(Distance to word \'abstract\'|Visual strength)", 
-      '\\2:\\1', 
-      .) %>%
+  sub('(\\w+.*):(Word co-occurrence|Visual strength)', '\\2:\\1', .) %>%
   
   # Replace colons denoting interactions with times symbols
   str_replace(pattern = ':', replacement = ' &times; ')
@@ -96,7 +94,7 @@ plot_semanticdecision_frequentist_bayesian_plot_informativepriors_exgaussian =
                             confint_semanticdecision_lmerTest,
                             semanticdecision_posteriordistributions_informativepriors_exgaussian,
                             labels = new_labels, interaction_symbol_x = TRUE,
-                            vertical_line_at_x = 0, x_title = 'Predicted RT (*z*)', 
+                            vertical_line_at_x = 0, x_title = 'Effect size (&beta;)', 
                             note_frequentist_no_prior = TRUE) +
   ggtitle('Prior *SD* = 0.1')
 
@@ -107,8 +105,8 @@ plot_semanticdecision_frequentist_bayesian_plot_informativepriors_exgaussian =
                             confint_semanticdecision_lmerTest,
                             semanticdecision_posteriordistributions_weaklyinformativepriors_exgaussian,
                             labels = new_labels, interaction_symbol_x = TRUE,
-                            vertical_line_at_x = 0, x_title = 'Predicted RT (*z*)',
-                            legend_columns = 1) + 
+                            vertical_line_at_x = 0, x_title = 'Effect size (&beta;)',
+                            legend_ncol = 1) + 
     theme(legend.position = 'bottom') ) %>%
   ggsave(filename = 'semanticdecision/frequentist_bayesian_plots/plots/semanticdecision_frequentist_bayesian_plot_weaklyinformativepriors_exgaussian.pdf',
          device = cairo_pdf, width = 5.5, height = 6.5, dpi = 900)
@@ -119,7 +117,7 @@ plot_semanticdecision_frequentist_bayesian_plot_weaklyinformativepriors_exgaussi
                             confint_semanticdecision_lmerTest,
                             semanticdecision_posteriordistributions_weaklyinformativepriors_exgaussian,
                             labels = new_labels, interaction_symbol_x = TRUE,
-                            vertical_line_at_x = 0, x_title = 'Predicted RT (*z*)', 
+                            vertical_line_at_x = 0, x_title = 'Effect size (&beta;)', 
                             note_frequentist_no_prior = TRUE) +
   ggtitle('Prior *SD* = 0.2') +
   theme(axis.text.y = element_blank())
@@ -131,7 +129,7 @@ plot_semanticdecision_frequentist_bayesian_plot_diffusepriors_exgaussian =
                             confint_semanticdecision_lmerTest,
                             semanticdecision_posteriordistributions_diffusepriors_exgaussian,
                             labels = new_labels, interaction_symbol_x = TRUE,
-                            vertical_line_at_x = 0, x_title = 'Predicted RT (*z*)', 
+                            vertical_line_at_x = 0, x_title = 'Effect size (&beta;)', 
                             note_frequentist_no_prior = TRUE) +
   ggtitle('Prior *SD* = 0.3') + 
   theme(axis.text.y = element_blank())
@@ -148,5 +146,5 @@ plot_semanticdecision_frequentist_bayesian_plot_diffusepriors_exgaussian =
     plot_layout(ncol = 3, guides = 'collect') & theme(legend.position = 'bottom') ) %>%
   
   ggsave(filename = 'semanticdecision/frequentist_bayesian_plots/plots/semanticdecision_frequentist_bayesian_plot_allpriors_exgaussian.pdf',
-         device = cairo_pdf, width = 9.1, height = 7, dpi = 900)
+         device = cairo_pdf, width = 8, height = 7, dpi = 900)
 

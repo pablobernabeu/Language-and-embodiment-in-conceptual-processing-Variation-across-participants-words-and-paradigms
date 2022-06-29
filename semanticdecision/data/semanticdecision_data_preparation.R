@@ -184,7 +184,7 @@ Wingfield_Connell_2019_semanticdecision$word_cooccurrence =
 # Rename variables
 Wingfield_Connell_2019_semanticdecision = 
   Wingfield_Connell_2019_semanticdecision %>%
-  rename(word_frequency = word_frequency,
+  rename(word_frequency = elex_LgSUBTLWF,
          number_syllables = elex_NSyll,
          orthographic_Levenshtein_distance = elex_OLD,
          phonological_Levenshtein_distance = elex_PLD)
@@ -196,6 +196,8 @@ semanticdecision =
           select(c(Word, word_frequency, number_syllables, 
                    orthographic_Levenshtein_distance, 
                    phonological_Levenshtein_distance, 
+                   Conditional_probability_BNC_r5_correlation_abstract_distance,
+                   Conditional_probability_BNC_r5_correlation_concrete_distance,
                    word_cooccurrence)), 
         all.x = TRUE)
 
@@ -445,6 +447,8 @@ semanticdecision =
          z_word_frequency, number_syllables, z_number_syllables, 
          orthographic_Levenshtein_distance, z_orthographic_Levenshtein_distance, 
          phonological_Levenshtein_distance, z_phonological_Levenshtein_distance, 
+         Conditional_probability_BNC_r5_correlation_abstract_distance,
+         Conditional_probability_BNC_r5_correlation_concrete_distance,
          word_cooccurrence, z_word_cooccurrence, visual_rating, z_visual_rating, 
          RTclean, z_RTclean)
 

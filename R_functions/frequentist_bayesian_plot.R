@@ -17,7 +17,7 @@ frequentist_bayesian_plot =
             # Number of columns into which the legend labels (i.e., 
             # 'Frequentist analysis', 'Bayesian analysis') should 
             # be distributed.
-            legend_columns = 2,
+            legend_ncol = 2,
             
             # If note_frequentist_no_prior = TRUE, '(no prior)' is appended to the
             # label 'Frequentist analysis' in the legend. This is useful when
@@ -118,40 +118,44 @@ frequentist_bayesian_plot =
       
       theme_minimal() +
       theme(text = element_text(family = 'Arial'),  # <-- prevent R crashing (see https://discourse.mc-stan.org/t/error-code-when-using-pp-check-with-brms/27419/4) 
-            plot.title = element_markdown(colour = '#005b96', hjust = 0.5, vjust = 1),
+            plot.title = element_markdown(colour = '#005b96', hjust = 0.5, vjust = 1,
+                                          size = font_size * 1.2),
             axis.title.x = ggtext::element_markdown(size = font_size, 
                                                     margin = margin(t = font_size * 0.8)), 
             axis.text.x = element_text(size = font_size * 0.9, 
                                        margin = margin(t = font_size * 0.4)), 
             axis.title.y = element_blank(), 
-            axis.text.y = ggtext::element_markdown(size = font_size, vjust = 0),  # Place label at the foot of each band, to fit with format of plot.
+            # Use 'vjust' used to place each Y axis label at the foot of its respective segment
+            axis.text.y = ggtext::element_markdown(size = font_size, vjust = 0),  
             axis.ticks.x = element_line(), 
-            legend.text = element_text(lineheight = 1.2, size = font_size, 
-                                       margin = margin(r = 4)),
-            legend.key.height = unit(ifelse(legend_columns==1, 17, 25), 'pt'),
-            legend.background = element_rect(colour = 'grey82', fill = 'white'),
+            # Parameters are adjusted based on number of columns in legend using ifelse()
+            legend.text = element_text(size = font_size,
+                                       lineheight = ifelse(legend_ncol == 1, 0.3, 1.2), 
+                                       margin = margin(r = ifelse(legend_ncol == 1, 2, 4))),
+            legend.key.height = unit(ifelse(legend_ncol == 1, 15, 21), 'pt'),
+            legend.background = element_rect(colour = 'grey70', fill = 'white'),
             panel.grid.major.y = element_line(colour = 'grey90'),
             plot.margin = margin(9, 4, 14, 12))
     
     # Manual legend for frequentist analysis (red) and Bayesian analysis (blue),
-    # subject to the 'note_frequentist_no_prior' argument.
+    # subject to the presence of 'note_frequentist_no_prior'.
     
     if(note_frequentist_no_prior) {
       plot = plot +
-        geom_line(aes(colour = factor(parameter)), size = 0) +  # <-- placeholder
+        geom_line(aes(colour = factor(parameter)), size = 0) +  # <-- placeholder to allow manual scale
         scale_colour_manual(values = c('Frequentist analysis\n(no prior)' = 'red', 
                                        'Bayesian analysis' = '#005b96'),  # <-- fancy blue
                             guide = guide_legend(title = NULL, 
-                                                 override.aes = list(size = 3), 
-                                                 ncol = legend_columns)) 
+                                                 override.aes = list(size = 5), 
+                                                 ncol = legend_ncol)) 
     } else{
       plot = plot +
-        geom_line(aes(colour = factor(parameter)), size = 0) +  # <-- placeholder
+        geom_line(aes(colour = factor(parameter)), size = 0) +  # <-- placeholder to allow manual scale
         scale_colour_manual(values = c('Frequentist analysis' = 'red', 
                                        'Bayesian analysis' = '#005b96'),  # <-- fancy blue
                             guide = guide_legend(title = NULL, 
-                                                 override.aes = list(size = 3), 
-                                                 ncol = legend_columns)) 
+                                                 override.aes = list(size = 4), 
+                                                 ncol = legend_ncol)) 
     }
     
     # If labels supplied, pass them to 'scale_y_discrete'. This is necessary 

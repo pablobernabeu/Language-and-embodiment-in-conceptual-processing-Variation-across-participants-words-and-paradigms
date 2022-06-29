@@ -56,7 +56,7 @@ source('R_functions/plot.fixef.allFit.R')
                                           'z_cosine_similarity',
                                           'z_visual_rating_diff',
                                           'z_recoded_interstimulus_interval'),
-                    y_title = 'Predicted RT (*z*)',
+                    y_title = 'Effect size (Predicted RT (*z*)beta;)',
                     decimal_points = 2, multiply_y_axis_limits = 1.3) +
     theme(plot.margin = margin(15, 15, 15, 15))
 ) %>%
@@ -78,7 +78,7 @@ source('R_functions/plot.fixef.allFit.R')
                                           'z_recoded_participant_gender:z_visual_rating_diff',
                                           'z_recoded_interstimulus_interval:z_cosine_similarity',
                                           'z_recoded_interstimulus_interval:z_visual_rating_diff'),
-                    y_title = 'Predicted RT (*z*)',
+                    y_title = 'Effect size (Predicted RT (*z*)beta;)',
                     decimal_points = 3, multiply_y_axis_limits = 1.3) +
     theme(plot.margin = margin(15, 15, 15, 15))
 ) %>%

@@ -82,14 +82,14 @@ get_prior(
     # In the random slopes below, `0 +` helps avoid redundant random intercepts
     # (background: https://github.com/lme4/lme4/issues/625)
     
-    # By-subject random slopes
+    # By-participant random slopes
     (0 + z_word_cooccurrence | Participant) +
     (0 + z_visual_rating | Participant) +
     (0 + z_word_frequency | Participant) +
     (0 + z_orthographic_Levenshtein_distance | Participant) +
     (0 + z_word_concreteness | Participant) +
     
-    # By-item random slopes
+    # By-word random slopes
     (0 + z_vocabulary_size | Word) +
     (0 + z_recoded_participant_gender | Word) +
     (0 + z_information_uptake | Word),
@@ -180,14 +180,14 @@ sampleonly_semanticdecision_brms_diffusepriors =
       # In the random slopes below, `0 +` helps avoid redundant random intercepts
       # (background: https://github.com/lme4/lme4/issues/625)
       
-      # By-subject random slopes
+      # By-participant random slopes
       (0 + z_word_cooccurrence | Participant) +
       (0 + z_visual_rating | Participant) +
       (0 + z_word_frequency | Participant) +
       (0 + z_orthographic_Levenshtein_distance | Participant) +
       (0 + z_word_concreteness | Participant) +
       
-      # By-item random slopes
+      # By-word random slopes
       (0 + z_vocabulary_size | Word) +
       (0 + z_recoded_participant_gender | Word) +
       (0 + z_information_uptake | Word),

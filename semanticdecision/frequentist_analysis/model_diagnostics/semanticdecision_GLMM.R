@@ -91,7 +91,7 @@ afex::mixed( RTclean ~
                # In the random slopes below, `0 +` helps avoid redundant random intercepts 
                # (background: https://github.com/lme4/lme4/issues/625)
                
-               # By-subject random slopes
+               # By-participant random slopes
                (0 + z_word_cooccurrence || Participant) + 
                (0 + z_visual_rating || Participant) +
                # Random slopes below removed due to non-convergence, following 
@@ -100,7 +100,7 @@ afex::mixed( RTclean ~
                # (0 + z_orthographic_Levenshtein_distance || Participant) +
                # (0 + z_word_concreteness || Participant) +
                
-               # By-item random slopes
+               # By-word random slopes
                (0 + z_vocabulary_size || Word) + 
                (0 + z_recoded_participant_gender || Word),
              # Random slopes below removed due to non-convergence, following 

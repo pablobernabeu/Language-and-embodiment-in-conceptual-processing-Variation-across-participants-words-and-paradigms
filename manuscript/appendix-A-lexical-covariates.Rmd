@@ -5,8 +5,8 @@
 
 ```{r}
 
-# This appendix inherits the libraries, the working directory and the
-# data sets loaded in manuscript.Rmd, when the latter is knitted.
+# This appendix is rendered by the main manuscript. It inherits the 
+# working directory and all the objects loaded in the main manuscript.
 
 ```
 
@@ -98,7 +98,7 @@ frequentist_model_table(
   # Footnote describing abbreviations, random slopes, etc. 
   # LaTeX code used to format the text.
   footnote(escape = FALSE, threeparttable = TRUE, general_title = '\\\\linebreak', 
-           general = paste('\\\\textit{Note}. $\\\\upbeta$ = Estimate based on z-scored variables; \\\\textit{SE} = standard error;',
+           general = paste('\\\\textit{Note}. $\\\\upbeta$ = Estimate based on $z$-scored variables; \\\\textit{SE} = standard error;',
                            'CI = confidence interval. By-participant random slopes were included for',
                            'every effect.', 
                            # Begin lines after first one with a dot-sized indent
@@ -188,7 +188,7 @@ frequentist_model_table(
   # Footnote describing abbreviations, random slopes, etc. 
   # LaTeX code used to format the text.
   footnote(escape = FALSE, threeparttable = TRUE, general_title = '\\\\linebreak', 
-           general = paste('\\\\textit{Note}. $\\\\upbeta$ = Estimate based on z-scored variables; \\\\textit{SE} = standard error;',
+           general = paste('\\\\textit{Note}. $\\\\upbeta$ = Estimate based on $z$-scored variables; \\\\textit{SE} = standard error;',
                            'CI = confidence interval. By-participant random slopes were included for',
                            'every effect.', 
                            # Begin lines after first one with a dot-sized indent
@@ -280,7 +280,7 @@ frequentist_model_table(
   # Footnote describing abbreviations, random slopes, etc. 
   # LaTeX code used to format the text.
   footnote(escape = FALSE, threeparttable = TRUE, general_title = '\\\\linebreak', 
-           general = paste('\\\\textit{Note}. $\\\\upbeta$ = Estimate based on z-scored variables; \\\\textit{SE} = standard error;',
+           general = paste('\\\\textit{Note}. $\\\\upbeta$ = Estimate based on $z$-scored variables; \\\\textit{SE} = standard error;',
                            'CI = confidence interval. By-participant random slopes were included for',
                            'every effect.', 
                            # Begin lines after first one with a dot-sized indent

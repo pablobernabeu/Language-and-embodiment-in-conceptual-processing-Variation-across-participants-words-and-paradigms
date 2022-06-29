@@ -56,7 +56,7 @@ rownames(KR_summary_semanticpriming_with_visualsimilarity_lmerTest$coefficients)
   # better consistency, the code below moves those word-level variables (with 
   # their new names) to the first position in their interactions. Note that the 
   # order does not affect the results in any way.
-  sub("(\\w+.*):(Language-based similarity|Visual-strength difference|Vision-based similarity)", 
+  sub('(\\w+.*):(Language-based similarity|Visual-strength difference|Vision-based similarity)', 
       '\\2:\\1', 
       .)
 
@@ -94,7 +94,7 @@ rownames(confint_semanticpriming_with_visualsimilarity_lmerTest) =
   # better consistency, the code below moves those word-level variables (with 
   # their new names) to the first position in their interactions. Note that the 
   # order does not affect the results in any way.
-  sub("(\\w+.*):(Language-based similarity|Visual-strength difference|Vision-based similarity)", 
+  sub('(\\w+.*):(Language-based similarity|Visual-strength difference|Vision-based similarity)', 
       '\\2:\\1', 
       .)
 
@@ -102,7 +102,7 @@ rownames(confint_semanticpriming_with_visualsimilarity_lmerTest) =
 ( plot_95_confidence_intervals(
   KR_summary_semanticpriming_with_visualsimilarity_lmerTest, 
   confint_semanticpriming_with_visualsimilarity_lmerTest, 
-  x_title = 'Predicted RT (*z*)', interaction_symbol_x = TRUE, 
+  x_title = 'Effect size (&beta;)', interaction_symbol_x = TRUE, 
   axis_text_size = 13, vertical_line_at_x = 0,
   # Intercept and covariates commented out below
   select_effects = c(
@@ -135,5 +135,5 @@ rownames(confint_semanticpriming_with_visualsimilarity_lmerTest) =
 ) + theme(plot.margin = margin(9, 4, 14, 12)) ) %>%
   # Save plot
   ggsave(filename = 'semanticpriming/analysis_with_visualsimilarity/plots/semanticpriming_with_visualsimilarity_confidence_intervals_plot.pdf', 
-         device = cairo_pdf, width = 7, height = 6.2, dpi = 900)
+         device = cairo_pdf, width = 7, height = 7, dpi = 900)
 

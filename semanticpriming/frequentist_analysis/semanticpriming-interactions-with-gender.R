@@ -12,10 +12,9 @@ library(ggplot2)
 
 # Data set below created in the script 'semanticpriming_data_preparation.R',
 # which is stored in the folder 'semanticpriming/data'
-semanticpriming = 
-  read.csv('semanticpriming/data/final_dataset/semanticpriming.csv')
+semanticpriming = read.csv('semanticpriming/data/final_dataset/semanticpriming.csv')
 
-# Consolidate gender labels
+# Set plain language labels
 semanticpriming$participant_gender = 
   ifelse(semanticpriming$participant_gender == 'f', 'Female',
          ifelse(semanticpriming$participant_gender == 'F', 'Female',
@@ -54,7 +53,7 @@ plot1 =
                              # in legend (else, Male would appear 
                              # first as it was coded as -0.5).
                              reverse = TRUE)) +
-  theme(plot.tag.position = c(0, 1), legend.position = c(.85, .81))
+  theme(plot.tag.position = c(0, 1), legend.position = c(.78, .81))
 
 plot2 = 
   alias_interaction_plot(
@@ -85,5 +84,5 @@ plot2 =
     plot_annotation(tag_levels = list(c('(a)', '(b)', '(c)'))) + 
     plot_layout(ncol = 1) ) %>%
   ggsave(filename = 'semanticpriming/frequentist_analysis/plots/semanticpriming-interactions-with-gender.pdf',
-         device = cairo_pdf, width = 6.5, height = 7, dpi = 900)
+         device = cairo_pdf, width = 6, height = 7, dpi = 900)
 

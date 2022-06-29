@@ -5,8 +5,8 @@
 
 ```{r}
 
-# This appendix inherits the libraries, the working directory and the
-# data sets loaded in manuscript.Rmd, when the latter is knitted.
+# This appendix is rendered by the main manuscript. It inherits the 
+# working directory and all the objects loaded in the main manuscript.
 
 ```
 
@@ -14,9 +14,9 @@
 Below, the convergence warnings and the non-normal residuals are first addressed generally, and then in more detail in the context of each study.
 
 
-## Lack of convergence
+## Convergence
 
-The challenge of convergence is well known in the area of mixed-effects models. The solutions proposed range from the removal of random slopes under certain conditions [@matuschekBalancingTypeError2017] to the maintenance of random slopes in spite of convergence warnings, which seeks to avoid an inflation of the Type I error caused by non-independence in the data [@brauer2018a; @singmann2019a]. 
+The challenge of convergence is well known in the area of mixed-effects models. These models often struggle to reach reliable-enough estimates due to an insufficiency of data relative to the complexity of the model [@batesFittingLinearMixedeffects2015; @baayenMixedeffectsModelingCrossed2008; @brauer2018a]. The solutions proposed range from the removal of random slopes under certain conditions [@matuschekBalancingTypeError2017] to the maintenance of random slopes in spite of convergence warnings, which seeks to avoid an inflation of the Type I error due to dependencies in the data [@brauer2018a; @singmann2019a]. 
 
 ### The multiple-optimizers sanity check from `lme4::allFit()`
 
@@ -59,7 +59,7 @@ Neither Method A nor Method B could finally be used, as the code produced errors
 
 ## Study 1: Semantic priming
 
-### Lack of convergence
+### Convergence
 
 In the initial model, the optimizer used (the default one in 'lmerTest') was '`r semanticpriming_lmerTest@optinfo$optimizer`', and the convergence warning read: '`r semanticpriming_lmerTest@optinfo$conv$lme4$messages`'. 
 

@@ -82,29 +82,29 @@ semanticpriming_brms_diffusepriors_exgaussian =
       # https://psych.wisc.edu/Brauer/BrauerLab/wp-content/uploads/2014/04/Brauer-Curtin-2018-on-LMEMs.pdf).
       # Interactions only require random slopes if all variables involved vary within the same units.
       
-      # By-subject random slopes
+      # By-participant random slopes
       
-      # Below, the random slopes for controlled covariates (i.e., 'z_target_word_frequency', 
+      # Below, the random slopes for control covariates (i.e., 'z_target_word_frequency', 
       # 'z_target_number_syllables' and 'z_word_concreteness_diff') were removed due to 
       # non-convergence, inspired by Remedy 11 from Table 17 in Brauer and Curtin (2018). 
       # However, whereas Brauer and Curtin constrained such a removal to cases in which the 
       # covariate does not interact with any effects of interest, the random slopes for 
       # 'z_word_concreteness_diff' were removed below because the interactions between this 
-      # covariate and the effects of interest were controlled covariates, not interactions 
+      # covariate and the effects of interest were control covariates, not interactions 
       # of interest. That is, they were not critical to the research question.
     
     (z_cosine_similarity + z_visual_rating_diff + z_recoded_interstimulus_interval + 
        z_cosine_similarity : z_recoded_interstimulus_interval +
        z_visual_rating_diff : z_recoded_interstimulus_interval | Participant) +
       
-      # By-item random slopes
+      # Random slopes by prime-target pair
       
-      # Below, the random slopes for the controlled covariate (i.e., 'z_attentional_control') 
+      # Below, the random slopes for the control covariate (i.e., 'z_attentional_control') 
       # were removed due to non-convergence, inspired by Remedy 11 from Table 17 in Brauer 
       # and Curtin (2018). However, whereas Brauer and Curtin constrained such a removal to 
       # cases in which the covariate does not interact with any effects of interest, the 
       # random slopes for 'z_attentional_control' were removed below because the interactions 
-      # between this covariate and the effects of interest were controlled covariates, not 
+      # between this covariate and the effects of interest were control covariates, not 
       # interactions of interest. That is, they were not critical to the research question.
       
     (z_vocabulary_size + z_recoded_participant_gender | primeword_targetword),

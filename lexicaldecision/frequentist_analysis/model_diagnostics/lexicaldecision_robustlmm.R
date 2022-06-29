@@ -56,14 +56,14 @@ lexicaldecision_robustlmm =
                      # In the random slopes below, `0 +` helps avoid redundant random intercepts 
                      # (background: https://github.com/lme4/lme4/issues/625)
                      
-                     # By-subject random slopes
+                     # By-participant random slopes
                      (0 + z_word_frequency || Participant) + 
                      (0 + z_visual_rating || Participant) +
                      # Random slopes below removed due to non-convergence, following 
                      # Remedy 11 from Table 17 in Brauer and Curtin (2018).
                      # (0 + z_orthographic_Levenshtein_distance || Participant) +
                      
-                     # By-item random slopes
+                     # By-word random slopes
                      (0 + z_vocabulary_age || word) + 
                      (0 + z_recoded_participant_gender || word),
                    

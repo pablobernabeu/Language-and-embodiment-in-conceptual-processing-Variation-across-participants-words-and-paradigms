@@ -33,7 +33,7 @@ rownames(KR_summary_semanticdecision_lmerTest$coefficients) =
   str_replace(pattern = 'z_word_concreteness',
               replacement = 'Word concreteness') %>%
   str_replace(pattern = 'z_word_cooccurrence',
-              replacement = "Distance to word \'abstract\'") %>%
+              replacement = 'Word co-occurrence') %>%
   str_replace(pattern = 'z_visual_rating',
               replacement = 'Visual strength') %>%
   str_replace(pattern = 'z_information_uptake',
@@ -49,9 +49,7 @@ rownames(KR_summary_semanticdecision_lmerTest$coefficients) =
   # better consistency, the code below moves those word-level variables (with 
   # their new names) to the first position in their interactions. Note that the 
   # order does not affect the results in any way.
-  sub("(\\w+.*):(Distance to word \'abstract\'|Visual strength)", 
-      '\\2:\\1', 
-      .)
+  sub('(\\w+.*):(Word co-occurrence|Visual strength)', '\\2:\\1', .)
 
 rownames(confint_semanticdecision_lmerTest) =
   rownames(confint_semanticdecision_lmerTest) %>%
@@ -64,7 +62,7 @@ rownames(confint_semanticdecision_lmerTest) =
   str_replace(pattern = 'z_word_concreteness',
               replacement = 'Word concreteness') %>%
   str_replace(pattern = 'z_word_cooccurrence',
-              replacement = "Distance to word \'abstract\'") %>%
+              replacement = 'Word co-occurrence') %>%
   str_replace(pattern = 'z_visual_rating',
               replacement = 'Visual strength') %>%
   str_replace(pattern = 'z_information_uptake',
@@ -80,17 +78,15 @@ rownames(confint_semanticdecision_lmerTest) =
   # better consistency, the code below moves those word-level variables (with 
   # their new names) to the first position in their interactions. Note that the 
   # order does not affect the results in any way.
-  sub("(\\w+.*):(Distance to word \'abstract\'|Visual strength)", 
-      '\\2:\\1', 
-      .)
+  sub('(\\w+.*):(Word co-occurrence|Visual strength)', '\\2:\\1', .)
 
 
 ( plot_95_confidence_intervals(
   KR_summary_semanticdecision_lmerTest, confint_semanticdecision_lmerTest, 
-  x_title = 'Predicted RT (*z*)', interaction_symbol_x = TRUE, 
+  x_title = 'Effect size (&beta;)', interaction_symbol_x = TRUE, 
   vertical_line_at_x = 0
 ) + theme(plot.margin = margin(9, 4, 14, 12)) ) %>%
   # Save plot
   ggsave(filename = 'semanticdecision/frequentist_analysis/plots/semanticdecision_confidence_intervals_plot.pdf', 
-         device = cairo_pdf, width = 5, height = 6.5, dpi = 900)
+         device = cairo_pdf, width = 4.5, height = 6.2, dpi = 900)
 

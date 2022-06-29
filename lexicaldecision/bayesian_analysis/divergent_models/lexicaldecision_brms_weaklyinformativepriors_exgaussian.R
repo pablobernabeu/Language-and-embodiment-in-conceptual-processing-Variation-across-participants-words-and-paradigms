@@ -75,12 +75,12 @@ lexicaldecision_brms_weaklyinformativepriors_exgaussian =
       # https://psych.wisc.edu/Brauer/BrauerLab/wp-content/uploads/2014/04/Brauer-Curtin-2018-on-LMEMs.pdf).
       # Interactions only require random slopes if all variables involved vary within the same units.
       
-      # By-subject random slopes
+      # By-participant random slopes
       (z_word_frequency + z_visual_rating + 
          z_orthographic_Levenshtein_distance + 
          z_word_concreteness | Participant) +
       
-      # By-item random slopes
+      # By-word random slopes
       (z_vocabulary_age + z_recoded_participant_gender | word),
     
     data = lexicaldecision, prior = weaklyinformative_priors,

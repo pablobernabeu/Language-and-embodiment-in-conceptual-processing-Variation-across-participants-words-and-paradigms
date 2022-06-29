@@ -3,7 +3,7 @@
 # Part of Study 2: Semantic decision
 
 # Combination of plots:
-# 1. Interaction between information uptake and distance to word 'abstract'
+# 1. Interaction between information uptake and word co-occurrence
 # 2. Interaction between information uptake and visual strength
 # 3. Interaction between information uptake and word concreteness
 
@@ -13,8 +13,7 @@ library(patchwork)
 
 # Data set below created in the script 'semanticdecision_data_preparation.R',
 # which is stored in the folder 'semanticdecision/data'
-semanticdecision = 
-  read.csv('semanticdecision/data/final_dataset/semanticdecision.csv')
+semanticdecision = read.csv('semanticdecision/data/final_dataset/semanticdecision.csv')
 
 # Model below created in the script 'semanticdecision_lmerTest.R',
 # which is stored in the folder 'semanticdecision/frequentist_analysis'
@@ -30,14 +29,13 @@ plot1 =
     x = 'z_word_cooccurrence',
     fill = 'z_information_uptake',
     fill_nesting_factor = 'Participant',
-    x_title = "Distance to word 'abstract' (*z*)",
+    x_title = "Word co-occurrence (*z*)",
     y_title = 'Predicted RT (*z*)',
     fill_title = 'Information uptake (*z*, deciles)'
-  ) +
-  theme(plot.tag.position = c(0, 1), 
-        legend.key.width = unit(1.2, 'cm'),
-        legend.margin = margin(t = 21),
-        legend.background = element_blank())
+  ) + theme(plot.tag.position = c(0, 1), 
+            legend.key.width = unit(1.2, 'cm'),
+            legend.margin = margin(t = 21),
+            legend.background = element_blank())
 
 plot2 =
   deciles_interaction_plot(
@@ -48,11 +46,11 @@ plot2 =
     x_title = 'Visual strength (*z*)',
     y_title = 'Predicted RT (*z*)',
     fill_title = 'Information uptake (*z*, deciles)'
-  ) +
-  theme(axis.title.y = element_blank(), 
-        legend.key.width = unit(1.2, 'cm'),
-        legend.margin = margin(t = 21),
-        legend.background = element_blank())
+  ) + theme(plot.tag.position = c(0, 1), 
+            axis.title.y = element_blank(), 
+            legend.key.width = unit(1.2, 'cm'),
+            legend.margin = margin(t = 21),
+            legend.background = element_blank())
 
 plot3 =
   deciles_interaction_plot(
@@ -63,16 +61,15 @@ plot3 =
     x_title = 'Word concreteness (*z*)',
     y_title = 'Predicted RT (*z*)',
     fill_title = 'Information uptake (*z*, deciles)'
-  ) +
-  theme(plot.tag.position = c(0, 1), 
-        legend.key.width = unit(1.2, 'cm'),
-        legend.margin = margin(t = 21),
-        legend.background = element_blank())
+  ) + theme(plot.tag.position = c(0, 1), 
+            legend.key.width = unit(1.2, 'cm'),
+            legend.margin = margin(t = 21),
+            legend.background = element_blank())
 
 # Combine plots using {patchwork} and save the result to disk
 ( plot1 + plot2 + plot3 + 
     plot_annotation(tag_levels = list(c('(a)', '(b)', '(c)'))) + 
     guide_area() + plot_layout(ncol = 2, guides = 'collect') ) %>%
   ggsave(filename = 'semanticdecision/frequentist_analysis/plots/semanticdecision-interactions-with-information-uptake.pdf',
-         device = cairo_pdf, width = 7, height = 7, dpi = 900)
+         device = cairo_pdf, width = 6, height = 7, dpi = 900)
 

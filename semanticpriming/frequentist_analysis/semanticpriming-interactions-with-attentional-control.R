@@ -12,8 +12,7 @@ library(patchwork)
 
 # Data set below created in the script 'semanticpriming_data_preparation.R',
 # which is stored in the folder 'semanticpriming/data'
-semanticpriming = 
-  read.csv('semanticpriming/data/final_dataset/semanticpriming.csv')
+semanticpriming = read.csv('semanticpriming/data/final_dataset/semanticpriming.csv')
 
 # Model below created in the script 'semanticpriming_lmerTest.R',
 # which is stored in the folder 'semanticpriming/frequentist_analysis'
