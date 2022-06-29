@@ -36,10 +36,6 @@ semanticpriming_allFit_convergence =
          # Use 7 cores in parallel for faster computation
          ncpus = 7)
 
-# Save
-saveRDS(semanticpriming_allFit_convergence,
-        'semanticpriming/frequentist_analysis/model_diagnostics/results/semanticpriming_allFit_convergence.rds')
-
 # Save (not saved because it takes up 2.1 GB)
 # saveRDS(semanticpriming_allFit_convergence,
 #         'semanticpriming/frequentist_analysis/model_diagnostics/results/semanticpriming_allFit_convergence.rds')
@@ -128,4 +124,3 @@ source('R_functions/plot.fixef.allFit.R')
 
 # Free up some memory
 rm(semanticpriming_allFit_convergence)
-
