@@ -5,18 +5,18 @@
 
 ```{r}
 
-# This appendix is rendered by the main manuscript. It inherits the 
-# working directory and all the objects loaded in the main manuscript.
+# This appendix is rendered by the main manuscript. It inherits all the 
+# parameters set in the main manuscript and the objects loaded therein.
 
 ```
 
 
-This appendix presents plots of interactions that were not shown in the main text. 
+Figures \@ref(fig:semanticpriming-interactions-with-attentional-control) -- \@ref(fig:lexicaldecision-interaction-word-concreteness-gender) present interactions that were not displayed in the main article. All interaction plots are based on the frequentist analysis.
 
 
 ## Study 1: Semantic priming
 
-(ref:semanticpriming-interactions-with-attentional-control) Interactions of attentional control with language-based similarity and visual-strength difference. Attentional control is constrained to deciles (ten sections) in this plot, whereas in the statistical analysis it contained more values within the current range. *n* = number of participants contained between decile values.
+(ref:semanticpriming-interactions-with-attentional-control) Interactions of attentional control with language-based similarity (panel a) and with visual-strength difference (panel b). Attentional control is constrained to deciles (10 sections) in this plot, whereas in the statistical analysis it contained more values within the current range. $n$ = number of participants contained between deciles.
 
 ```{r semanticpriming-interactions-with-attentional-control, fig.cap = '(ref:semanticpriming-interactions-with-attentional-control)', out.width = '85%'}
 
@@ -35,7 +35,7 @@ include_graphics(
 ```
 
 
-```{r semanticpriming-interaction-word-concreteness-difference-SOA, fig.cap = 'Interaction of stimulus-onset asynchrony (SOA) with word-concreteness difference. SOA was analysed using $z$-scores, but for clarity, the variable is shown in its basic form here.', out.width = '65%'}
+```{r semanticpriming-interaction-word-concreteness-difference-SOA, fig.cap = 'Interaction between stimulus onset asynchrony (SOA) and word-concreteness difference. SOA was analysed using $z$-scores, but for clarity, the basic labels are used in the legend.', out.width = '70%'}
 
 # Run plot through source() rather than directly in this R Markdown document 
 # to preserve the italicised text.
@@ -52,9 +52,9 @@ include_graphics(
 ```
 
 
-(ref:semanticpriming-interaction-word-concreteness-difference-vocabulary-size) Interaction of word-concreteness difference with vocabulary size. Vocabulary size is constrained to deciles in this plot, whereas in the statistical analysis it contained more values within the current range. *n* = number of participants contained between decile values.
+(ref:semanticpriming-interaction-word-concreteness-difference-vocabulary-size) Interaction between word-concreteness difference and vocabulary size. Vocabulary size is constrained to deciles in this plot, whereas in the statistical analysis it contained more values within the current range. $n$ = number of participants contained between deciles.
 
-```{r semanticpriming-interaction-word-concreteness-difference-vocabulary-size, fig.cap = '(ref:semanticpriming-interaction-word-concreteness-difference-vocabulary-size)', out.width = '85%'}
+```{r semanticpriming-interaction-word-concreteness-difference-vocabulary-size, fig.cap = '(ref:semanticpriming-interaction-word-concreteness-difference-vocabulary-size)', out.width = '90%'}
 
 include_graphics(
   paste0(
@@ -65,9 +65,9 @@ include_graphics(
 ```
 
 
-(ref:semanticpriming-interaction-word-concreteness-difference-gender) Interaction of word-concreteness difference with gender. Gender was analysed using $z$-scores, but for clarity, the variable is shown in its basic form here. *n* = number of participants contained between decile values.
+(ref:semanticpriming-interaction-word-concreteness-difference-gender) Interaction between word-concreteness difference and gender. Gender was analysed using $z$-scores, but for clarity, the basic labels are used in the legend. $n$ = number of participants contained between deciles.
 
-```{r semanticpriming-interaction-word-concreteness-difference-gender, fig.cap = '(ref:semanticpriming-interaction-word-concreteness-difference-gender)', out.width = '65%'}
+```{r semanticpriming-interaction-word-concreteness-difference-gender, fig.cap = '(ref:semanticpriming-interaction-word-concreteness-difference-gender)', out.width = '70%'}
 
 include_graphics(
   paste0(
@@ -83,9 +83,9 @@ include_graphics(
 
 ## Study 2: Semantic decision
 
-(ref:semanticdecision-interactions-with-information-uptake) Interactions of information uptake with language-based similarity and visual-strength difference. Information uptake is constrained to deciles in this plot, whereas in the statistical analysis it contained more values within the current range. *n* = number of participants contained between decile values.
+(ref:semanticdecision-interactions-with-information-uptake) Interactions of information uptake with word co-occurrence (panel a) and with visual strength (panel b). Information uptake is constrained to deciles in this plot, whereas in the statistical analysis it contained more values within the current range. $n$ = number of participants contained between deciles.
 
-```{r semanticdecision-interactions-with-information-uptake, fig.cap = '(ref:semanticdecision-interactions-with-information-uptake)', out.width = '90%'}
+```{r semanticdecision-interactions-with-information-uptake, fig.cap = '(ref:semanticdecision-interactions-with-information-uptake)', out.width = '95%'}
 
 # Run plot through source() rather than directly in this R Markdown document 
 # to preserve the italicised text.
@@ -107,9 +107,9 @@ include_graphics(
 
 ## Study 3: Lexical decision
 
-(ref:lexicaldecision-interaction-word-concreteness-vocabulary-age) Interaction of word concreteness with vocabulary age. Vocabulary age is constrained to sextiles (six sections) in this plot, whereas in the statistical analysis it contained more values within the current range. *n* = number of participants contained between sextile values.
+(ref:lexicaldecision-interaction-word-concreteness-vocabulary-age) Interaction between word concreteness and vocabulary age. Vocabulary age is constrained to sextiles (6 sections) in this plot, whereas in the statistical analysis it contained more values within the current range. $n$ = number of participants contained between sextiles.
 
-```{r lexicaldecision-interaction-word-concreteness-vocabulary-age, fig.cap = '(ref:lexicaldecision-interaction-word-concreteness-vocabulary-age)', out.width = '85%'}
+```{r lexicaldecision-interaction-word-concreteness-vocabulary-age, fig.cap = '(ref:lexicaldecision-interaction-word-concreteness-vocabulary-age)', out.width = '90%'}
 
 # Run plot through source() rather than directly in this R Markdown document 
 # to preserve the italicised text.
@@ -126,7 +126,7 @@ include_graphics(
 ```
 
 
-(ref:lexicaldecision-interaction-word-concreteness-gender) Interaction of word concreteness with gender. Gender was analysed using $z$-scores, but for clarity, the variable is shown in its basic form here. *n* = number of participants contained between sextile values.
+(ref:lexicaldecision-interaction-word-concreteness-gender) Interaction between word concreteness and gender. Gender was analysed using $z$-scores, but for clarity, the basic labels are used in the legend. $n$ = number of participants contained between sextiles.
 
 ```{r lexicaldecision-interaction-word-concreteness-gender, fig.cap = '(ref:lexicaldecision-interaction-word-concreteness-gender)', out.width = '65%'}
 

@@ -196,7 +196,7 @@ fill_colours = c('#CCCBE7', '#D7D7D7', '#E7CBCB')
     facet_wrap(vars(informativeness), scales = 'free', dir = 'v') +
     # Vertical line at x = 0
     geom_vline(xintercept = 0, linetype = 'dashed', color = 'grey50') +
-    xlab('Estimate (*z*)') + 
+    xlab('Effect size (&beta;)') + 
     ylab('Direction of the prior and corresponding distribution') +
     theme_minimal() +
     theme(axis.title.x = ggtext::element_markdown(size = 12, margin = margin(t = 9)),

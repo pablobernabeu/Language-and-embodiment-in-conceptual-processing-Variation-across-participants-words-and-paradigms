@@ -1,6 +1,6 @@
 
 
-# Plot the results from the fixed effects produced by different optimizers. This function 
+# Plot the results from the fixed effects produced by different optimisers. This function 
 # takes the output from lme4::allFit(), tidies it, selects fixed effects and plots them.
 
 plot.fixef.allFit = function(allFit_output, 
@@ -19,8 +19,8 @@ plot.fixef.allFit = function(allFit_output,
                              y_title = 'Fixed effect',
                              # Alignment of the Y axis title
                              y_title_hjust = NULL,
-                             # Add number to the names of optimizers
-                             number_optimizers = TRUE,
+                             # Add number to the names of optimisers
+                             number_optimisers = TRUE,
                              # Replace colon in interactions with x
                              interaction_symbol_x = TRUE) {
   
@@ -39,11 +39,11 @@ plot.fixef.allFit = function(allFit_output,
   # Extract fixed effects from the allFit() output
   allFit_fixef = summary(allFit_output)$fixef %>%  # Select fixed effects in the allFit results
     reshape2::melt() %>%  # Structure the output as a data frame
-    rename('Optimizer' = 'Var1', 'fixed_effect' = 'Var2')  # set informative names
+    rename('Optimiser' = 'Var1', 'fixed_effect' = 'Var2')  # set informative names
   
-  # If number_optimizers = TRUE, assign number to each optimizer and place it before its name
-  if(number_optimizers == TRUE) {
-    allFit_fixef$Optimizer = paste0(as.numeric(allFit_fixef$Optimizer), '. ', allFit_fixef$Optimizer)
+  # If number_optimisers = TRUE, assign number to each optimiser and place it before its name
+  if(number_optimisers == TRUE) {
+    allFit_fixef$Optimiser = paste0(as.numeric(allFit_fixef$Optimiser), '. ', allFit_fixef$Optimiser)
   }
   
   # If select_predictors were supplied, select them along with the intercept (the latter required)
@@ -52,7 +52,7 @@ plot.fixef.allFit = function(allFit_output,
   }
   
   # Order variables
-  allFit_fixef = allFit_fixef[, c('Optimizer', 'fixed_effect', 'value')]
+  allFit_fixef = allFit_fixef[, c('Optimiser', 'fixed_effect', 'value')]
   
   # PLOT. The overall plot is formed of a first row containing the intercept and the legend 
   # (intercept_plot), and a second row containing the predictors (predictors_plot), 
@@ -99,7 +99,7 @@ plot.fixef.allFit = function(allFit_output,
   intercept = allFit_fixef %>% dplyr::filter(fixed_effect == '(Intercept)')
   
   intercept_plot = intercept %>%
-    ggplot(., aes(fixed_effect, value, colour = Optimizer)) +
+    ggplot(., aes(fixed_effect, value, colour = Optimiser)) +
     geom_point(position = position_dodge(1)) +
     facet_wrap(~fixed_effect, scale = 'free') +
     guides(colour = guide_legend(title.position = 'left')) +
@@ -136,7 +136,7 @@ plot.fixef.allFit = function(allFit_output,
     # predictors (exc. intercept) by 2 and round up the result. For instance, 7 predictors --> 3 rows
   } else predictors_plot_nrow = (length(unique(predictors$fixed_effect)) / 2) %>% ceiling()
   
-  predictors_plot = ggplot(predictors, aes(fixed_effect, value, colour = Optimizer)) +
+  predictors_plot = ggplot(predictors, aes(fixed_effect, value, colour = Optimiser)) +
     geom_point(position = position_dodge(1)) +
     facet_wrap(~fixed_effect, scale = 'free',
                # Note that predictors_plot_nrow was defined a few lines above

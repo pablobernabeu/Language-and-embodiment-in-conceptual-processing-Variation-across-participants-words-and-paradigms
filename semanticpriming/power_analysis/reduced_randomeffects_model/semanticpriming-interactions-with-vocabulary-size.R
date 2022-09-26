@@ -2,6 +2,9 @@
 
 # Part of Study 1: Semantic priming
 
+# Deprecated model. For details, please see README.md in the directory
+# 'semanticpriming/power_analysis/reduced_randomeffects_model'
+
 # Combination of plots:
 # 1. Interaction between vocabulary size and language-based similarity
 # 2. Interaction between vocabulary size and visual-strength difference
@@ -49,6 +52,6 @@ plot2 =
 
 # Combine plots using {patchwork}
 (plot1 + plot2 + plot_layout(ncol = 1, guides = 'collect')) %>%
-  ggsave(filename = 'semanticpriming/power_analysis/model/plots/semanticpriming-interactions-with-vocabulary-size.pdf',
+  ggsave(filename = 'semanticpriming/power_analysis/reduced_randomeffects_model/plots/semanticpriming-interactions-with-vocabulary-size.pdf',
          device = cairo_pdf, width = 6.5, height = 7, dpi = 900)
 

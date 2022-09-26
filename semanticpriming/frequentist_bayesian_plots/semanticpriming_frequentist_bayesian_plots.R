@@ -33,8 +33,8 @@ rownames(confint_semanticpriming_lmerTest)
 semanticpriming_posteriordistributions_informativepriors_exgaussian = 
   readRDS('semanticpriming/bayesian_analysis/results/semanticpriming_posteriordistributions_informativepriors_exgaussian.rds')
 
-# semanticpriming_posteriordistributions_weaklyinformativepriors_exgaussian = 
-#   readRDS('semanticpriming/bayesian_analysis/results/semanticpriming_posteriordistributions_weaklyinformativepriors_exgaussian.rds')
+semanticpriming_posteriordistributions_weaklyinformativepriors_exgaussian =
+  readRDS('semanticpriming/bayesian_analysis/results/semanticpriming_posteriordistributions_weaklyinformativepriors_exgaussian.rds')
 
 semanticpriming_posteriordistributions_diffusepriors_exgaussian = 
   readRDS('semanticpriming/bayesian_analysis/results/semanticpriming_posteriordistributions_diffusepriors_exgaussian.rds')
@@ -96,7 +96,7 @@ new_labels =
               replacement = 'SOA') %>%
   # Show acronym in main effect of SOA
   str_replace(pattern = '^SOA$',
-              replacement = 'Stimulus-onset asynchrony (SOA)') %>%
+              replacement = 'Stimulus onset asynchrony (SOA)') %>%
   
   # Second, adjust order of effects in interactions. In the output from the model, 
   # the word-level variables of interest (i.e., 'z_cosine_similarity' and 
@@ -114,38 +114,38 @@ new_labels =
 
 # Create plots, beginning with the informative-prior model
 
-# Save single plot
-( frequentist_bayesian_plot(KR_summary_semanticpriming_lmerTest,
-                            confint_semanticpriming_lmerTest,
-                            semanticpriming_posteriordistributions_informativepriors_exgaussian,
-                            labels = new_labels, interaction_symbol_x = TRUE,
-                            vertical_line_at_x = 0, x_title = 'Effect size (&beta;)',
-                            legend_ncol = 1) + 
-    theme(legend.position = 'bottom') ) %>%
-  ggsave(filename = 'semanticpriming/frequentist_bayesian_plots/plots/semanticpriming_frequentist_bayesian_plot_informativepriors_exgaussian.pdf',
-         device = cairo_pdf, width = 6.5, height = 7.5, dpi = 900)
-
-# Plot adjusted to fit in the combination of all three plots
 plot_semanticpriming_frequentist_bayesian_plot_informativepriors_exgaussian =
   frequentist_bayesian_plot(KR_summary_semanticpriming_lmerTest,
                             confint_semanticpriming_lmerTest,
                             semanticpriming_posteriordistributions_informativepriors_exgaussian,
                             labels = new_labels, interaction_symbol_x = TRUE,
                             vertical_line_at_x = 0, x_title = 'Effect size (&beta;)', 
-                            note_frequentist_no_prior = TRUE) +
+                            x_axis_labels = 3, note_frequentist_no_prior = TRUE) +
   ggtitle('Prior *SD* = 0.1')
 
 #####
 
-# plot_semanticpriming_frequentist_bayesian_plot_weaklyinformativepriors_exgaussian =
-#   frequentist_bayesian_plot(KR_summary_semanticpriming_lmerTest,
-#                             confint_semanticpriming_lmerTest,
-#                             semanticpriming_posteriordistributions_weaklyinformativepriors_exgaussian,
-#                             labels = new_labels, interaction_symbol_x = TRUE,
-#                             vertical_line_at_x = 0, x_title = 'Effect size (&beta;)', 
-#                             note_frequentist_no_prior = TRUE) +
-#   ggtitle('Prior *SD* = 0.1') +
-#   theme(axis.text.y = element_blank())
+# Save single plot
+( frequentist_bayesian_plot(KR_summary_semanticpriming_lmerTest,
+                            confint_semanticpriming_lmerTest,
+                            semanticpriming_posteriordistributions_weaklyinformativepriors_exgaussian,
+                            labels = new_labels, interaction_symbol_x = TRUE,
+                            vertical_line_at_x = 0, x_title = 'Effect size (&beta;)',
+                            legend_ncol = 1) + 
+    theme(legend.position = 'bottom') ) %>%
+  ggsave(filename = 'semanticpriming/frequentist_bayesian_plots/plots/semanticpriming_frequentist_bayesian_plot_weaklyinformativepriors_exgaussian.pdf',
+         device = cairo_pdf, width = 6.5, height = 7.5, dpi = 900)
+
+# Plot adjusted to fit in the combination of all three plots
+plot_semanticpriming_frequentist_bayesian_plot_weaklyinformativepriors_exgaussian =
+  frequentist_bayesian_plot(KR_summary_semanticpriming_lmerTest,
+                            confint_semanticpriming_lmerTest,
+                            semanticpriming_posteriordistributions_weaklyinformativepriors_exgaussian,
+                            labels = new_labels, interaction_symbol_x = TRUE,
+                            vertical_line_at_x = 0, x_title = 'Effect size (&beta;)',
+                            x_axis_labels = 3, note_frequentist_no_prior = TRUE) +
+  ggtitle('Prior *SD* = 0.2') +
+  theme(axis.text.y = element_blank())
 
 #####
 
@@ -155,7 +155,7 @@ plot_semanticpriming_frequentist_bayesian_plot_diffusepriors_exgaussian =
                             semanticpriming_posteriordistributions_diffusepriors_exgaussian,
                             labels = new_labels, interaction_symbol_x = TRUE,
                             vertical_line_at_x = 0, x_title = 'Effect size (&beta;)', 
-                            note_frequentist_no_prior = TRUE) +
+                            x_axis_labels = 3, note_frequentist_no_prior = TRUE) +
   ggtitle('Prior *SD* = 0.3') + 
   theme(axis.text.y = element_blank())
 
@@ -165,11 +165,11 @@ plot_semanticpriming_frequentist_bayesian_plot_diffusepriors_exgaussian =
 # Save combination of the three plots
 
 ( plot_semanticpriming_frequentist_bayesian_plot_informativepriors_exgaussian +
-    # plot_semanticpriming_frequentist_bayesian_plot_weaklyinformativepriors_exgaussian +
+    plot_semanticpriming_frequentist_bayesian_plot_weaklyinformativepriors_exgaussian +
     plot_semanticpriming_frequentist_bayesian_plot_diffusepriors_exgaussian +
     
-    plot_layout(ncol = 2, guides = 'collect') & theme(legend.position = 'bottom') ) %>%
+    plot_layout(ncol = 3, guides = 'collect') & theme(legend.position = 'bottom') ) %>%
   
   ggsave(filename = 'semanticpriming/frequentist_bayesian_plots/plots/semanticpriming_frequentist_bayesian_plot_allpriors_exgaussian.pdf',
-         device = cairo_pdf, width = 7.5, height = 8, dpi = 900)
+         device = cairo_pdf, width = 8, height = 7, dpi = 900)
 

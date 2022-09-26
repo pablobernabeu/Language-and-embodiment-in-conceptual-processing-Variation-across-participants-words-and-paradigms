@@ -140,8 +140,8 @@ semanticdecision %>%
 # downloaded from https://osf.io/k4fn2/download?version=1
 
 # This data set also contains lexical measures from the English Lexicon Project (Balota et al., 2007; https://doi.org/10.3758/BF03193014),
-# namely number of syllables, orthographic Levenshtein distance (Yarkoni et al., 2008; https://doi.org/10.3758/PBR.15.5.971),
-# and phonological Levenshtein distance (Suárez et al., 2011; https://doi.org/10.3758/s13423-011-0078-9).
+# namely, number of syllables, orthographic Levenshtein distance (Yarkoni et al., 2008; https://doi.org/10.3758/PBR.15.5.971),
+# and phonological Levenshtein distance (Yap et al., 2009; https://doi.org/10.1016/j.jml.2009.02.001).
 # The two latter measures were created by the authors cited, and added into the English Lexicon Project.
 
 # Note on reproducibility
@@ -372,10 +372,13 @@ semanticdecision = na.omit(semanticdecision)
 
 str(semanticdecision)
 
+# ! NOTE added after conducting this study: This removal of NA cases inadvertently 
+# resulted in the removal of 6 participants who had NA in 'participant_gender'.
+
 #######################################################################################################
 
 
-# Trim data set to 3 standard deviations within participants and within trial blocks, as done in the
+# Trim RTs to 3 standard deviations within participants and within trial blocks, as done in the
 # Calgary Semantic Decision study (Pexman et al., 2017; https://doi.org/10.3758/s13428-016-0720-6)
 
 # Create empty dataframe using column names from the original data set.

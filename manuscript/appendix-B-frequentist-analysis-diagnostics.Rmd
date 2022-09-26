@@ -5,8 +5,8 @@
 
 ```{r}
 
-# This appendix is rendered by the main manuscript. It inherits the 
-# working directory and all the objects loaded in the main manuscript.
+# This appendix is rendered by the main manuscript. It inherits all the 
+# parameters set in the main manuscript and the objects loaded therein.
 
 ```
 
@@ -18,9 +18,9 @@ Below, the convergence warnings and the non-normal residuals are first addressed
 
 The challenge of convergence is well known in the area of mixed-effects models. These models often struggle to reach reliable-enough estimates due to an insufficiency of data relative to the complexity of the model [@batesFittingLinearMixedeffects2015; @baayenMixedeffectsModelingCrossed2008; @brauer2018a]. The solutions proposed range from the removal of random slopes under certain conditions [@matuschekBalancingTypeError2017] to the maintenance of random slopes in spite of convergence warnings, which seeks to avoid an inflation of the Type I error due to dependencies in the data [@brauer2018a; @singmann2019a]. 
 
-### The multiple-optimizers sanity check from `lme4::allFit()`
+### The multiple-optimisers sanity check from `lme4::allFit()`
 
-Framed within the drive to maintain random slopes wherever possible, the developers of the 'lme4' package propose a sanity check that uses a part of the 'lme4' *engine* called 'optimizer'. Every model has a default optimizer, unless a specific one is chosen through `control = lmerControl(optimizer = '...')` (in `lmer` models) or `control = glmerControl(optimizer = '...')` (in `glmer` models). The 7 widely-available optimizers are:
+Framed within the drive to maintain random slopes wherever possible, the developers of the 'lme4' package propose a sanity check that uses a part of the 'lme4' *engine* called 'optimiser'. Every model has a default optimiser, unless a specific one is chosen through `control = lmerControl(optimiser = '...')` (in `lmer` models) or `control = glmerControl(optimiser = '...')` (in `glmer` models). The seven widely-available optimisers are:
 
 - bobyqa
 - Nelder_Mead
@@ -30,14 +30,14 @@ Framed within the drive to maintain random slopes wherever possible, the develop
 - nloptwrap.NLOPT_LN_NELDERMEAD
 - nloptwrap.NLOPT_LN_BOBYQA
 
-To assess whether convergence warnings render the results invalid, or on the contrary, the results can be deemed valid in spite of the warnings, @batesPackageLme42021 suggest refitting models affected by convergence warnings with a variety of optimizers. The authors argue that if the different optimizers produce practically-equivalent results, the results are valid. For this purpose, the 'allFit' function from the 'lme4' package allows the refitting of models using a number of optimizers. To use the 7 optimizers listed above, two extra packages were installed: 'dfoptim' and 'optimx' (see [lme4 manual](https://cran.r-project.org/web/packages/lme4/lme4.pdf)). The output from 'allFit' contains several statistics on the fixed and the random effects fitted by each optimizer (see [example](https://github.com/lme4/lme4/issues/512#issue-425198940)).
+To assess whether convergence warnings render the results invalid, or on the contrary, the results can be deemed valid in spite of the warnings, @batesPackageLme42021 suggest refitting models affected by convergence warnings with a variety of optimisers. The authors argue that if the different optimisers produce practically-equivalent results, the results are valid. For this purpose, the 'allFit' function from the 'lme4' package allows the refitting of models using a number of optimisers. To use the seven optimisers listed above, two extra packages were installed: 'dfoptim' and 'optimx' (see [lme4 manual](https://cran.r-project.org/web/packages/lme4/lme4.pdf)). The output from 'allFit' contains several statistics on the fixed and the random effects fitted by each optimiser (see [example](https://github.com/lme4/lme4/issues/512#issue-425198940)).
 
 The severity of convergence problems in each study will be examined below using the 'allFit' function from the 'lme4' package. 
 
 
 ## Residual errors not normally distributed
 
-The residuals of the linear mixed-effects models in all three studies violated the assumption of normality. Even though linear mixed-effects models tend to be quite robust to deviations from normality [@kniefViolatingNormalityAssumption2021; @schielzethRobustnessLinearMixed2020], we sought to verify our results. To this end, two robust models were performed in each study, as described below.
+The residuals of the linear mixed-effects models in the three studies violated the assumption of normality. Even though linear mixed-effects models tend to be quite robust to deviations from normality [@kniefViolatingNormalityAssumption2021; @schielzethRobustnessLinearMixed2020], we sought to verify our results. To this end, two robust models were performed in each study, as described below.
 
 
 ### Method A: *robustlmm* model
@@ -61,11 +61,11 @@ Neither Method A nor Method B could finally be used, as the code produced errors
 
 ### Convergence
 
-In the initial model, the optimizer used (the default one in 'lmerTest') was '`r semanticpriming_lmerTest@optinfo$optimizer`', and the convergence warning read: '`r semanticpriming_lmerTest@optinfo$conv$lme4$messages`'. 
+In the initial model, the optimiser used (the default one in 'lmerTest') was '`r semanticpriming_lmerTest@optinfo$optimiser`', and the convergence warning read: '`r semanticpriming_lmerTest@optinfo$conv$lme4$messages`'. 
 
-Based on the reanalysis using 7 optimizers, Figure \@ref(fig:main-effects-semanticpriming-allFit-convergence) shows the fixed, main effects, and Figure \@ref(fig:interactions-semanticpriming-allFit-convergence) shows the fixed interactions.
+Based on the reanalysis using seven optimisers, Figure \@ref(fig:main-effects-semanticpriming-allFit-convergence) shows the fixed, main effects, and Figure \@ref(fig:interactions-semanticpriming-allFit-convergence) shows the fixed interactions.
 
-```{r main-effects-semanticpriming-allFit-convergence, fig.cap = 'Fixed, main effects from the semantic priming study fitted by 7 optimizers.'}
+```{r main-effects-semanticpriming-allFit-convergence, fig.cap = 'Fixed, main effects from the semantic priming study fitted by seven optimisers.'}
 
 # Display plot, which was produced in advance due to memory overload. Code available at:
 # semanticpriming/frequentist_analysis/model_diagnostics/semanticpriming_allFit_convergence.R
@@ -78,7 +78,7 @@ include_graphics(
 
 ```
 
-```{r interactions-semanticpriming-allFit-convergence, fig.cap = 'Fixed interaction effects from the semantic priming study fitted by 7 optimizers.'}
+```{r interactions-semanticpriming-allFit-convergence, fig.cap = 'Fixed interaction effects from the semantic priming study fitted by seven optimisers.'}
 
 # Display plot, which was produced in advance due to memory overload. Code available at:
 # semanticpriming/frequentist_analysis/model_diagnostics/semanticpriming_allFit_convergence.R
@@ -115,11 +115,11 @@ include_graphics(
 
 #### Convergence
 
-In the initial model, the optimizer used (the default one in 'lmerTest') was '`r semanticpriming_with_visualsimilarity_lmerTest@optinfo$optimizer`', and the convergence warning read: '`r semanticpriming_with_visualsimilarity_lmerTest@optinfo$conv$lme4$messages`'. 
+In the initial model, the optimiser used (the default one in 'lmerTest') was '`r semanticpriming_with_visualsimilarity_lmerTest@optinfo$optimiser`', and the convergence warning read: '`r semanticpriming_with_visualsimilarity_lmerTest@optinfo$conv$lme4$messages`'. 
 
-Based on the reanalysis using 7 optimizers, Figure \@ref(fig:main-effects-semanticpriming-with-visualsimilarity-allFit-convergence) shows the fixed, main effects, and Figure \@ref(fig:interactions-semanticpriming-with-visualsimilarity-allFit-convergence) shows the fixed interactions.
+Based on the reanalysis using seven optimisers, Figure \@ref(fig:main-effects-semanticpriming-with-visualsimilarity-allFit-convergence) shows the fixed, main effects, and Figure \@ref(fig:interactions-semanticpriming-with-visualsimilarity-allFit-convergence) shows the fixed interactions.
 
-```{r main-effects-semanticpriming-with-visualsimilarity-allFit-convergence, fig.cap = 'Fixed, main effects from the semantic priming study fitted by 7 optimizers.'}
+```{r main-effects-semanticpriming-with-visualsimilarity-allFit-convergence, fig.cap = 'Fixed, main effects from the semantic priming study fitted by seven optimisers.'}
 
 # Display plot, which was produced in advance due to memory overload. Code available at:
 # semanticpriming/analysis_with_visualsimilarity/model_diagnostics/semanticpriming_with_visualsimilarity_allFit_convergence.R
@@ -132,7 +132,7 @@ include_graphics(
 
 ```
 
-```{r interactions-semanticpriming-with-visualsimilarity-allFit-convergence, fig.cap = 'Fixed interaction effects from the semantic priming study fitted by 7 optimizers.'}
+```{r interactions-semanticpriming-with-visualsimilarity-allFit-convergence, fig.cap = 'Fixed interaction effects from the semantic priming study fitted by seven optimisers.'}
 
 # Display plot, which was produced in advance due to memory overload. Code available at:
 # semanticpriming/analysis_with_visualsimilarity/model_diagnostics/semanticpriming_with_visualsimilarity_allFit_convergence.R
@@ -169,11 +169,11 @@ include_graphics(
 
 ### Convergence
 
-In the initial model, the optimizer used (the default one in 'lmerTest') was '`r semanticdecision_lmerTest@optinfo$optimizer`', and the convergence warning read: '`r semanticdecision_lmerTest@optinfo$conv$lme4$messages`'. 
+In the initial model, the optimiser used (the default one in 'lmerTest') was '`r semanticdecision_lmerTest@optinfo$optimiser`', and the convergence warning read: '`r semanticdecision_lmerTest@optinfo$conv$lme4$messages`'. 
 
-Based on the reanalysis using 7 optimizers, Figure \@ref(fig:main-effects-semanticdecision-allFit-convergence) shows the fixed, main effects, and Figure \@ref(fig:interactions-semanticdecision-allFit-convergence) shows the fixed interactions.
+Based on the reanalysis using seven optimisers, Figure \@ref(fig:main-effects-semanticdecision-allFit-convergence) shows the fixed, main effects, and Figure \@ref(fig:interactions-semanticdecision-allFit-convergence) shows the fixed interactions.
 
-```{r main-effects-semanticdecision-allFit-convergence, fig.cap = 'Fixed, main effects from the semantic decision study fitted by 7 optimizers.'}
+```{r main-effects-semanticdecision-allFit-convergence, fig.cap = 'Fixed, main effects from the semantic decision study fitted by seven optimisers.'}
 
 # Display plot, which was produced in advance due to memory overload. Code available at:
 # semanticdecision/frequentist_analysis/model_diagnostics/semanticdecision_allFit_convergence.R
@@ -186,7 +186,7 @@ include_graphics(
 
 ```
 
-```{r interactions-semanticdecision-allFit-convergence, fig.cap = 'Fixed interaction effects from the semantic decision study fitted by 7 optimizers.'}
+```{r interactions-semanticdecision-allFit-convergence, fig.cap = 'Fixed interaction effects from the semantic decision study fitted by seven optimisers.'}
 
 # Display plot, which was produced in advance due to memory overload. Code available at:
 # semanticdecision/frequentist_analysis/model_diagnostics/semanticdecision_allFit_convergence.R
@@ -223,11 +223,11 @@ include_graphics(
 
 ### Convergence
 
-In the initial model, the optimizer used (the default one in 'lmerTest') was '`r lexicaldecision_lmerTest@optinfo$optimizer`', and the convergence warning read: '`r lexicaldecision_lmerTest@optinfo$conv$lme4$messages`'. 
+In the initial model, the optimiser used (the default one in 'lmerTest') was '`r lexicaldecision_lmerTest@optinfo$optimiser`', and the convergence warning read: '`r lexicaldecision_lmerTest@optinfo$conv$lme4$messages`'. 
 
-Based on the reanalysis using 7 optimizers, Figure \@ref(fig:main-effects-lexicaldecision-allFit-convergence) shows the fixed, main effects, and Figure \@ref(fig:interactions-lexicaldecision-allFit-convergence) shows the fixed interactions.
+Based on the reanalysis using seven optimisers, Figure \@ref(fig:main-effects-lexicaldecision-allFit-convergence) shows the fixed, main effects, and Figure \@ref(fig:interactions-lexicaldecision-allFit-convergence) shows the fixed interactions.
 
-```{r main-effects-lexicaldecision-allFit-convergence, fig.cap = 'Fixed, main effects from the lexical decision study fitted by 7 optimizers.'}
+```{r main-effects-lexicaldecision-allFit-convergence, fig.cap = 'Fixed, main effects from the lexical decision study fitted by seven optimisers.'}
 
 # Display plot, which was produced in advance due to memory overload. Code available at:
 # lexicaldecision/frequentist_analysis/model_diagnostics/lexicaldecision_allFit_convergence.R
@@ -240,7 +240,7 @@ include_graphics(
 
 ```
 
-```{r interactions-lexicaldecision-allFit-convergence, fig.cap = 'Fixed interaction effects from the lexical decision study fitted by 7 optimizers.'}
+```{r interactions-lexicaldecision-allFit-convergence, fig.cap = 'Fixed interaction effects from the lexical decision study fitted by seven optimisers.'}
 
 # Display plot, which was produced in advance due to memory overload. Code available at:
 # lexicaldecision/frequentist_analysis/model_diagnostics/lexicaldecision_allFit_convergence.R

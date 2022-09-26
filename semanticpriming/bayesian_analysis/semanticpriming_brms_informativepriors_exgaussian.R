@@ -122,9 +122,9 @@ semanticpriming_brms_informativepriors_exgaussian =
     family = exgaussian(),
     
     seed = 123,  # allow exact replication of results
-    warmup = 2000,  # warmup iterations
-    iter = 8000, chains = 16,  # (iter - warmup) x chains = total post-warmup draws (brms v2.17.0)
-    cores = 5,  # parallel computation
+    warmup = 1500,  # warmup iterations
+    iter = 9000, chains = 16,  # (iter - warmup) x chains = total post-warmup draws (brms v2.17.0)
+    cores = 16,  # parallel computation
     control = list(adapt_delta = 0.99, max_treedepth = 15)  # facilitate convergence
   )
 

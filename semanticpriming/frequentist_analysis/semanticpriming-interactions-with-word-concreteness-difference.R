@@ -15,9 +15,9 @@ library(patchwork)
 semanticpriming = read.csv('semanticpriming/data/final_dataset/semanticpriming.csv')
 
 
-## Convert interstimulus interval to stimulus-onset asynchrony ##
+## Convert interstimulus interval to stimulus onset asynchrony ##
 
-# The stimulus-onset asynchrony (SOA) has an alternative formula called the 
+# The stimulus onset asynchrony (SOA) has an alternative formula called the 
 # 'interstimulus interval' (ISI). The difference between these is that the 
 # ISI does not count the presentation of the prime word (example 
 # equivalences between ISI and SOA are available ISI and SOA in Lam et al., 
@@ -74,7 +74,7 @@ source('R_functions/deciles_interaction_plot.R')
   x_title = 'Word-concreteness difference (*z*)',
   y_title = 'Predicted RT (*z*)',
   fill_title = 'SOA (ms)'
-) + theme(legend.position = c(.9, .15)) ) %>%
+) + theme(legend.position = c(.88, .17)) ) %>%
   # save to disk
   ggsave(filename = 'semanticpriming/frequentist_analysis/plots/semanticpriming-interaction-word-concreteness-difference-SOA.pdf',
          device = cairo_pdf, width = 5, height = 4.5, dpi = 900)

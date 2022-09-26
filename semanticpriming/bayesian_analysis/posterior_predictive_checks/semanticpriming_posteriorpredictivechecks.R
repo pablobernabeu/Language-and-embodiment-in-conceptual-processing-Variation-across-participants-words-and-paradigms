@@ -22,8 +22,8 @@ source('R_functions/plot_posteriorpredictivecheck.R')
 semanticpriming_posteriorpredictivecheck_informativepriors_exgaussian =
   readRDS('semanticpriming/bayesian_analysis/posterior_predictive_checks/results/semanticpriming_posteriorpredictivecheck_informativepriors_exgaussian.rds')
 
-# semanticpriming_posteriorpredictivecheck_weaklyinformativepriors_exgaussian =
-#   readRDS('semanticpriming/bayesian_analysis/posterior_predictive_checks/results/semanticpriming_posteriorpredictivecheck_weaklyinformativepriors_exgaussian.rds')
+semanticpriming_posteriorpredictivecheck_weaklyinformativepriors_exgaussian =
+  readRDS('semanticpriming/bayesian_analysis/posterior_predictive_checks/results/semanticpriming_posteriorpredictivecheck_weaklyinformativepriors_exgaussian.rds')
 
 semanticpriming_posteriorpredictivecheck_diffusepriors_exgaussian =
   readRDS('semanticpriming/bayesian_analysis/posterior_predictive_checks/results/semanticpriming_posteriorpredictivecheck_diffusepriors_exgaussian.rds')
@@ -50,19 +50,21 @@ semanticpriming_posteriorpredictivecheck_diffusepriors_exgaussian =
   plot_posteriorpredictivecheck() + 
   ggtitle('Prior *SD* = 0.3') + xlab('RT (*z*)') + 
   theme(axis.title.y = element_blank(), 
+        legend.position = c(.75, .7),
+        legend.text = element_text(size = 17), 
         plot.margin = margin(12, 0, 14, 12))
 
 
 # Combine plots
 
 ( semanticpriming_posteriorpredictivecheck_informativepriors_exgaussian +
-    # semanticpriming_posteriorpredictivecheck_weaklyinformativepriors_exgaussian +
+    semanticpriming_posteriorpredictivecheck_weaklyinformativepriors_exgaussian +
     semanticpriming_posteriorpredictivecheck_diffusepriors_exgaussian +
     # plot_annotation(tag_levels = list(c('(a)', '(b)', '(c)'))) + 
-    plot_layout(ncol = 2) ) %>%
+    plot_layout(ncol = 3) ) %>%
   
   # Save to disk
   ggsave(filename = 'semanticpriming/bayesian_analysis/posterior_predictive_checks/plots/semanticpriming_posteriorpredictivechecks_allpriors_exgaussian.pdf',
-         device = cairo_pdf, width = 10, height = 5.5, dpi = 900)
+         device = cairo_pdf, width = 10, height = 4, dpi = 900)
 
 

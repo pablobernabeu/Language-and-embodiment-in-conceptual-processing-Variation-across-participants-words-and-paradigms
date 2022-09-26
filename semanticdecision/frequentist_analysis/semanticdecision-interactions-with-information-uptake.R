@@ -71,5 +71,5 @@ plot3 =
     plot_annotation(tag_levels = list(c('(a)', '(b)', '(c)'))) + 
     guide_area() + plot_layout(ncol = 2, guides = 'collect') ) %>%
   ggsave(filename = 'semanticdecision/frequentist_analysis/plots/semanticdecision-interactions-with-information-uptake.pdf',
-         device = cairo_pdf, width = 6, height = 7, dpi = 900)
+         device = cairo_pdf, width = 7.5, height = 7, dpi = 900)
 

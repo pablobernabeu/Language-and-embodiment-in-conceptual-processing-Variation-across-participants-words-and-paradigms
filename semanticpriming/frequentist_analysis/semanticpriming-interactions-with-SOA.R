@@ -15,9 +15,9 @@ library(patchwork)
 semanticpriming = read.csv('semanticpriming/data/final_dataset/semanticpriming.csv')
 
 
-## Convert interstimulus interval to stimulus-onset asynchrony ##
+## Convert interstimulus interval to stimulus onset asynchrony ##
 
-# The stimulus-onset asynchrony (SOA) has an alternative formula called the 
+# The stimulus onset asynchrony (SOA) has an alternative formula called the 
 # 'interstimulus interval' (ISI). The difference between these is that the 
 # ISI does not count the presentation of the prime word (example 
 # equivalences between ISI and SOA are available ISI and SOA in Lam et al., 

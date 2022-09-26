@@ -46,7 +46,7 @@ rownames(KR_summary_semanticpriming_lmerTest$coefficients) =
               replacement = 'SOA') %>%
   # Show acronym in main effect of SOA
   str_replace(pattern = '^SOA$',
-              replacement = 'Stimulus-onset asynchrony (SOA)') %>%
+              replacement = 'Stimulus onset asynchrony (SOA)') %>%
   
   # Second, adjust order of effects in interactions. In the output from the model, 
   # the word-level variables of interest (i.e., 'z_cosine_similarity' and 
@@ -82,7 +82,7 @@ rownames(confint_semanticpriming_lmerTest) =
               replacement = 'SOA') %>%
   # Show acronym in main effect of SOA
   str_replace(pattern = '^SOA$',
-              replacement = 'Stimulus-onset asynchrony (SOA)') %>%
+              replacement = 'Stimulus onset asynchrony (SOA)') %>%
   
   # Second, adjust order of effects in interactions. In the output from the model, 
   # the word-level variables of interest (i.e., 'z_cosine_similarity' and 

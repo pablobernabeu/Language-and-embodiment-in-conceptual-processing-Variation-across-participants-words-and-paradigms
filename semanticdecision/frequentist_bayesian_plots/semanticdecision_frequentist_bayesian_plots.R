@@ -95,7 +95,7 @@ plot_semanticdecision_frequentist_bayesian_plot_informativepriors_exgaussian =
                             semanticdecision_posteriordistributions_informativepriors_exgaussian,
                             labels = new_labels, interaction_symbol_x = TRUE,
                             vertical_line_at_x = 0, x_title = 'Effect size (&beta;)', 
-                            note_frequentist_no_prior = TRUE) +
+                            x_axis_labels = 3, note_frequentist_no_prior = TRUE) +
   ggtitle('Prior *SD* = 0.1')
 
 #####
@@ -118,7 +118,7 @@ plot_semanticdecision_frequentist_bayesian_plot_weaklyinformativepriors_exgaussi
                             semanticdecision_posteriordistributions_weaklyinformativepriors_exgaussian,
                             labels = new_labels, interaction_symbol_x = TRUE,
                             vertical_line_at_x = 0, x_title = 'Effect size (&beta;)', 
-                            note_frequentist_no_prior = TRUE) +
+                            x_axis_labels = 3, note_frequentist_no_prior = TRUE) +
   ggtitle('Prior *SD* = 0.2') +
   theme(axis.text.y = element_blank())
 
@@ -130,7 +130,7 @@ plot_semanticdecision_frequentist_bayesian_plot_diffusepriors_exgaussian =
                             semanticdecision_posteriordistributions_diffusepriors_exgaussian,
                             labels = new_labels, interaction_symbol_x = TRUE,
                             vertical_line_at_x = 0, x_title = 'Effect size (&beta;)', 
-                            note_frequentist_no_prior = TRUE) +
+                            x_axis_labels = 3, note_frequentist_no_prior = TRUE) +
   ggtitle('Prior *SD* = 0.3') + 
   theme(axis.text.y = element_blank())
 

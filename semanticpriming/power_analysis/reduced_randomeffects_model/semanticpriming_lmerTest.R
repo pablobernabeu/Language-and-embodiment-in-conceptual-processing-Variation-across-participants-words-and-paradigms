@@ -2,7 +2,8 @@
 
 # Part of Study 1: Semantic priming
 
-# This model was run 
+# Deprecated model. For details, please see README.md in the directory
+# 'semanticpriming/power_analysis/reduced_randomeffects_model'
 
 library(dplyr)  # data wrangling
 # The following lme4-relevant package was installed before lme4 to avoid a conflict 
@@ -103,26 +104,26 @@ system.time({
 })
 
 saveRDS(semanticpriming_lmerTest, 
-        'semanticpriming/power_analysis/model/results/semanticpriming_lmerTest.rds')
+        'semanticpriming/power_analysis/reduced_randomeffects_model/results/semanticpriming_lmerTest.rds')
 
 # Calculate p values using Kenward-Roger method (Luke, 2017; 
 # https://doi.org/10.3758/s13428-016-0809-y)
 summary(semanticpriming_lmerTest, ddf = 'Kenward-Roger') %>%
-  saveRDS('semanticpriming/power_analysis/model/results/KR_summary_semanticpriming_lmerTest.rds')
+  saveRDS('semanticpriming/power_analysis/reduced_randomeffects_model/results/KR_summary_semanticpriming_lmerTest.rds')
 
 # Calculate R^2. The result must be interpreted with caution as it differs from the 
 # traditional R^2 (Nakagawa et al., 2017; https://doi.org/10.1098/rsif.2017.0213)
 MuMIn::r.squaredGLMM(semanticpriming_lmerTest) %>%
-  saveRDS('semanticpriming/power_analysis/model/results/Nakagawa2017_R2_semanticpriming_lmerTest.rds')
+  saveRDS('semanticpriming/power_analysis/reduced_randomeffects_model/results/Nakagawa2017_R2_semanticpriming_lmerTest.rds')
 
 # Calculate 95% confidence intervals of fixed effects
 lme4::confint.merMod(semanticpriming_lmerTest, method = 'profile',
                      # Compute 95% CIs for every effect, as well as for the intercept
                      parm = rownames(summary(semanticpriming_lmerTest)$coefficients)) %>%
-  saveRDS('semanticpriming/power_analysis/model/results/confint_semanticpriming_lmerTest.rds')
+  saveRDS('semanticpriming/power_analysis/reduced_randomeffects_model/results/confint_semanticpriming_lmerTest.rds')
 
 # Save random effects
 lme4::ranef(semanticpriming_lmerTest) %>%
-  saveRDS('semanticpriming/power_analysis/model/results/ranef_semanticpriming_lmerTest.rds')
+  saveRDS('semanticpriming/power_analysis/reduced_randomeffects_model/results/ranef_semanticpriming_lmerTest.rds')
 
 

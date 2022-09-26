@@ -26,8 +26,8 @@ library(LSAfun)
 library(standardize)
 
 
-# DATA SET 1. Lexical decision task from the Semantic Priming Project (Hutchison et al., 2013; 
-# https://doi.org/10.3758/s13428-012-0304-z), downloaded from 
+# DATA SET 1. Lexical decision task from the Semantic Priming Project (Hutchison 
+# et al., 2013; https://doi.org/10.3758/s13428-012-0304-z), downloaded from 
 # https://www.montana.edu/attmemlab/documents/all%20ldt%20subs_all%20trials3.xlsx
 
 # Note on reproducibility
@@ -47,24 +47,20 @@ semanticpriming =
   read.csv('semanticpriming/data/primary_datasets/Hutchison_etal_2013_semanticpriming_lexicaldecision.csv')
 
 # Rename columns
-semanticpriming = 
-  semanticpriming %>%
+semanticpriming = semanticpriming %>%
   rename(Participant = Subject, target_word = target,
          prime_word = prime, interstimulus_interval = isi)
 
 # Only keep correctly-responded trials
-semanticpriming = 
-  semanticpriming[semanticpriming$target.ACC == '1',]
+semanticpriming = semanticpriming[semanticpriming$target.ACC == '1',]
 
 # Remove responses faster than 200 ms or slower than 3,000 ms 
 # (Hutchison et al., 2013; https://doi.org/10.3758/s13428-012-0304-z)
-semanticpriming = 
-  semanticpriming[!semanticpriming$target.RT < 200 & 
-                                          !semanticpriming$target.RT > 3000,]
+semanticpriming = semanticpriming[!semanticpriming$target.RT < 200 & 
+                                    !semanticpriming$target.RT > 3000,]
 
 # Calculate number of letters per word
-semanticpriming$target_length = 
-  nchar(semanticpriming$target_word)
+semanticpriming$target_length = nchar(semanticpriming$target_word)
 
 # Recode dichotomous predictor 'interstimulus_interval'
 # (Brauer & Curtin, 2018; https://doi.org/10.1037/met0000159)
@@ -87,7 +83,7 @@ table(semanticpriming$recoded_interstimulus_interval)
 semanticpriming = 
   
   semanticpriming[semanticpriming$type == 'first' |
-                                          semanticpriming$type == 'other', ] %>% 
+                    semanticpriming$type == 'other', ] %>% 
   
   # Join prime and target words by a hyphen and save this into a new column, 
   # which will be used as a grouping factor in the mixed-effects model. This
@@ -169,7 +165,7 @@ semanticpriming$recoded_participant_gender =
 
 # Process lingering NA values in recoded_participant_gender
 semanticpriming[is.na(semanticpriming$recoded_participant_gender), 
-                                      'recoded_participant_gender'] = 0
+                'recoded_participant_gender'] = 0
 
 # View
 summary(semanticpriming$recoded_participant_gender)
@@ -182,8 +178,8 @@ semanticpriming %>%
 
 
 # DATA SET 3. Lexical measures from the English Lexicon Project (Balota et al., 2007; https://doi.org/10.3758/BF03193014),
-# namely number of syllables, orthographic Levenshtein distance (Yarkoni et al., 2008; https://doi.org/10.3758/PBR.15.5.971),
-# and phonological Levenshtein distance (Suárez et al., 2011; https://doi.org/10.3758/s13423-011-0078-9).
+# namely, number of syllables, orthographic Levenshtein distance (Yarkoni et al., 2008; https://doi.org/10.3758/PBR.15.5.971),
+# and phonological Levenshtein distance (Yap et al., 2009; https://doi.org/10.1016/j.jml.2009.02.001).
 # The two latter measures were created by the authors cited, and added into the English Lexicon Project.
 
 # First, the target words were saved in R into a CSV file as follows:
@@ -191,19 +187,21 @@ write.csv(sort(unique(semanticpriming$target_word)),
           'semanticpriming/data/primary_datasets/semanticpriming_targetwords.csv', 
           row.names = FALSE)
 
-# Next, the above file was uploaded to https://elexicon.wustl.edu/query14/query14.html, where
-# the 'Method of Submission' selected was 'Filename Containing List of Words', and the output 
-# variables were 'LgSUBTLWF', 'OLD20', 'PLD20', 'NSyll'. The output was downloaded and saved 
-# as 'lexicaldecision/data/primary_datasets/Balota_etal_2007_ELP_lexical.csv'.
+# Next, the above file was uploaded to https://elexicon.wustl.edu/query14/query14.html, 
+# where the 'Method of Submission' selected was 'Filename Containing List of Words'. 
+# The default output variables 'Length', 'Log_Freq_HAL' and 'Log_Freq_HAL' were 
+# deselected, whereas the output variables 'LgSUBTLWF', 'OLD', 'PLD' and 'NSyll' were 
+# selected. The query was executed and the resulting table was copy-pasted into the 
+# txt file that is loaded in below.
 
-# Read in output downloaded from the 'elexicon' web application
 Balota_etal_2007_ELP_lexical = 
   read.csv('semanticpriming/data/primary_datasets/Balota_etal_2007_ELP_lexical.csv')
 
 # Rename columns
 Balota_etal_2007_ELP_lexical =
   Balota_etal_2007_ELP_lexical %>%
-  rename(target_word = Word, target_word_frequency = LgSUBTLWF,
+  rename(target_word = Word, 
+         target_word_frequency = LgSUBTLWF,
          target_orthographic_Levenshtein_distance = OLD,
          target_phonological_Levenshtein_distance = PLD,
          target_number_syllables = NSyll)
@@ -264,7 +262,7 @@ dimnames(Mandera_etal_2017_semanticspace)[1] =
     col_names = FALSE, delim = ' ',
     # Skip first seven lines, as they have metadata
     skip = 7) %>%
-  # Row names containing the words
+  # Column containing the words
   select(1)
 
 # Correct column names (X1 to X300)
@@ -283,7 +281,7 @@ for(i in 1 : nrow(wordpairs)) {
                    tvectors = Mandera_etal_2017_semanticspace)
 }
 
-# Add cosine_similarity to main data set.
+# Add cosine_similarity to main data set
 semanticpriming = 
   merge(semanticpriming, wordpairs, 
         by = c('prime_word', 'target_word'), 
@@ -410,8 +408,8 @@ length(unique(semanticpriming[
   !is.na(semanticpriming$word_concreteness_diff), 'primeword_targetword']))
 
 # Number of prime-target pairs lacking a word-concreteness difference score
-unique(semanticpriming[
-  is.na(semanticpriming$word_concreteness_diff), 'primeword_targetword'])
+length(unique(semanticpriming[
+  is.na(semanticpriming$word_concreteness_diff), 'primeword_targetword']))
 
 # Free up workspace
 # rm(Brysbaert_etal_2014_wordconcreteness)
@@ -440,7 +438,7 @@ str(semanticpriming)
 #######################################################################################################
 
 
-# Trim data set to 3 standard deviations within participants, within sessions and within  
+# Trim RTs to 3 standard deviations within participants, within sessions and within  
 # interstimulus interval conditions, as done in the Semantic Priming Project (Hutchison 
 # et al., 2013; https://doi.org/10.3758/s13428-012-0304-z).
 
@@ -453,8 +451,8 @@ for(i in unique(semanticpriming$Participant)) {
       
       # First, select Participant, session and interstimulus interval condition
       subset = semanticpriming[semanticpriming$Participant == i & 
-                                                       semanticpriming$Session == j & 
-                                                       semanticpriming$interstimulus_interval == k,]
+                                 semanticpriming$Session == j & 
+                                 semanticpriming$interstimulus_interval == k,]
       
       result = subset[subset$target.RT > -(mean(subset$target.RT) + 3 * sd(subset$target.RT)) &
                         subset$target.RT < mean(subset$target.RT) + 3 * sd(subset$target.RT),]

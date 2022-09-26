@@ -48,7 +48,7 @@ rownames(KR_summary_semanticpriming_with_visualsimilarity_lmerTest$coefficients)
               replacement = 'SOA') %>%
   # Show acronym in main effect of SOA
   str_replace(pattern = '^SOA$',
-              replacement = 'Stimulus-onset asynchrony (SOA)') %>%
+              replacement = 'Stimulus onset asynchrony (SOA)') %>%
   
   # Second, adjust order of effects in interactions. In the output from the model, 
   # the word-level variables of interest (i.e., 'z_cosine_similarity' and 
@@ -86,7 +86,7 @@ rownames(confint_semanticpriming_with_visualsimilarity_lmerTest) =
               replacement = 'SOA') %>%
   # Show acronym in main effect of SOA
   str_replace(pattern = '^SOA$',
-              replacement = 'Stimulus-onset asynchrony (SOA)') %>%
+              replacement = 'Stimulus onset asynchrony (SOA)') %>%
   
   # Second, adjust order of effects in interactions. In the output from the model, 
   # the word-level variables of interest (i.e., 'z_cosine_similarity' and 
@@ -116,7 +116,7 @@ rownames(confint_semanticpriming_with_visualsimilarity_lmerTest) =
     'Language-based similarity',
     'Visual-strength difference',
     'Vision-based similarity',
-    'Stimulus-onset asynchrony (SOA)',
+    'Stimulus onset asynchrony (SOA)',
     # 'Word-concreteness difference:Vocabulary size',
     # 'Word-concreteness difference:SOA',
     # 'Word-concreteness difference:Gender',

@@ -5,16 +5,16 @@
 # Convergence diagnostics
 
 # Following Brauer and Curtin (2018), avoid removing random slopes to prevent an inflation of the Type I error rate.
-# As a sanity check, refit mixed-effects model with several optimizers. This check is done by comparing the results 
-# from these optimizers. If they are similar, especially for the fixed effects, then the results are likely valid,
+# As a sanity check, refit mixed-effects model with several optimisers. This check is done by comparing the results 
+# from these optimisers. If they are similar, especially for the fixed effects, then the results are likely valid,
 # even in the presence of convergence warnings (see https://cran.r-project.org/web/packages/lme4/lme4.pdf).
 
 
 library(tidyverse)  # Data wrangling, text processing and plotting
-library(dfoptim)  # Refit model with various optimizers using lme4::allFit()
-library(optimx)  # Refit model with various optimizers using lme4::allFit()
+library(dfoptim)  # Refit model with various optimisers using lme4::allFit()
+library(optimx)  # Refit model with various optimisers using lme4::allFit()
 library(lme4)   # Main analysis and adjustment of effect labels
-library(parallel)   # Allow parallel processing using several cores
+library(parallel)  # Allow parallel processing using several cores
 
 
 # Data set below created in the script 'semanticpriming_with_visualsimilarity_data_preparation.R',
@@ -27,7 +27,7 @@ semanticpriming_with_visualsimilarity =
 semanticpriming_with_visualsimilarity_lmerTest = 
   readRDS('semanticpriming/analysis_with_visualsimilarity/results/semanticpriming_with_visualsimilarity_lmerTest.rds')
 
-# Fit model using the seven available optimizers
+# Fit model using the seven available optimisers
 semanticpriming_with_visualsimilarity_allFit_convergence =
   allFit(semanticpriming_with_visualsimilarity_lmerTest, 
          # Set maximum iterations to 1m to facilitate convergence 
@@ -36,18 +36,14 @@ semanticpriming_with_visualsimilarity_allFit_convergence =
          # Use 7 cores in parallel for faster computation
          ncpus = 7)
 
-# Save
-saveRDS(semanticpriming_with_visualsimilarity_allFit_convergence,
-        'semanticpriming/analysis_with_visualsimilarity/model_diagnostics/results/semanticpriming_with_visualsimilarity_allFit_convergence.rds')
-
-# Load the result back in, if needed later
-# semanticpriming_with_visualsimilarity_allFit_convergence =
-#   readRDS('semanticpriming/analysis_with_visualsimilarity/model_diagnostics/results/semanticpriming_with_visualsimilarity_allFit_convergence.rds')
+# Save (not saved because it takes up 400 MB)
+# saveRDS(semanticpriming_with_visualsimilarity_allFit_convergence,
+#         'semanticpriming/analysis_with_visualsimilarity/model_diagnostics/results/semanticpriming_with_visualsimilarity_allFit_convergence.rds')
 
 ################################################################################
 
 
-# PLOT fixed effects from all the optimizers
+# PLOT fixed effects from all the optimisers
 
 # Adjust the names of the predictors in two ways, as detailed below
 labels = 
@@ -85,7 +81,7 @@ labels =
       '\\2:\\1', 
       .)
 
-# The for-loop below iterates over the output from the seven optimizers. 
+# The for-loop below iterates over the output from the seven optimisers. 
 # In each iteration, the 'labels' created above are applied first, and
 # then the 'pp' section of the 'allFit' output is created by passing 
 # in the original content, of which only the column names of 'X' were 
@@ -103,7 +99,7 @@ for(i in 1 : length(semanticpriming_with_visualsimilarity_allFit_convergence)) {
              n = nrow(semanticpriming_with_visualsimilarity_allFit_convergence[[i]]@pp$X))
 }
 
-# Load function to plot fixed effects across different optimizers
+# Load function to plot fixed effects across different optimisers
 source('R_functions/plot.fixef.allFit.R')
 
 # Main effects

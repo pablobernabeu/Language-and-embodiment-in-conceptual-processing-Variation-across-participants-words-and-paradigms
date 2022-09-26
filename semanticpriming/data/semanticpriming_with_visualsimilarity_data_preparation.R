@@ -35,8 +35,8 @@ library(LSAfun)
 library(standardize)
 
 
-# DATA SET 1. Lexical decision task from the Semantic Priming Project (Hutchison et al., 2013; 
-# https://doi.org/10.3758/s13428-012-0304-z), downloaded from 
+# DATA SET 1. Lexical decision task from the Semantic Priming Project (Hutchison 
+# et al., 2013; https://doi.org/10.3758/s13428-012-0304-z), downloaded from 
 # https://www.montana.edu/attmemlab/documents/all%20ldt%20subs_all%20trials3.xlsx
 
 # Note on reproducibility
@@ -191,7 +191,7 @@ semanticpriming_with_visualsimilarity %>%
 
 
 # DATA SET 3. Lexical measures from the English Lexicon Project (Balota et al., 2007; https://doi.org/10.3758/BF03193014),
-# namely number of syllables, orthographic Levenshtein distance and phonological Levenshtein distance
+# namely, number of syllables, orthographic Levenshtein distance and phonological Levenshtein distance
 # (Yarkoni et al., 2008; https://doi.org/10.3758/PBR.15.5.971).
 
 # First, the target words were saved in R into a CSV file as follows:
@@ -199,19 +199,21 @@ write.csv(sort(unique(semanticpriming_with_visualsimilarity$target_word)),
           'semanticpriming/data/primary_datasets/semanticpriming_targetwords.csv', 
           row.names = FALSE)
 
-# Next, the above file was uploaded to https://elexicon.wustl.edu/query14/query14.html, where the
-# the 'Method of Submission' selected was 'Filename Containing List of Words', and the output 
-# variables were 'LgSUBTLWF', 'OLD20', 'PLD20', 'NSyll'. The output was downloaded and saved as 
-# 'semanticpriming/data/primary_datasets/Balota_etal_2007_ELP_lexical.csv'.
+# Next, the above file was uploaded to https://elexicon.wustl.edu/query14/query14.html, 
+# where the 'Method of Submission' selected was 'Filename Containing List of Words'. 
+# The default output variables 'Length', 'Log_Freq_HAL' and 'Log_Freq_HAL' were 
+# deselected, whereas the output variables 'LgSUBTLWF', 'OLD', 'PLD' and 'NSyll' were 
+# selected. The query was executed and the resulting table was copy-pasted into the 
+# txt file that is loaded in below.
 
-# Read in output downloaded from the elexicon web application
 Balota_etal_2007_ELP_lexical = 
   read.csv('semanticpriming/data/primary_datasets/Balota_etal_2007_ELP_lexical.csv')
 
 # Rename columns
 Balota_etal_2007_ELP_lexical =
   Balota_etal_2007_ELP_lexical %>%
-  rename(target_word = Word, target_word_frequency = LgSUBTLWF,
+  rename(target_word = Word, 
+         target_word_frequency = LgSUBTLWF,
          target_orthographic_Levenshtein_distance = OLD,
          target_phonological_Levenshtein_distance = PLD,
          target_number_syllables = NSyll)
@@ -530,7 +532,7 @@ str(semanticpriming_with_visualsimilarity)
 #######################################################################################################
 
 
-# Trim data set to 3 standard deviations within participants, within sessions and within  
+# Trim RTs to 3 standard deviations within participants, within sessions and within  
 # interstimulus interval conditions, as done in the Semantic Priming Project (Hutchison 
 # et al., 2013; https://doi.org/10.3758/s13428-012-0304-z).
 

@@ -201,8 +201,8 @@ lexicaldecision %>%
 
 
 # DATA SET 2. Lexical measures from the English Lexicon Project (Balota et al., 2007; https://doi.org/10.3758/BF03193014),
-# namely number of syllables, orthographic Levenshtein distance (Yarkoni et al., 2008; https://doi.org/10.3758/PBR.15.5.971),
-# and phonological Levenshtein distance (Suárez et al., 2011; https://doi.org/10.3758/s13423-011-0078-9).
+# namely, number of syllables, orthographic Levenshtein distance (Yarkoni et al., 2008; https://doi.org/10.3758/PBR.15.5.971),
+# and phonological Levenshtein distance (Yap et al., 2009; https://doi.org/10.1016/j.jml.2009.02.001).
 # The two latter measures were created by the authors cited, and added into the English Lexicon Project.
 
 # First, the target words were saved in R into a CSV file as follows:
@@ -210,19 +210,21 @@ write.csv(sort(unique(lexicaldecision$word)),
           'lexicaldecision/data/primary_datasets/lexicaldecision_targetwords.csv', 
           row.names = FALSE)
 
-# Next, the above file was uploaded to https://elexicon.wustl.edu/query14/query14.html, where
-# the 'Method of Submission' selected was 'Filename Containing List of Words', and the output 
-# variables were 'LgSUBTLWF', 'OLD20', 'PLD20', 'NSyll'. The output was downloaded and saved 
-# as 'lexicaldecision/data/primary_datasets/Balota_etal_2007_ELP_lexical.csv'.
+# Next, the above file was uploaded to https://elexicon.wustl.edu/query14/query14.html, 
+# where the 'Method of Submission' selected was 'Filename Containing List of Words'. 
+# The default output variables 'Length', 'Log_Freq_HAL' and 'Log_Freq_HAL' were 
+# deselected, whereas the output variables 'LgSUBTLWF', 'OLD', 'PLD' and 'NSyll' were 
+# selected. The query was executed and the resulting table was copy-pasted into the 
+# txt file that is loaded in below.
 
-# Read in output downloaded from the 'elexicon' web application
 Balota_etal_2007_ELP_lexical = 
   read.csv('lexicaldecision/data/primary_datasets/Balota_etal_2007_ELP_lexical.csv')
 
 # Rename columns
 Balota_etal_2007_ELP_lexical =
   Balota_etal_2007_ELP_lexical %>%
-  rename(word = Word, word_frequency = LgSUBTLWF,
+  rename(word = Word, 
+         word_frequency = LgSUBTLWF,
          orthographic_Levenshtein_distance = OLD,
          phonological_Levenshtein_distance = PLD,
          number_syllables = NSyll)
@@ -353,7 +355,7 @@ lexicaldecision$Participant %>% unique %>% length   # 795
 lexicaldecision$word %>% unique %>% length   # 12636
 
 
-# Trim data set to 3 standard deviations within participants, as done in the English 
+# Trim RTs to 3 standard deviations within participants, as done in the English 
 # Lexicon Project (Balota et al., 2007; https://doi.org/10.3758/BF03193014).
 
 # Create empty dataframe using column names from the original data set.

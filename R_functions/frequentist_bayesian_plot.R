@@ -13,6 +13,7 @@ frequentist_bayesian_plot =
   
   function( frequentist_model_summary, confidence_intervals, mcmc_plot, 
             labels = NULL, font_size = 10, x_title = 'Estimate', 
+            x_axis_labels = 6, # <-- approximate number of labels in X axis
             
             # Number of columns into which the legend labels (i.e., 
             # 'Frequentist analysis', 'Bayesian analysis') should 
@@ -107,7 +108,7 @@ frequentist_bayesian_plot =
                  position = position_nudge(y = 0.09), 
                  colour = 'red', size = 0.8) +
       
-      scale_x_continuous(n.breaks = 6, 
+      scale_x_continuous(n.breaks = x_axis_labels, 
                          limits = c(min(mcmc_plot$data$CI_2.5, mcmc_plot$data$x), 
                                     max(mcmc_plot$data$CI_97.5, mcmc_plot$data$x))) +
       
