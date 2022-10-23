@@ -1,9 +1,13 @@
 {
     "sortOrder": [
         {
+            "columnIndex": 4,
+            "ascending": false
+        },
+        {
             "columnIndex": 2,
             "ascending": false
         }
     ],
-    "path": "C:/Users/Pablo/OneDrive - Lancaster University/semanticpriming-semanticdecision-lexicaldecision/manuscript"
+    "path": "~/semanticpriming-semanticdecision-lexicaldecision/R_functions"
 }

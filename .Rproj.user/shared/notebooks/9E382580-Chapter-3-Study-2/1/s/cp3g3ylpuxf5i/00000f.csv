@@ -1,0 +1,6 @@
+"0",""
+"0","source('bayesian_priors/bayesian_priors.R', local = TRUE)"
+"2","Warning: cannot open file 'bayesian_priors/bayesian_priors.R': No such file or directory"
+"2","Error in file(filename, ""r"", encoding = encoding) : 
+  cannot open the connection
+"
