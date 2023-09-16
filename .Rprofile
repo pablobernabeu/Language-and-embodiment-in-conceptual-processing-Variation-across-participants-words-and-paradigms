@@ -1,3 +1,4 @@
+source("renv/activate.R")
 
 
 # This .Rprofile script is run automatically when the project is opened.

@@ -1,0 +1,28 @@
+{
+    "id": "ED285B9D",
+    "path": null,
+    "project_path": null,
+    "type": "object_explorer",
+    "hash": "0",
+    "contents": "",
+    "dirty": false,
+    "created": 1694879180545.0,
+    "source_on_save": false,
+    "relative_order": 9,
+    "properties": {
+        "id": "b5f9d36c2cff45fea584d1ee8f19f73f",
+        "name": "semanticdecision[semanticdecision$Participant == 301, \"information_uptake\"]",
+        "title": "semanticdecision[semanticdecision$Participant == 301, \"information_uptake\"]",
+        "language": "R",
+        "source_window_id": "",
+        "Source": "Source"
+    },
+    "folds": "",
+    "lastKnownWriteTime": 3976785546167280225,
+    "encoding": "",
+    "collab_server": "",
+    "source_window": "",
+    "last_content_update": 1694879180545,
+    "read_only": false,
+    "read_only_alternatives": []
+}

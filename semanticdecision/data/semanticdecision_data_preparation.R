@@ -116,6 +116,11 @@ semanticdecision %>%
 # M                     82
 # NA                     6
 
+# Replace NA values with zeros
+semanticdecision[
+  is.na(semanticdecision$participant_gender), 
+  'participant_gender'] = 0
+
 # Recode dichotomous predictor 'participant_gender' (Brauer & Curtin, 2018; https://doi.org/10.1037/met0000159). 
 # Male = -0.5, female = 0.5, others = 0 (N.B. the current data, shown above, does not contain sufficient 
 # information to allow a more specific coding).
@@ -123,11 +128,6 @@ semanticdecision %>%
 semanticdecision$recoded_participant_gender = 
   ifelse(semanticdecision$participant_gender == 'M', -0.5, 
          ifelse(semanticdecision$participant_gender == 'F', 0.5, 0))
-
-# Replace NA values in recoded_participant_gender with zeros
-semanticdecision[
-  is.na(semanticdecision$recoded_participant_gender), 
-  'recoded_participant_gender'] = 0
 
 # View
 summary(semanticdecision$recoded_participant_gender)
@@ -365,15 +365,12 @@ str(semanticdecision)
 
 #######################################################################################################
 
-# Remove NAs, necessary because the power analysis that is to be conducted using the 'simr' package 
-# requires NA-free data (see https://github.com/pitakakariki/simr/issues/204).
+# Remove NAs, necessary because the power analysis that is to be conducted using the 'simr' 
+# package requires NA-free data (see https://github.com/pitakakariki/simr/issues/204).
 
 semanticdecision = na.omit(semanticdecision)
 
 str(semanticdecision)
-
-# ! NOTE added after conducting this study: This removal of NA cases inadvertently 
-# resulted in the removal of 6 participants who had NA in 'participant_gender'.
 
 #######################################################################################################
 

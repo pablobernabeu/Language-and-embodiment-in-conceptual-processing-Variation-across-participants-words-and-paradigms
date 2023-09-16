@@ -1,0 +1,28 @@
+{
+    "id": "DCA32CAC",
+    "path": null,
+    "project_path": null,
+    "type": "object_explorer",
+    "hash": "0",
+    "contents": "",
+    "dirty": false,
+    "created": 1694879162742.0,
+    "source_on_save": false,
+    "relative_order": 7,
+    "properties": {
+        "id": "07d8cbeca9514b2ead7fa14117dc6871",
+        "name": "semanticdecision[semanticdecision$Participant == 308, \"information_uptake\"]",
+        "title": "semanticdecision[semanticdecision$Participant == 308, \"information_uptake\"]",
+        "language": "R",
+        "source_window_id": "",
+        "Source": "Source"
+    },
+    "folds": "",
+    "lastKnownWriteTime": 4189032028197581413,
+    "encoding": "",
+    "collab_server": "",
+    "source_window": "",
+    "last_content_update": 1694879162742,
+    "read_only": false,
+    "read_only_alternatives": []
+}

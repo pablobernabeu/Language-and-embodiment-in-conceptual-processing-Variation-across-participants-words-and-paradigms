@@ -1,5 +1,0 @@
-"0","# Create table (using custom function from the 'R_functions' folder)
-Considering the maximum correlation allowed ($r$ = $\pm$.70) and the results of the model, the variables that will be included as covariates in the main analysis are word frequency and number of syllables.
-"
-"2","Error: unexpected symbol in ""Considering the""
-"
