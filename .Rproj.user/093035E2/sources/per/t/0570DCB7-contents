@@ -363,7 +363,7 @@ str(semanticdecision)
 # z-scored visual modality rating: z_visual_rating
 
 
-#######################################################################################################
+#################################################################################################
 
 # Remove NAs, necessary because the power analysis that is to be conducted using the 'simr' 
 # package requires NA-free data (see https://github.com/pitakakariki/simr/issues/204).
@@ -372,7 +372,7 @@ semanticdecision = na.omit(semanticdecision)
 
 str(semanticdecision)
 
-#######################################################################################################
+#################################################################################################
 
 
 # Trim RTs to 3 standard deviations within participants and within trial blocks, as done in the
