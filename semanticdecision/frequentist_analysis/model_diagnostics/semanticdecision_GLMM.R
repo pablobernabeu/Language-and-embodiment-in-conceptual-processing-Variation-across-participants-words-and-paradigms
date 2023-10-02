@@ -33,7 +33,9 @@
 # CRAN. https://cran.r-project.org/web/packages/afex/afex.pdf
 
 
+# install.packages('dplyr', repos = 'https://www.stats.bris.ac.uk/R/')
 # install.packages('afex', repos = 'https://www.stats.bris.ac.uk/R/')
+library(dplyr)	# data wrangling
 library(afex)  # Compute p values (package version 3.1-3) using parametric bootstrapping (see information below)
 library(parallel)  # Parallel processing for a faster computation (included in base R)
 
