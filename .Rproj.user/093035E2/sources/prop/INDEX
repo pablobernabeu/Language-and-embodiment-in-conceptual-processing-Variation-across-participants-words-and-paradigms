@@ -5,6 +5,7 @@
 ~%2FOSF%2Fosf.io-ueryq%2Fsemanticdecision%2Fbayesian_analysis%2Fposterior_predictive_checks%2Fsemanticdecision_posteriorpredictivechecks.R="2EA34ACD"
 ~%2FOSF%2Fosf.io-ueryq%2Fsemanticdecision%2Fbayesian_analysis%2Fprior_predictive_checks%2Fsemanticdecision_priorpredictivecheck_diffusepriors_exgaussian.R="434AA05B"
 ~%2FOSF%2Fosf.io-ueryq%2Fsemanticdecision%2Fbayesian_analysis%2Fsemanticdecision_brms_diffusepriors_exgaussian.R="98D87F8C"
+~%2FOSF%2Fosf.io-ueryq%2Fsemanticdecision%2Fbayesian_analysis%2Fsemanticdecision_brms_weaklyinformativepriors_exgaussian.R="3406D2DF"
 ~%2FOSF%2Fosf.io-ueryq%2Fsemanticdecision%2Fcorrelations%2Fsemanticdecision_correlations.R="3EDC62B8"
 ~%2FOSF%2Fosf.io-ueryq%2Fsemanticdecision%2Fdata%2Fsemanticdecision_data_preparation.R="5F25266B"
 ~%2FOSF%2Fosf.io-ueryq%2Fsemanticdecision%2Ffrequentist_analysis%2Flexical_covariates_selection%2Flexical_covariates_selection_semanticdecision_lmerTest.R="A4DD5B32"
