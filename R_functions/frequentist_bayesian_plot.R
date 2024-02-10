@@ -2,11 +2,11 @@
 
 # Presenting frequentist and Bayesian estimates in the same plot. For this 
 # purpose, the frequentist results are merged into a plot from 
-# brms::mcmc_plot(), Three arguments are required for this function: a 
-# summary of a 'lmerTest' model, confidence intervals from 
+# brms::mcmc_plot(). Three arguments are required for this function: a 
+# summary of an 'lmerTest' model, confidence intervals from 
 # lme4::confint.merMod(), and a plot from brms::mcmc_plot(). The function 
-# is equipped to accept the slight between the names of the predictors in 
-# the frequentist results and in the Bayesian results.
+# is equipped to accept the slight differences between the names of the 
+# predictors in the frequentist results and in the Bayesian results.
 
 
 frequentist_bayesian_plot =
@@ -138,27 +138,6 @@ frequentist_bayesian_plot =
             panel.grid.major.y = element_line(colour = 'grey90'),
             plot.margin = margin(9, 4, 14, 12))
     
-    # Manual legend for frequentist analysis (red) and Bayesian analysis (blue),
-    # subject to the presence of 'note_frequentist_no_prior'.
-    
-    if(note_frequentist_no_prior) {
-      plot = plot +
-        geom_line(aes(colour = factor(parameter)), size = 0) +  # <-- placeholder to allow manual scale
-        scale_colour_manual(values = c('Frequentist analysis\n(no prior)' = 'red', 
-                                       'Bayesian analysis' = '#005b96'),  # <-- fancy blue
-                            guide = guide_legend(title = NULL, 
-                                                 override.aes = list(size = 5), 
-                                                 ncol = legend_ncol)) 
-    } else{
-      plot = plot +
-        geom_line(aes(colour = factor(parameter)), size = 0) +  # <-- placeholder to allow manual scale
-        scale_colour_manual(values = c('Frequentist analysis' = 'red', 
-                                       'Bayesian analysis' = '#005b96'),  # <-- fancy blue
-                            guide = guide_legend(title = NULL, 
-                                                 override.aes = list(size = 4), 
-                                                 ncol = legend_ncol)) 
-    }
-    
     # If labels supplied, pass them to 'scale_y_discrete'. This is necessary 
     # because modifying the 'parameter' column directly creates errors in 
     # the plot.
@@ -171,6 +150,39 @@ frequentist_bayesian_plot =
         scale_y_discrete(labels = rev(labels), limits = rev, 
                          # Padding at the borders
                          expand = c(0.023, 0.033))
+    }
+    
+    # Manual legend for frequentist analysis (red) and Bayesian analysis (blue),
+    # subject to the presence of 'note_frequentist_no_prior'.
+    
+    if(note_frequentist_no_prior) {
+      
+      plot$data = plot$data %>%
+        mutate(method = rep(c('Frequentist analysis\n(no prior)', 
+                              'Bayesian analysis'), 
+                            times = n()/2))
+      
+      plot = plot +
+        geom_line(aes(colour = factor(method)), alpha = 0) +  # <-- placeholder to allow manual scale
+        scale_colour_manual(values = c('Frequentist analysis\n(no prior)' = 'red', 
+                                       'Bayesian analysis' = '#005b96'),  # <-- blue
+                            guide = guide_legend(title = NULL, 
+                                                 override.aes = list(alpha = 1, linewidth = 5), 
+                                                 ncol = legend_ncol))
+      
+    } else {
+      
+      plot$data = plot$data %>%
+        mutate(method = rep(c('Frequentist analysis', 'Bayesian analysis'), 
+                            times = n()/2))
+      
+      plot = plot +
+        geom_line(aes(colour = factor(method)), alpha = 0) +  # <-- placeholder to allow manual scale
+        scale_colour_manual(values = c('Frequentist analysis' = 'red', 
+                                       'Bayesian analysis' = '#005b96'),  # <-- blue
+                            guide = guide_legend(title = NULL, 
+                                                 override.aes = list(alpha = 1, linewidth = 4), 
+                                                 ncol = legend_ncol))
     }
     
     # Output

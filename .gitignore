@@ -9,3 +9,4 @@ semanticpriming/data/primary_datasets/Hutchison_etal_2013_semanticpriming_lexica
 semanticpriming/data/subset_with_visualsimilarity/semanticpriming_with_visualsimilarity.csv
 semanticpriming/frequentist_analysis/results/semanticpriming_lmerTest.rds
 semanticpriming/power_analysis/reduced_randomeffects_model/results/semanticpriming_lmerTest.rds
+.Rproj.user

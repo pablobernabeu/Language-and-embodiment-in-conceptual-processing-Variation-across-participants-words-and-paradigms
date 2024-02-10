@@ -92,7 +92,9 @@ plot_lexicaldecision_frequentist_bayesian_plot_informativepriors_exgaussian =
                             labels = new_labels, interaction_symbol_x = TRUE,
                             vertical_line_at_x = 0, x_title = 'Effect size (&beta;)', 
                             x_axis_labels = 3, note_frequentist_no_prior = TRUE) +
-  ggtitle('Prior *SD* = 0.1')
+  ggtitle('Prior *SD* = 0.1') +
+  # Narrow down the breadth of the credible intervals 
+  xlim(-0.2, 0.2)
 
 #####
 
@@ -103,7 +105,9 @@ plot_lexicaldecision_frequentist_bayesian_plot_informativepriors_exgaussian =
                             labels = new_labels, interaction_symbol_x = TRUE,
                             vertical_line_at_x = 0, x_title = 'Effect size (&beta;)',
                             legend_ncol = 1) + 
-    theme(legend.position = 'bottom') ) %>%
+    theme(legend.position = 'bottom') +
+    # Narrow down the breadth of the credible intervals 
+    xlim(-0.2, 0.2) ) %>%
   ggsave(filename = 'lexicaldecision/frequentist_bayesian_plots/plots/lexicaldecision_frequentist_bayesian_plot_weaklyinformativepriors_exgaussian.pdf',
          device = cairo_pdf, width = 5.4, height = 6, dpi = 900)
 
@@ -116,7 +120,9 @@ plot_lexicaldecision_frequentist_bayesian_plot_weaklyinformativepriors_exgaussia
                             vertical_line_at_x = 0, x_title = 'Effect size (&beta;)', 
                             x_axis_labels = 3, note_frequentist_no_prior = TRUE) +
   ggtitle('Prior *SD* = 0.2') +
-  theme(axis.text.y = element_blank())
+  theme(axis.text.y = element_blank()) +
+  # Narrow down the breadth of the credible intervals 
+  xlim(-0.2, 0.2)
 
 #####
 
@@ -128,7 +134,9 @@ plot_lexicaldecision_frequentist_bayesian_plot_diffusepriors_exgaussian =
                             vertical_line_at_x = 0, x_title = 'Effect size (&beta;)', 
                             x_axis_labels = 3, note_frequentist_no_prior = TRUE) +
   ggtitle('Prior *SD* = 0.3') + 
-  theme(axis.text.y = element_blank())
+  theme(axis.text.y = element_blank()) +
+  # Narrow down the breadth of the credible intervals 
+  xlim(-0.2, 0.2)
 
 #####
 
